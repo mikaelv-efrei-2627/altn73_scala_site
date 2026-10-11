@@ -315,35 +315,55 @@
     "href": "tp4.html",
     "title": "TP4 - Collections",
     "section": "",
-    "text": "Utilisez l’invitation GitHub Classroom pour créer un dépôt, puis clonez-le.\n\n\n\n\n\n\nNote\n\n\n\nN’oubliez pas de commit & push régulièrement et avant la fin du cours."
+    "text": "Utilisez l’invitation GitHub Classroom pour créer un dépôt, puis clonez-le.\n\n\n\n\n\n\nNote\n\n\n\nN’oubliez pas de commit & push régulièrement et avant la fin du cours.",
+    "crumbs": [
+      "TPs",
+      "TP4 - Collections"
+    ]
   },
   {
     "objectID": "tp4.html#installation",
     "href": "tp4.html#installation",
     "title": "TP4 - Collections",
     "section": "",
-    "text": "Utilisez l’invitation GitHub Classroom pour créer un dépôt, puis clonez-le.\n\n\n\n\n\n\nNote\n\n\n\nN’oubliez pas de commit & push régulièrement et avant la fin du cours."
+    "text": "Utilisez l’invitation GitHub Classroom pour créer un dépôt, puis clonez-le.\n\n\n\n\n\n\nNote\n\n\n\nN’oubliez pas de commit & push régulièrement et avant la fin du cours.",
+    "crumbs": [
+      "TPs",
+      "TP4 - Collections"
+    ]
   },
   {
     "objectID": "tp4.html#salesanalysis",
     "href": "tp4.html#salesanalysis",
     "title": "TP4 - Collections",
     "section": "2 SalesAnalysis",
-    "text": "2 SalesAnalysis\nComplétez la classe SalesAnalysis dans le repository. Lancez les tests SalesAnalysisSpec après chaque exercice pour vérifier votre implémentation."
+    "text": "2 SalesAnalysis\nComplétez la classe SalesAnalysis dans le repository. Lancez les tests SalesAnalysisSpec après chaque exercice pour vérifier votre implémentation.",
+    "crumbs": [
+      "TPs",
+      "TP4 - Collections"
+    ]
   },
   {
     "objectID": "tp4.html#issorted",
     "href": "tp4.html#issorted",
     "title": "TP4 - Collections",
     "section": "3 isSorted",
-    "text": "3 isSorted\nImplémenter isSorted, qui vérifie si une Seq[Int] est triée selon une fonction de comparaison gt. gt renvoie true si le premier paramètre est supérieur au second paramètre.\ndef isSorted(as: Seq[Int], gt: (Int, Int) =&gt; Boolean): Boolean = ???\nVotre implémentation doit renvoyer les résultats suivants :\n@main\ndef main(): Unit = \n  println(isSorted(Seq(1, 2, 3), _ &gt; _)) // true\n  println(isSorted(Seq(1, 2, 1), _ &gt; _)) // false\n  println(isSorted(Seq(3, 2, 1), _ &lt; _)) // true\n  println(isSorted(Seq(1, 2, 3), _ &lt; _)) // false"
+    "text": "3 isSorted\nImplémenter isSorted, qui vérifie si une Seq[Int] est triée selon une fonction de comparaison gt. gt renvoie true si le premier paramètre est supérieur au second paramètre.\ndef isSorted(as: Seq[Int], gt: (Int, Int) =&gt; Boolean): Boolean = ???\nVotre implémentation doit renvoyer les résultats suivants :\n@main\ndef main(): Unit = \n  println(isSorted(Seq(1, 2, 3), _ &gt; _)) // true\n  println(isSorted(Seq(1, 2, 1), _ &gt; _)) // false\n  println(isSorted(Seq(3, 2, 1), _ &lt; _)) // true\n  println(isSorted(Seq(1, 2, 3), _ &lt; _)) // false",
+    "crumbs": [
+      "TPs",
+      "TP4 - Collections"
+    ]
   },
   {
     "objectID": "tp4.html#curry",
     "href": "tp4.html#curry",
     "title": "TP4 - Collections",
     "section": "4 curry",
-    "text": "4 curry\nÉcrire une fonction curry, qui convertit une fonction f prenant deux arguments en une fonction prenant un seul argument. Il n’y a qu’une seule solution possible.\ndef curry(f: (Int, Int) =&gt; Int): Int =&gt; Int =&gt; Int = ???\nVotre implémentation doit pouvoir être utilisée de la manière suivante :\n@main\ndef main(): Unit =\n  val subXY = (x: Int, y: Int) =&gt; x - y\n  val subXYCurried: Int =&gt; Int =&gt; Int = curry(subXY)\n  val subY: Int =&gt; Int = subXYCurried(2)\n  println(subY(3)) // -1\n\n\n\n\n\n\nTip\n\n\n\nCet exercice permet de renforcer votre compréhension du currying. En pratique, le SDK possède les méthodes myFn.curried et Function.uncurried(myFn)."
+    "text": "4 curry\nÉcrire une fonction curry, qui convertit une fonction f prenant deux arguments en une fonction prenant un seul argument. Il n’y a qu’une seule solution possible.\ndef curry(f: (Int, Int) =&gt; Int): Int =&gt; Int =&gt; Int = ???\nVotre implémentation doit pouvoir être utilisée de la manière suivante :\n@main\ndef main(): Unit =\n  val subXY = (x: Int, y: Int) =&gt; x - y\n  val subXYCurried: Int =&gt; Int =&gt; Int = curry(subXY)\n  val subY: Int =&gt; Int = subXYCurried(2)\n  println(subY(3)) // -1\n\n\n\n\n\n\nTip\n\n\n\nCet exercice permet de renforcer votre compréhension du currying. En pratique, le SDK possède les méthodes myFn.curried et Function.uncurried(myFn).",
+    "crumbs": [
+      "TPs",
+      "TP4 - Collections"
+    ]
   },
   {
     "objectID": "cm4_wooclap.html",
@@ -887,56 +907,88 @@
     "href": "cm4.html",
     "title": "CM4 - Paramètres de type",
     "section": "",
-    "text": "Generic Classes\nVariance\nUpper Type Bounds\nPolymorphic Methods\nGenerics and Variance with Java"
+    "text": "Generic Classes\nVariance\nUpper Type Bounds\nPolymorphic Methods\nGenerics and Variance with Java",
+    "crumbs": [
+      "Cours",
+      "CM4 - Paramètres de type"
+    ]
   },
   {
     "objectID": "cm4.html#classes-génériques---type-bounds",
     "href": "cm4.html#classes-génériques---type-bounds",
     "title": "CM4 - Paramètres de type",
     "section": "2.1 Classes génériques - Type bounds",
-    "text": "2.1 Classes génériques - Type bounds\nOn peut spécifier des contraintes sur un paramètre de type :\n\nA &lt;: Upper : borne supérieure (upper type bound). A doit être une sous-classe de Upper.\nA &gt;: Lower : borne inférieure (lower type bound). A doit être une super-classe de Lower.\n\nutilisé dans les définitions de méthodes polymorphiques (voir ci-dessous)\n\n\n// Pile qui accepte uniquement des éléments Comparable\nclass SortedStack[T &lt;: Comparable[T]]:\n  // ..."
+    "text": "2.1 Classes génériques - Type bounds\nOn peut spécifier des contraintes sur un paramètre de type :\n\nA &lt;: Upper : borne supérieure (upper type bound). A doit être une sous-classe de Upper.\nA &gt;: Lower : borne inférieure (lower type bound). A doit être une super-classe de Lower.\n\nutilisé dans les définitions de méthodes polymorphiques (voir ci-dessous)\n\n\n// Pile qui accepte uniquement des éléments Comparable\nclass SortedStack[T &lt;: Comparable[T]]:\n  // ...",
+    "crumbs": [
+      "Cours",
+      "CM4 - Paramètres de type"
+    ]
   },
   {
     "objectID": "cm4.html#méthodes-polymorphiques",
     "href": "cm4.html#méthodes-polymorphiques",
     "title": "CM4 - Paramètres de type",
     "section": "2.2 Méthodes polymorphiques",
-    "text": "2.2 Méthodes polymorphiques\nDes paramètres de types peuvent être déclarés dans les méthodes.\nCela permet de définir des méthodes qui s’appliquent de manière très générale, sans contraindre fortement le type des paramètres.\nobject Utils:\n  def isSorted[A](as: Seq[A], gt: (A,A) =&gt; Boolean): Boolean = ???\n    \n  def pair[A, B](first: A, second: B): (A, B) =\n    (first, second)\n\n  // T has an upper type bound\n  def max[T &lt;: Comparable[T]](a: T, b: T): T =\n    if a.compareTo(b) &gt; 0 then a else b"
+    "text": "2.2 Méthodes polymorphiques\nDes paramètres de types peuvent être déclarés dans les méthodes.\nCela permet de définir des méthodes qui s’appliquent de manière très générale, sans contraindre fortement le type des paramètres.\nobject Utils:\n  def isSorted[A](as: Seq[A], gt: (A,A) =&gt; Boolean): Boolean = ???\n    \n  def pair[A, B](first: A, second: B): (A, B) =\n    (first, second)\n\n  // T has an upper type bound\n  def max[T &lt;: Comparable[T]](a: T, b: T): T =\n    if a.compareTo(b) &gt; 0 then a else b",
+    "crumbs": [
+      "Cours",
+      "CM4 - Paramètres de type"
+    ]
   },
   {
     "objectID": "cm4.html#covariance-a",
     "href": "cm4.html#covariance-a",
     "title": "CM4 - Paramètres de type",
     "section": "3.1 Covariance [+A]",
-    "text": "3.1 Covariance [+A]\nÀ utiliser lorsque la classe générique produit des A : Collections, Décodeurs, Cache\n\n\n\n\n\nclassDiagram\n    class Animal {\n    }\n    \n    class Dog {\n    }\n    \n    \n    Animal &lt;|-- Dog \n\n    class `F[+A]` {\n        produce(): A\n    }\n    \n    class `F[Animal]`\n    `F[Animal]` &lt;|-- `F[Dog]`\n\n\n\n\n\n\nval dogs: Stack[Dog] = Stack(List(Dog()))\n// on peut assigner car Stack[Dog] &lt;:&lt; Stack[Animal]\nval animals: Stack[Animal] = dogs\n\nval catsAndDogs = animals.push(Cat())\n// val catsAndDogs: Stack[Animal] = ...\n// Ne fonctionnerait pas si Stack était mutable"
+    "text": "3.1 Covariance [+A]\nÀ utiliser lorsque la classe générique produit des A : Collections, Décodeurs, Cache\n\n\n\n\n\nclassDiagram\n    class Animal {\n    }\n    \n    class Dog {\n    }\n    \n    \n    Animal &lt;|-- Dog \n\n    class `F[+A]` {\n        produce(): A\n    }\n    \n    class `F[Animal]`\n    `F[Animal]` &lt;|-- `F[Dog]`\n\n\n\n\n\n\nval dogs: Stack[Dog] = Stack(List(Dog()))\n// on peut assigner car Stack[Dog] &lt;:&lt; Stack[Animal]\nval animals: Stack[Animal] = dogs\n\nval catsAndDogs = animals.push(Cat())\n// val catsAndDogs: Stack[Animal] = ...\n// Ne fonctionnerait pas si Stack était mutable",
+    "crumbs": [
+      "Cours",
+      "CM4 - Paramètres de type"
+    ]
   },
   {
     "objectID": "cm4.html#contravariance--a",
     "href": "cm4.html#contravariance--a",
     "title": "CM4 - Paramètres de type",
     "section": "3.2 Contravariance [-A]",
-    "text": "3.2 Contravariance [-A]\nÀ utiliser lorsque la classe générique consomme des A : Encodeurs\n\n\n\n\n\nclassDiagram\n    class Animal {\n    }\n    \n    class Dog {\n    }\n    \n    \n    Animal &lt;|-- Dog \n\n    class `F[-A]` {\n        consume(x: A)\n    }\n    \n    class `F[Animal]`\n    \n    `F[Animal]` --|&gt; `F[Dog]`\n\n\n\n\n\n\ntrait JsonEncoder[A]:\n  def encode(obj: A): String\n\nval animalEncoder: JsonEncoder[Animal] = ???\n// on peut assigner, car JsonEncoder[Animal] &lt;:&lt; JsonEncoder[Dog]\n// si je peux encoder un Animal en Json, je sais aussi encoder Dog, Cat, ...\nval dogEncoder: JsonEncoder[Dog] = animalEncoder\ndogEncoder.encode(Dog())"
+    "text": "3.2 Contravariance [-A]\nÀ utiliser lorsque la classe générique consomme des A : Encodeurs\n\n\n\n\n\nclassDiagram\n    class Animal {\n    }\n    \n    class Dog {\n    }\n    \n    \n    Animal &lt;|-- Dog \n\n    class `F[-A]` {\n        consume(x: A)\n    }\n    \n    class `F[Animal]`\n    \n    `F[Animal]` --|&gt; `F[Dog]`\n\n\n\n\n\n\ntrait JsonEncoder[A]:\n  def encode(obj: A): String\n\nval animalEncoder: JsonEncoder[Animal] = ???\n// on peut assigner, car JsonEncoder[Animal] &lt;:&lt; JsonEncoder[Dog]\n// si je peux encoder un Animal en Json, je sais aussi encoder Dog, Cat, ...\nval dogEncoder: JsonEncoder[Dog] = animalEncoder\ndogEncoder.encode(Dog())",
+    "crumbs": [
+      "Cours",
+      "CM4 - Paramètres de type"
+    ]
   },
   {
     "objectID": "cm4.html#méthodes-et-variance",
     "href": "cm4.html#méthodes-et-variance",
     "title": "CM4 - Paramètres de type",
     "section": "3.3 Méthodes et variance",
-    "text": "3.3 Méthodes et variance\n\nLe type de retour est en position covariante.\nLes paramètres d’une méthode sont en position contravariante\n\nLorsqu’une classe est covariante [+A], A ne peut être utilisé que dans le type de retour.\ncase class Stack[+A](elements: List[A]):\n  // OK, A est en position covariante\n  def peek: Option[A] = ???\n\n  // ERREUR DE COMPILATION !! x: A est en position contravariante !\n  def push(x: A): Stack[A] = ???\nLorsqu’une classe est contravariante [-A], A ne peut être utilisé que dans les paramètres.\ntrait JsonDecoderEncoder[-A]:\n  // OK, A est en position contravariante\n  def encode(obj: A): String\n  \n  // ERREUR DE COMPILATION !! A est en position covariante !\n  def decode(json: String): A"
+    "text": "3.3 Méthodes et variance\n\nLe type de retour est en position covariante.\nLes paramètres d’une méthode sont en position contravariante\n\nLorsqu’une classe est covariante [+A], A ne peut être utilisé que dans le type de retour.\ncase class Stack[+A](elements: List[A]):\n  // OK, A est en position covariante\n  def peek: Option[A] = ???\n\n  // ERREUR DE COMPILATION !! x: A est en position contravariante !\n  def push(x: A): Stack[A] = ???\nLorsqu’une classe est contravariante [-A], A ne peut être utilisé que dans les paramètres.\ntrait JsonDecoderEncoder[-A]:\n  // OK, A est en position contravariante\n  def encode(obj: A): String\n  \n  // ERREUR DE COMPILATION !! A est en position covariante !\n  def decode(json: String): A",
+    "crumbs": [
+      "Cours",
+      "CM4 - Paramètres de type"
+    ]
   },
   {
     "objectID": "cm4.html#méthodes-et-variances-pourquoi",
     "href": "cm4.html#méthodes-et-variances-pourquoi",
     "title": "CM4 - Paramètres de type",
     "section": "3.4 Méthodes et variances — pourquoi ?",
-    "text": "3.4 Méthodes et variances — pourquoi ?\nCes contraintes garantissent que le système de typage est cohérent. (the type system is sound)\n\n3.4.1 Covariance absurde\nProuvons que les paramètres sont contravariants par l’absurde. Imaginons que le compilateur autorise ceci :\ntrait Animal\ncase class Dog(woof: String) extends Animal\ncase class Cat(miaw: String) extends Animal\n\ntrait Encoder[+A]:\n  // ❌ Interdit : A est en position contravariante\n  def encode(a: A): String\n\nobject DogEncoder extends Encoder[Dog]\n  def encode(a: Dog): String =\n    a.woof\nAlors, on pourrait se retrouver dans la situation suivante :\n// on peut assigner. A est covariant, donc Encoder[Dog] &lt;:&lt; Encoder[Animal]\nval animalEncoder: Encoder[Animal] = DogEncoder\n// ❌ Absurde !! encode ne peut prendre en paramètre que Dog ou ses sous-classes\nanimalEncoder.encode(Cat(\"miaou\"))\n\n\n3.4.2 Contravariance absurde\nProuvons que le type résultat est covariant. Imaginons que le compilateur autorise ceci :\ntrait Decoder[-A]:\n  // ❌ Interdit : A est en position covariante\n  def decode(s: String): A\n\nobject AnimalDecoder extends Decoder[Animal]\n  def decode(s: String): Animal =\n    if (s == \"miaou\") Cat(s) else Dog(s)\nAlors, on pourrait se retrouver dans la situation suivante :\n// on peut assigner. A est contravariant, donc Decoder[Animal] &lt;:&lt; Decoder[Dog]\nval dogDecoder: Decoder[Dog] = AnimalDecoder\n// ❌ Absurde !! decode renvoie une instance de Cat\nval dog: Dog = dogDecoder.decode(\"miaou\")"
+    "text": "3.4 Méthodes et variances — pourquoi ?\nCes contraintes garantissent que le système de typage est cohérent. (the type system is sound)\n\n3.4.1 Covariance absurde\nProuvons que les paramètres sont contravariants par l’absurde. Imaginons que le compilateur autorise ceci :\ntrait Animal\ncase class Dog(woof: String) extends Animal\ncase class Cat(miaw: String) extends Animal\n\ntrait Encoder[+A]:\n  // ❌ Interdit : A est en position contravariante\n  def encode(a: A): String\n\nobject DogEncoder extends Encoder[Dog]\n  def encode(a: Dog): String =\n    a.woof\nAlors, on pourrait se retrouver dans la situation suivante :\n// on peut assigner. A est covariant, donc Encoder[Dog] &lt;:&lt; Encoder[Animal]\nval animalEncoder: Encoder[Animal] = DogEncoder\n// ❌ Absurde !! encode ne peut prendre en paramètre que Dog ou ses sous-classes\nanimalEncoder.encode(Cat(\"miaou\"))\n\n\n3.4.2 Contravariance absurde\nProuvons que le type résultat est covariant. Imaginons que le compilateur autorise ceci :\ntrait Decoder[-A]:\n  // ❌ Interdit : A est en position covariante\n  def decode(s: String): A\n\nobject AnimalDecoder extends Decoder[Animal]\n  def decode(s: String): Animal =\n    if (s == \"miaou\") Cat(s) else Dog(s)\nAlors, on pourrait se retrouver dans la situation suivante :\n// on peut assigner. A est contravariant, donc Decoder[Animal] &lt;:&lt; Decoder[Dog]\nval dogDecoder: Decoder[Dog] = AnimalDecoder\n// ❌ Absurde !! decode renvoie une instance de Cat\nval dog: Dog = dogDecoder.decode(\"miaou\")",
+    "crumbs": [
+      "Cours",
+      "CM4 - Paramètres de type"
+    ]
   },
   {
     "objectID": "cm4.html#collections-contravariantes-méthodes-dajout",
     "href": "cm4.html#collections-contravariantes-méthodes-dajout",
     "title": "CM4 - Paramètres de type",
     "section": "3.5 Collections contravariantes — méthodes d’ajout",
-    "text": "3.5 Collections contravariantes — méthodes d’ajout\nÉtant donné les contraintes sur les paramètres, comment implémenter notre classe Stack ?\ncase class Stack[+A](elements: List[A]):\n  // ❌ Interdit : A est en position covariante\n  def push(x: A): Stack[A] =\n    Stack(x +: elements)\nL’astuce est d’utiliser une méthode polymorphique avec une borne inférieure :\ncase class Stack[+A](elements: List[A]):\n  // ✅ Compile : B est un paramètre de type\n  // Il peut être égal à A ou être une super-classe de A\n  def push[B &gt;: A](x: B): Stack[B] =\n    Stack(x +: elements)\nLe compilateur infère le type B lorsqu’on appelle push. Il cherche la super-classe la plus proche qui est commune à A et au type du paramètre passé.\nUtilisation :\ntrait Animal\ncase class Dog(name: String) extends Animal\ncase class Cat(name: String) extends Animal\n\nval dogStack = Stack(List(Dog(\"Winnie\"), Dog(\"Dolly\")))\n// val dogStack: Stack[Dog] = Stack(List(Dog(Winnie), Dog(Dolly)))\n\n// B est inféré, égal à Dog\nval dogStack2 = dogStack.push(Dog(\"Upi\"))\n// val dogStack2: Stack[Dog] = Stack(List(Dog(Upi), Dog(Winnie), Dog(Dolly)))\n\n// B est inféré, égal à Animal\nval animalStack = dogStack.push(Cat(\"Max\"))\n// val animalStack: Stack[Animal] = Stack(List(Cat(Max), Dog(Winnie), Dog(Dolly)))\n\n// B est inféré, égal à Animal | Int\nval objectStack = animalStack.push(1)\n// val objectStack: Stack[Animal | Int] = ..."
+    "text": "3.5 Collections contravariantes — méthodes d’ajout\nÉtant donné les contraintes sur les paramètres, comment implémenter notre classe Stack ?\ncase class Stack[+A](elements: List[A]):\n  // ❌ Interdit : A est en position covariante\n  def push(x: A): Stack[A] =\n    Stack(x +: elements)\nL’astuce est d’utiliser une méthode polymorphique avec une borne inférieure :\ncase class Stack[+A](elements: List[A]):\n  // ✅ Compile : B est un paramètre de type\n  // Il peut être égal à A ou être une super-classe de A\n  def push[B &gt;: A](x: B): Stack[B] =\n    Stack(x +: elements)\nLe compilateur infère le type B lorsqu’on appelle push. Il cherche la super-classe la plus proche qui est commune à A et au type du paramètre passé.\nUtilisation :\ntrait Animal\ncase class Dog(name: String) extends Animal\ncase class Cat(name: String) extends Animal\n\nval dogStack = Stack(List(Dog(\"Winnie\"), Dog(\"Dolly\")))\n// val dogStack: Stack[Dog] = Stack(List(Dog(Winnie), Dog(Dolly)))\n\n// B est inféré, égal à Dog\nval dogStack2 = dogStack.push(Dog(\"Upi\"))\n// val dogStack2: Stack[Dog] = Stack(List(Dog(Upi), Dog(Winnie), Dog(Dolly)))\n\n// B est inféré, égal à Animal\nval animalStack = dogStack.push(Cat(\"Max\"))\n// val animalStack: Stack[Animal] = Stack(List(Cat(Max), Dog(Winnie), Dog(Dolly)))\n\n// B est inféré, égal à Animal | Int\nval objectStack = animalStack.push(1)\n// val objectStack: Stack[Animal | Int] = ...",
+    "crumbs": [
+      "Cours",
+      "CM4 - Paramètres de type"
+    ]
   },
   {
     "objectID": "tp1.html",
