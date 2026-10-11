@@ -457,6 +457,104 @@
     "text": "10 Exemples de ce projet\n\n10.1 Lire depuis un socket\nfor\n  msg &lt;- SocketUtils.read[WorkerMessage](driverSocket)\n  _ &lt;- ZIO.logInfo(s\"Received: $msg\")\nyield ()\n\n\n10.2 Diffuser à plusieurs sockets\nval sockets = workers.map(_.socket)\nSocketUtils.broadcast(WorkerMessage.StartShuffle(stageId, n), sockets)\n\n\n10.3 Collecter les réponses de tous les workers\nSocketUtils.readAll[DriverMessage, Map[Int, List[Any]]](sockets) {\n  case DriverMessage.ShuffleData(_, _, partitions) =&gt; ZIO.succeed(partitions)\n}"
   },
   {
+    "objectID": "tp7.html",
+    "href": "tp7.html",
+    "title": "TP7 - Classes de type",
+    "section": "",
+    "text": "Avant de démarrer, cliquez sur le lien GitHub Classroom pour créer votre repository."
+  },
+  {
+    "objectID": "tp7.html#objectif",
+    "href": "tp7.html#objectif",
+    "title": "TP7 - Classes de type",
+    "section": "1.1 Objectif",
+    "text": "1.1 Objectif\nCréer un système de gestion de notifications qui utilise given/using pour injecter la configuration de différents environnements (dev, staging, prod)."
+  },
+  {
+    "objectID": "tp7.html#contexte",
+    "href": "tp7.html#contexte",
+    "title": "TP7 - Classes de type",
+    "section": "1.2 Contexte",
+    "text": "1.2 Contexte\nVous développez un système de notifications pour une application. Selon l’environnement, les notifications doivent se comporter différemment :\n\nDev : logs en console uniquement\nStaging : logs + email de test\nProduction : email réel + SMS"
+  },
+  {
+    "objectID": "tp7.html#définir-les-structures",
+    "href": "tp7.html#définir-les-structures",
+    "title": "TP7 - Classes de type",
+    "section": "1.3 Définir les structures",
+    "text": "1.3 Définir les structures\nLes structures suivantes sont fournies dans un package exo1_notification :\n// 1. Configuration d'environnement\ncase class AppConfig(\n  environment: String,\n  enableEmail: Boolean,\n  enableSMS: Boolean,\n  emailEndpoint: String,\n  smsEndpoint: String,\n  debugMode: Boolean\n)\n\n// 2. Service email \nobject EmailService:\n  def sendEmail(to: String, message: String)(using config: AppConfig): Unit =\n    if config.enableEmail then\n      println(s\"[${config.environment}] Email envoyé à $to via ${config.emailEndpoint}: $message\")\n    else\n      println(s\"[${config.environment}] Email désactivé\")\n\n// 3. Service SMS \nobject SmsService:\n  def sendSMS(to: String, message: String)(using config: AppConfig): Unit =\n    if config.enableSMS then\n      println(s\"[${config.environment}] SMS envoyé à $to via ${config.smsEndpoint}: $message\")\n    else\n      println(s\"[${config.environment}] SMS désactivé\")"
+  },
+  {
+    "objectID": "tp7.html#créer-les-configurations-given",
+    "href": "tp7.html#créer-les-configurations-given",
+    "title": "TP7 - Classes de type",
+    "section": "1.4 Créer les configurations given",
+    "text": "1.4 Créer les configurations given\nDéfinissez trois configurations implicites différentes :\nobject Environments:\n  // TODO: Créer given devConfig: AppConfig pour dev\n  // environment = \"DEV\", email + SMS désactivés, debugMode = true\n  \n  // TODO: Créer given stagingConfig: AppConfig pour staging  \n  // environment = \"STAGING\", email activé, SMS désactivé, debugMode = true\n  \n  // TODO: Créer given prodConfig: AppConfig pour production\n  // environment = \"PROD\", email + SMS activés, debugMode = false"
+  },
+  {
+    "objectID": "tp7.html#implémenter-notificationservice",
+    "href": "tp7.html#implémenter-notificationservice",
+    "title": "TP7 - Classes de type",
+    "section": "1.5 Implémenter NotificationService",
+    "text": "1.5 Implémenter NotificationService\nCréez un object NotificationManager avec une méthode send qui :\n\nAccepte une configuration implicite via using\nUtilise EmailService et SmsService\nImplémente la logique d’envoi selon la config :\n\nsi config.debugMode est true, logger l’action\nEnvoyer email si activé (EmailService.sendEmail)\nEnvoyer SMS si activé (SmsService.sendSMS)"
+  },
+  {
+    "objectID": "tp7.html#tester-le-système",
+    "href": "tp7.html#tester-le-système",
+    "title": "TP7 - Classes de type",
+    "section": "1.6 Tester le système",
+    "text": "1.6 Tester le système\nCréez un object Main qui teste les trois environnements :\nobject Main:\n  @main def testNotifications(): Unit =\n    println(\"=== Test DEV ===\")\n    // TODO: Importer devConfig et créer NotificationManager\n  \n    println(\"\\n=== Test STAGING ===\")\n    // TODO: Importer stagingConfig et créer NotificationManager\n  \n    println(\"\\n=== Test PROD ===\")\n    // TODO: Importer prodConfig et créer NotificationManager\nQuand vous exécutez le programme, vous devriez voir :\n=== Test DEV ===\n[DEV] DEBUG: Envoi notification à user@example.com\n[DEV] Email désactivé\n[DEV] SMS désactivé\n\n=== Test STAGING ===\n[STAGING] DEBUG: Envoi notification à user@example.com\n[STAGING] Email envoyé à user@example.com via smtp.staging.com: Alerte importante\n[STAGING] SMS désactivé\n\n=== Test PROD ===\n[PROD] Email envoyé à user@example.com via smtp.prod.com: Alerte importante\n[PROD] SMS envoyé à user@example.com via api.sms.com: Alerte importante\nRemarque : Dans vrai système, il serait préférable de charger la configuration depuis un fichier. Mais le principe d’injecter AppConfig avec using serait conservé."
+  },
+  {
+    "objectID": "tp7.html#points-clés-à-retenir",
+    "href": "tp7.html#points-clés-à-retenir",
+    "title": "TP7 - Classes de type",
+    "section": "1.7 Points clés à retenir",
+    "text": "1.7 Points clés à retenir\n\ngiven déclare des valeurs implicites disponibles dans un scope\nusing demande l’injection d’une valeur implicite\nLes given peuvent être importés sélectivement\nParfait pour l’injection de dépendances sans framework\nAlternative moderne aux implicit de Scala 2"
+  },
+  {
+    "objectID": "tp7.html#code-fourni",
+    "href": "tp7.html#code-fourni",
+    "title": "TP7 - Classes de type",
+    "section": "3.1 Code fourni",
+    "text": "3.1 Code fourni\n\n3.1.1 Structure YamlValue\nenum YamlValue:\n  case YString(value: String)\n  case YNumber(value: Double)\n  case YBoolean(value: Boolean)\n  case YNull\n  case YArray(values: List[YamlValue])\n  case YObject(fields: Map[String, YamlValue])\n\n\n3.1.2 Classe de type YamlEncoder\ntrait YamlEncoder[A]:\n  def encode(value: A): YamlValue\n\n\n3.1.3 Renderer YAML\nobject YamlRenderer:\n  def render(yaml: YamlValue, indent: Int = 0): String =\n    val spaces = \"  \" * indent\n    yaml match\n      case YamlValue.YString(s) =&gt; \n        if s.contains('\\n') || s.contains(':') then\n          s\"|\\n${s.linesIterator.map(l =&gt; s\"$spaces  $l\").mkString(\"\\n\")}\"\n        else if s.matches(\".*[:#\\\\[\\\\]{}].*\") then s\"'$s'\"\n        else s\n      \n      case YamlValue.YNumber(n) =&gt; \n        if n.isWhole then n.toLong.toString else n.toString\n      \n      case YamlValue.YBoolean(b) =&gt; b.toString\n      \n      case YamlValue.YNull =&gt; \"null\"\n      \n      case YamlValue.YArray(values) if values.isEmpty =&gt; \"[]\"\n      \n      case YamlValue.YArray(values) =&gt;\n        values.map(v =&gt; s\"\\n$spaces- ${render(v, indent + 1).trim}\")\n              .mkString(\"\")\n      \n      case YamlValue.YObject(fields) if fields.isEmpty =&gt; \"{}\"\n      \n      case YamlValue.YObject(fields) =&gt;\n        fields.map { (key, value) =&gt;\n          value match\n            case YamlValue.YObject(_) | YamlValue.YArray(_) =&gt;\n              s\"\\n$spaces$key:${render(value, indent + 1)}\"\n            case _ =&gt;\n              s\"\\n$spaces$key: ${render(value, indent + 1)}\"\n        }.mkString(\"\")\n\n\n3.1.4 Code de test\nVoir YamlEncoderSpec dans le code fourni."
+  },
+  {
+    "objectID": "tp7.html#travail-à-réaliser",
+    "href": "tp7.html#travail-à-réaliser",
+    "title": "TP7 - Classes de type",
+    "section": "3.2 Travail à réaliser",
+    "text": "3.2 Travail à réaliser\n\n3.2.1 Instances pour les types primitifs\nImplémentez les instances given de YamlEncoder pour les types suivants : - String - Int - Double - Boolean - Long\n// TODO: Implémentez les instances ici\ngiven YamlEncoder[String] = ???\ngiven YamlEncoder[Int] = ???\ngiven YamlEncoder[Double] = ???\ngiven YamlEncoder[Boolean] = ???\ngiven YamlEncoder[Long] = ???\n\n\n3.2.2 Instances pour les classes Person, Address, Employee\n\n\n3.2.3 Combinateurs pour collections\nImplémentez les instances pour les types génériques :\n\nList[A] (si A a un encoder)\nOption[A] (si A a un encoder)\n\n// TODO: Implémentez les combinateurs\ngiven [A](using enc: YamlEncoder[A]): YamlEncoder[List[A]] = ???\n\ngiven [A](using enc: YamlEncoder[A]): YamlEncoder[Option[A]] = ???\n\n\n\n3.2.4 Extension method\nCréez une extension method toYaml qui permet d’appeler .toYaml sur n’importe quelle valeur ayant un YamlEncoder.\n// TODO: Implémentez l'extension method\nextension [A](value: A)\n  def toYaml(using enc: YamlEncoder[A]): YamlValue = ???"
+  },
+  {
+    "objectID": "tp7.html#résultat-attendu",
+    "href": "tp7.html#résultat-attendu",
+    "title": "TP7 - Classes de type",
+    "section": "3.3 Résultat attendu",
+    "text": "3.3 Résultat attendu\nExécutez les tests YamlEncoderSpec, tous les tests doivent passer."
+  },
+  {
+    "objectID": "tp7.html#bonus-support-pour-mapstring-a",
+    "href": "tp7.html#bonus-support-pour-mapstring-a",
+    "title": "TP7 - Classes de type",
+    "section": "3.4 (Bonus) Support pour Map[String, A]",
+    "text": "3.4 (Bonus) Support pour Map[String, A]\nImplémentez le support pour Map[String, A] :\ngiven [A](using enc: YamlEncoder[A]): YamlEncoder[Map[String, A]] = ???\nPuis testez avec :\ntest(\"encoder Map[String, A]\") {\n   case class Config(host: String, port: Int, ssl: Boolean) derives YamlEncoder\n\n   val configMap = Map(\n      \"database\" -&gt; Config(\"localhost\", 5432, true),\n      \"cache\" -&gt; Config(\"redis.local\", 6379, false)\n   )\n\n   val yaml = YamlRenderer.render(configMap.toYaml)\n\n   yaml shouldBe \"\"\"\ndatabase:\n  host: localhost\n  port: 5432\n  ssl: true\ncache:\n  host: redis.local\n  port: 6379\n  ssl: false\"\"\".trim\n}"
+  },
+  {
+    "objectID": "tp7.html#bonus-dérivation-automatique-pour-case-classes",
+    "href": "tp7.html#bonus-dérivation-automatique-pour-case-classes",
+    "title": "TP7 - Classes de type",
+    "section": "3.5 (Bonus) Dérivation automatique pour case classes",
+    "text": "3.5 (Bonus) Dérivation automatique pour case classes\nImplémentez la dérivation automatique en utilisant les méthodes de Product. Ce trait est implémenté par toutes les case classes.\nimport scala.deriving.*\n\n// TODO: Fonction helper pour encoder n'importe quel type\nprivate def encodeAny(value: Any): YamlValue = ???\n\n// TODO: Instance dérivée automatiquement\ngiven derivedProduct[T &lt;: Product]: YamlEncoder[T] = ???"
+  },
+  {
+    "objectID": "tp7.html#bonus---difficile-dérivation-automatique-pour-case-classes-avec-macros",
+    "href": "tp7.html#bonus---difficile-dérivation-automatique-pour-case-classes-avec-macros",
+    "title": "TP7 - Classes de type",
+    "section": "3.6 (Bonus - Difficile) Dérivation automatique pour case classes avec macros",
+    "text": "3.6 (Bonus - Difficile) Dérivation automatique pour case classes avec macros\nL’approche précédente avec Product n’est pas satisfaisante. En effet, si notre case class possède des attributs d’un type que nous ne savons pas encoder, le programme compilera quand même.\nIl serait préférable de tout valider à la compilation. Scala 3 offre un mécanisme permettant de séparer les composants d’un ADT avec la classe Mirror. Lisez cet article et implémentez la dérivation automatique de case class pour YamlEncoder :\nType Class Derivation in Scala 3"
+  },
+  {
     "objectID": "cm3.html",
     "href": "cm3.html",
     "title": "CM3 - Collections, Fonctions, Boucles",
@@ -633,102 +731,11 @@
     ]
   },
   {
-    "objectID": "tp7.html",
-    "href": "tp7.html",
-    "title": "TP7 - Classes de type",
+    "objectID": "seance3.html",
+    "href": "seance3.html",
+    "title": "ALTN73 Programmation fonctionnelle avec Scala",
     "section": "",
-    "text": "Avant de démarrer, cliquez sur le lien GitHub Classroom pour créer votre repository."
-  },
-  {
-    "objectID": "tp7.html#objectif",
-    "href": "tp7.html#objectif",
-    "title": "TP7 - Classes de type",
-    "section": "1.1 Objectif",
-    "text": "1.1 Objectif\nCréer un système de gestion de notifications qui utilise given/using pour injecter la configuration de différents environnements (dev, staging, prod)."
-  },
-  {
-    "objectID": "tp7.html#contexte",
-    "href": "tp7.html#contexte",
-    "title": "TP7 - Classes de type",
-    "section": "1.2 Contexte",
-    "text": "1.2 Contexte\nVous développez un système de notifications pour une application. Selon l’environnement, les notifications doivent se comporter différemment :\n\nDev : logs en console uniquement\nStaging : logs + email de test\nProduction : email réel + SMS"
-  },
-  {
-    "objectID": "tp7.html#définir-les-structures",
-    "href": "tp7.html#définir-les-structures",
-    "title": "TP7 - Classes de type",
-    "section": "1.3 Définir les structures",
-    "text": "1.3 Définir les structures\nLes structures suivantes sont fournies dans un package exo1_notification :\n// 1. Configuration d'environnement\ncase class AppConfig(\n  environment: String,\n  enableEmail: Boolean,\n  enableSMS: Boolean,\n  emailEndpoint: String,\n  smsEndpoint: String,\n  debugMode: Boolean\n)\n\n// 2. Service email \nobject EmailService:\n  def sendEmail(to: String, message: String)(using config: AppConfig): Unit =\n    if config.enableEmail then\n      println(s\"[${config.environment}] Email envoyé à $to via ${config.emailEndpoint}: $message\")\n    else\n      println(s\"[${config.environment}] Email désactivé\")\n\n// 3. Service SMS \nobject SmsService:\n  def sendSMS(to: String, message: String)(using config: AppConfig): Unit =\n    if config.enableSMS then\n      println(s\"[${config.environment}] SMS envoyé à $to via ${config.smsEndpoint}: $message\")\n    else\n      println(s\"[${config.environment}] SMS désactivé\")"
-  },
-  {
-    "objectID": "tp7.html#créer-les-configurations-given",
-    "href": "tp7.html#créer-les-configurations-given",
-    "title": "TP7 - Classes de type",
-    "section": "1.4 Créer les configurations given",
-    "text": "1.4 Créer les configurations given\nDéfinissez trois configurations implicites différentes :\nobject Environments:\n  // TODO: Créer given devConfig: AppConfig pour dev\n  // environment = \"DEV\", email + SMS désactivés, debugMode = true\n  \n  // TODO: Créer given stagingConfig: AppConfig pour staging  \n  // environment = \"STAGING\", email activé, SMS désactivé, debugMode = true\n  \n  // TODO: Créer given prodConfig: AppConfig pour production\n  // environment = \"PROD\", email + SMS activés, debugMode = false"
-  },
-  {
-    "objectID": "tp7.html#implémenter-notificationservice",
-    "href": "tp7.html#implémenter-notificationservice",
-    "title": "TP7 - Classes de type",
-    "section": "1.5 Implémenter NotificationService",
-    "text": "1.5 Implémenter NotificationService\nCréez un object NotificationManager avec une méthode send qui :\n\nAccepte une configuration implicite via using\nUtilise EmailService et SmsService\nImplémente la logique d’envoi selon la config :\n\nsi config.debugMode est true, logger l’action\nEnvoyer email si activé (EmailService.sendEmail)\nEnvoyer SMS si activé (SmsService.sendSMS)"
-  },
-  {
-    "objectID": "tp7.html#tester-le-système",
-    "href": "tp7.html#tester-le-système",
-    "title": "TP7 - Classes de type",
-    "section": "1.6 Tester le système",
-    "text": "1.6 Tester le système\nCréez un object Main qui teste les trois environnements :\nobject Main:\n  @main def testNotifications(): Unit =\n    println(\"=== Test DEV ===\")\n    // TODO: Importer devConfig et créer NotificationManager\n  \n    println(\"\\n=== Test STAGING ===\")\n    // TODO: Importer stagingConfig et créer NotificationManager\n  \n    println(\"\\n=== Test PROD ===\")\n    // TODO: Importer prodConfig et créer NotificationManager\nQuand vous exécutez le programme, vous devriez voir :\n=== Test DEV ===\n[DEV] DEBUG: Envoi notification à user@example.com\n[DEV] Email désactivé\n[DEV] SMS désactivé\n\n=== Test STAGING ===\n[STAGING] DEBUG: Envoi notification à user@example.com\n[STAGING] Email envoyé à user@example.com via smtp.staging.com: Alerte importante\n[STAGING] SMS désactivé\n\n=== Test PROD ===\n[PROD] Email envoyé à user@example.com via smtp.prod.com: Alerte importante\n[PROD] SMS envoyé à user@example.com via api.sms.com: Alerte importante\nRemarque : Dans vrai système, il serait préférable de charger la configuration depuis un fichier. Mais le principe d’injecter AppConfig avec using serait conservé."
-  },
-  {
-    "objectID": "tp7.html#points-clés-à-retenir",
-    "href": "tp7.html#points-clés-à-retenir",
-    "title": "TP7 - Classes de type",
-    "section": "1.7 Points clés à retenir",
-    "text": "1.7 Points clés à retenir\n\ngiven déclare des valeurs implicites disponibles dans un scope\nusing demande l’injection d’une valeur implicite\nLes given peuvent être importés sélectivement\nParfait pour l’injection de dépendances sans framework\nAlternative moderne aux implicit de Scala 2"
-  },
-  {
-    "objectID": "tp7.html#code-fourni",
-    "href": "tp7.html#code-fourni",
-    "title": "TP7 - Classes de type",
-    "section": "3.1 Code fourni",
-    "text": "3.1 Code fourni\n\n3.1.1 Structure YamlValue\nenum YamlValue:\n  case YString(value: String)\n  case YNumber(value: Double)\n  case YBoolean(value: Boolean)\n  case YNull\n  case YArray(values: List[YamlValue])\n  case YObject(fields: Map[String, YamlValue])\n\n\n3.1.2 Classe de type YamlEncoder\ntrait YamlEncoder[A]:\n  def encode(value: A): YamlValue\n\n\n3.1.3 Renderer YAML\nobject YamlRenderer:\n  def render(yaml: YamlValue, indent: Int = 0): String =\n    val spaces = \"  \" * indent\n    yaml match\n      case YamlValue.YString(s) =&gt; \n        if s.contains('\\n') || s.contains(':') then\n          s\"|\\n${s.linesIterator.map(l =&gt; s\"$spaces  $l\").mkString(\"\\n\")}\"\n        else if s.matches(\".*[:#\\\\[\\\\]{}].*\") then s\"'$s'\"\n        else s\n      \n      case YamlValue.YNumber(n) =&gt; \n        if n.isWhole then n.toLong.toString else n.toString\n      \n      case YamlValue.YBoolean(b) =&gt; b.toString\n      \n      case YamlValue.YNull =&gt; \"null\"\n      \n      case YamlValue.YArray(values) if values.isEmpty =&gt; \"[]\"\n      \n      case YamlValue.YArray(values) =&gt;\n        values.map(v =&gt; s\"\\n$spaces- ${render(v, indent + 1).trim}\")\n              .mkString(\"\")\n      \n      case YamlValue.YObject(fields) if fields.isEmpty =&gt; \"{}\"\n      \n      case YamlValue.YObject(fields) =&gt;\n        fields.map { (key, value) =&gt;\n          value match\n            case YamlValue.YObject(_) | YamlValue.YArray(_) =&gt;\n              s\"\\n$spaces$key:${render(value, indent + 1)}\"\n            case _ =&gt;\n              s\"\\n$spaces$key: ${render(value, indent + 1)}\"\n        }.mkString(\"\")\n\n\n3.1.4 Code de test\nVoir YamlEncoderSpec dans le code fourni."
-  },
-  {
-    "objectID": "tp7.html#travail-à-réaliser",
-    "href": "tp7.html#travail-à-réaliser",
-    "title": "TP7 - Classes de type",
-    "section": "3.2 Travail à réaliser",
-    "text": "3.2 Travail à réaliser\n\n3.2.1 Instances pour les types primitifs\nImplémentez les instances given de YamlEncoder pour les types suivants : - String - Int - Double - Boolean - Long\n// TODO: Implémentez les instances ici\ngiven YamlEncoder[String] = ???\ngiven YamlEncoder[Int] = ???\ngiven YamlEncoder[Double] = ???\ngiven YamlEncoder[Boolean] = ???\ngiven YamlEncoder[Long] = ???\n\n\n3.2.2 Instances pour les classes Person, Address, Employee\n\n\n3.2.3 Combinateurs pour collections\nImplémentez les instances pour les types génériques :\n\nList[A] (si A a un encoder)\nOption[A] (si A a un encoder)\n\n// TODO: Implémentez les combinateurs\ngiven [A](using enc: YamlEncoder[A]): YamlEncoder[List[A]] = ???\n\ngiven [A](using enc: YamlEncoder[A]): YamlEncoder[Option[A]] = ???\n\n\n\n3.2.4 Extension method\nCréez une extension method toYaml qui permet d’appeler .toYaml sur n’importe quelle valeur ayant un YamlEncoder.\n// TODO: Implémentez l'extension method\nextension [A](value: A)\n  def toYaml(using enc: YamlEncoder[A]): YamlValue = ???"
-  },
-  {
-    "objectID": "tp7.html#résultat-attendu",
-    "href": "tp7.html#résultat-attendu",
-    "title": "TP7 - Classes de type",
-    "section": "3.3 Résultat attendu",
-    "text": "3.3 Résultat attendu\nExécutez les tests YamlEncoderSpec, tous les tests doivent passer."
-  },
-  {
-    "objectID": "tp7.html#bonus-support-pour-mapstring-a",
-    "href": "tp7.html#bonus-support-pour-mapstring-a",
-    "title": "TP7 - Classes de type",
-    "section": "3.4 (Bonus) Support pour Map[String, A]",
-    "text": "3.4 (Bonus) Support pour Map[String, A]\nImplémentez le support pour Map[String, A] :\ngiven [A](using enc: YamlEncoder[A]): YamlEncoder[Map[String, A]] = ???\nPuis testez avec :\ntest(\"encoder Map[String, A]\") {\n   case class Config(host: String, port: Int, ssl: Boolean) derives YamlEncoder\n\n   val configMap = Map(\n      \"database\" -&gt; Config(\"localhost\", 5432, true),\n      \"cache\" -&gt; Config(\"redis.local\", 6379, false)\n   )\n\n   val yaml = YamlRenderer.render(configMap.toYaml)\n\n   yaml shouldBe \"\"\"\ndatabase:\n  host: localhost\n  port: 5432\n  ssl: true\ncache:\n  host: redis.local\n  port: 6379\n  ssl: false\"\"\".trim\n}"
-  },
-  {
-    "objectID": "tp7.html#bonus-dérivation-automatique-pour-case-classes",
-    "href": "tp7.html#bonus-dérivation-automatique-pour-case-classes",
-    "title": "TP7 - Classes de type",
-    "section": "3.5 (Bonus) Dérivation automatique pour case classes",
-    "text": "3.5 (Bonus) Dérivation automatique pour case classes\nImplémentez la dérivation automatique en utilisant les méthodes de Product. Ce trait est implémenté par toutes les case classes.\nimport scala.deriving.*\n\n// TODO: Fonction helper pour encoder n'importe quel type\nprivate def encodeAny(value: Any): YamlValue = ???\n\n// TODO: Instance dérivée automatiquement\ngiven derivedProduct[T &lt;: Product]: YamlEncoder[T] = ???"
-  },
-  {
-    "objectID": "tp7.html#bonus---difficile-dérivation-automatique-pour-case-classes-avec-macros",
-    "href": "tp7.html#bonus---difficile-dérivation-automatique-pour-case-classes-avec-macros",
-    "title": "TP7 - Classes de type",
-    "section": "3.6 (Bonus - Difficile) Dérivation automatique pour case classes avec macros",
-    "text": "3.6 (Bonus - Difficile) Dérivation automatique pour case classes avec macros\nL’approche précédente avec Product n’est pas satisfaisante. En effet, si notre case class possède des attributs d’un type que nous ne savons pas encoder, le programme compilera quand même.\nIl serait préférable de tout valider à la compilation. Scala 3 offre un mécanisme permettant de séparer les composants d’un ADT avec la classe Mirror. Lisez cet article et implémentez la dérivation automatique de case class pour YamlEncoder :\nType Class Derivation in Scala 3"
+    "text": "correction liste chaînée\nfin CM3 sucre\nTP4 collections\nCM4\nTP5"
   },
   {
     "objectID": "tp2.html",
@@ -1327,21 +1334,33 @@
     "href": "tp5.html",
     "title": "TP5 - Paramètres de type",
     "section": "",
-    "text": "Reprenons la liste chaînée du TP3. Rendons notre liste générique pour accepter n’importe quel type. Vous pouvez partir du corrigé publié sur GitHub.\nsealed trait MyList[+A]:\n  // TODO méthodes prepend, length, ...\ncase object Empty extends MyList[Nothing]\ncase class Cons[A](head: A, tail: MyList[A]) extends MyList[A]\n\nCorrigez les méthodes précédentes pour utiliser le paramètre de type A au lieu de Int.\nTestez votre MyList avec d’autres types que Int, comme String"
+    "text": "Reprenons la liste chaînée du TP3. Rendons notre liste générique pour accepter n’importe quel type. Vous pouvez partir du corrigé publié sur GitHub.\nsealed trait MyList[+A]:\n  // TODO méthodes prepend, length, ...\ncase object Empty extends MyList[Nothing]\ncase class Cons[A](head: A, tail: MyList[A]) extends MyList[A]\n\nCorrigez les méthodes précédentes pour utiliser le paramètre de type A au lieu de Int.\nTestez votre MyList avec d’autres types que Int, comme String",
+    "crumbs": [
+      "TPs",
+      "TP5 - Paramètres de type"
+    ]
   },
   {
     "objectID": "tp5.html#liste-chaînée",
     "href": "tp5.html#liste-chaînée",
     "title": "TP5 - Paramètres de type",
     "section": "",
-    "text": "Reprenons la liste chaînée du TP3. Rendons notre liste générique pour accepter n’importe quel type. Vous pouvez partir du corrigé publié sur GitHub.\nsealed trait MyList[+A]:\n  // TODO méthodes prepend, length, ...\ncase object Empty extends MyList[Nothing]\ncase class Cons[A](head: A, tail: MyList[A]) extends MyList[A]\n\nCorrigez les méthodes précédentes pour utiliser le paramètre de type A au lieu de Int.\nTestez votre MyList avec d’autres types que Int, comme String"
+    "text": "Reprenons la liste chaînée du TP3. Rendons notre liste générique pour accepter n’importe quel type. Vous pouvez partir du corrigé publié sur GitHub.\nsealed trait MyList[+A]:\n  // TODO méthodes prepend, length, ...\ncase object Empty extends MyList[Nothing]\ncase class Cons[A](head: A, tail: MyList[A]) extends MyList[A]\n\nCorrigez les méthodes précédentes pour utiliser le paramètre de type A au lieu de Int.\nTestez votre MyList avec d’autres types que Int, comme String",
+    "crumbs": [
+      "TPs",
+      "TP5 - Paramètres de type"
+    ]
   },
   {
     "objectID": "tp5.html#foldleft",
     "href": "tp5.html#foldleft",
     "title": "TP5 - Paramètres de type",
     "section": "2 foldLeft",
-    "text": "2 foldLeft\nObservez le corrigé de IntList dans le package tp3_list_tailrec. Toutes les méthodes se ressemblent. Il serait intéressant de refactorer ce code pour éviter la duplication.\n\nImplémentez foldLeft en utilisant @tailrec\n\nsealed trait MyList[+A]:\n  def foldLeft[B](initial: A)(reduceFn: (B, A) =&gt; B): B = ???\n\nRéimplémentez length, contains, filter, mkString, map, sum en utilisant foldLeft.\n\n\n\n\n\n\n\nNote\n\n\n\nfoldLeft est une opération clé, disponible dans toutes les collections. Presque toutes les opérations peuvent être implémentées avec foldLeft. Au lieu d’écrire les fonctions récursives manuellement, foldLeft fournit un pattern réutilisable."
+    "text": "2 foldLeft\nObservez le corrigé de IntList dans le package tp3_list_tailrec. Toutes les méthodes se ressemblent. Il serait intéressant de refactorer ce code pour éviter la duplication.\n\nImplémentez foldLeft en utilisant @tailrec\n\nsealed trait MyList[+A]:\n  def foldLeft[B](initial: A)(reduceFn: (B, A) =&gt; B): B = ???\n\nRéimplémentez length, contains, filter, mkString, map, sum en utilisant foldLeft.\n\n\n\n\n\n\n\nNote\n\n\n\nfoldLeft est une opération clé, disponible dans toutes les collections. Presque toutes les opérations peuvent être implémentées avec foldLeft. Au lieu d’écrire les fonctions récursives manuellement, foldLeft fournit un pattern réutilisable.",
+    "crumbs": [
+      "TPs",
+      "TP5 - Paramètres de type"
+    ]
   },
   {
     "objectID": "cm1.html",
