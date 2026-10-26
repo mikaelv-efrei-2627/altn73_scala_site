@@ -224,42 +224,66 @@
     "href": "tp6.html",
     "title": "TP6 - Gestion des erreurs",
     "section": "",
-    "text": "Vous travaillez sur un système de gestion d’utilisateurs. Créez une classe User et implémentez des fonctions utilisant Option.\n\n\n\ncase class User(id: Int, name: String, email: Option[String], age: Option[Int])\n\n// 1. Créer une fonction qui retourne l'email d'un utilisateur ou \"Pas d'email\"\ndef getEmailOrDefault(user: User): String = ???\n\n// 2. Créer une fonction qui retourne true si l'utilisateur est majeur (&gt;= 18)\n// Retourner false si l'âge n'est pas défini\ndef isAdult(user: User): Boolean = ???\n\n// 3. Créer une fonction qui transforme l'email en majuscules s'il existe\ndef uppercaseEmail(user: User): Option[String] = ???\n\n\n\nval user1 = User(1, \"Alice\", Some(\"alice@example.com\"), Some(25))\nval user2 = User(2, \"Bob\", None, Some(16))\nval user3 = User(3, \"Charlie\", Some(\"charlie@example.com\"), None)\n\n\n\n\n\n\n\nVous créez un système de configuration avec des valeurs optionnelles qui doivent être validées. On distingue la configuration brute (pouvant être invalide) de la configuration validée (garantie correcte).\n\n\n\n// Configuration brute issue d'un fichier ou de variables d'environnement\ncase class RawConfig(\n  host: Option[String],\n  port: Option[Int],\n  timeout: Option[Int]\n)\n\n// Configuration validée avec des valeurs garanties correctes\ncase class ValidatedConfig(\n  host: String,\n  port: Int,\n  timeout: Int\n)\n\n// 1. Créer une fonction qui valide le port (entre 1 et 65535)\ndef validatePort(port: Int): Option[Int] = ???\n\n// 2. Créer une fonction qui valide le host (non vide et non blanc)\ndef validateHost(host: String): Option[String] = ???\n\n// 3. Créer une fonction qui valide le timeout (&gt; 0)\ndef validateTimeout(timeout: Int): Option[Int] = ???\n\n// 4. Créer une fonction qui transforme une RawConfig en ValidatedConfig\n// Toutes les valeurs doivent être présentes et valides\ndef validateConfig(config: RawConfig): Option[ValidatedConfig] = ???\n\n// 5. Créer une fonction qui construit une URL depuis une ValidatedConfig\n// Format: \"http://host:port\"\ndef buildUrl(config: ValidatedConfig): String = ???\n\n// 6. BONUS : Créer une fonction qui valide avec des valeurs par défaut\n// Défauts : host = \"localhost\", port = 8080, timeout = 3000\ndef validateConfigWithDefaults(config: RawConfig): ValidatedConfig = ???\n\n\n\nval validRaw = RawConfig(Some(\"api.example.com\"), Some(443), Some(5000))\nval invalidHost = RawConfig(Some(\"\"), Some(443), Some(5000))\nval invalidPort = RawConfig(Some(\"api.example.com\"), Some(99999), Some(5000))\nval partialRaw = RawConfig(None, None, Some(1000))\nval completelyEmpty = RawConfig(None, None, None)\n\n\n\n\n\n\n\n\n\n\n\nTipMéthodes principales d’Option\n\n\n\n\nOption.map: transforme la valeur si elle existe\nOption.flatMap: transforme et aplatit\nOption.getOrElse: retourne la valeur ou un défaut\nOption.filter: filtre selon une condition\nOption.fold: fournit une valeur par défaut et une transformation\nOption.isDefined / Option.isEmpty: teste la présence de valeur"
+    "text": "Vous travaillez sur un système de gestion d’utilisateurs. Créez une classe User et implémentez des fonctions utilisant Option.\n\n\n\ncase class User(id: Int, name: String, email: Option[String], age: Option[Int])\n\n// 1. Créer une fonction qui retourne l'email d'un utilisateur ou \"Pas d'email\"\ndef getEmailOrDefault(user: User): String = ???\n\n// 2. Créer une fonction qui retourne true si l'utilisateur est majeur (&gt;= 18)\n// Retourner false si l'âge n'est pas défini\ndef isAdult(user: User): Boolean = ???\n\n// 3. Créer une fonction qui transforme l'email en majuscules s'il existe\ndef uppercaseEmail(user: User): Option[String] = ???\n\n\n\nval user1 = User(1, \"Alice\", Some(\"alice@example.com\"), Some(25))\nval user2 = User(2, \"Bob\", None, Some(16))\nval user3 = User(3, \"Charlie\", Some(\"charlie@example.com\"), None)\n\n\n\n\n\n\n\nVous créez un système de configuration avec des valeurs optionnelles qui doivent être validées. On distingue la configuration brute (pouvant être invalide) de la configuration validée (garantie correcte).\n\n\n\n// Configuration brute issue d'un fichier ou de variables d'environnement\ncase class RawConfig(\n  host: Option[String],\n  port: Option[Int],\n  timeout: Option[Int]\n)\n\n// Configuration validée avec des valeurs garanties correctes\ncase class ValidatedConfig(\n  host: String,\n  port: Int,\n  timeout: Int\n)\n\n// 1. Créer une fonction qui valide le port (entre 1 et 65535)\ndef validatePort(port: Int): Option[Int] = ???\n\n// 2. Créer une fonction qui valide le host (non vide et non blanc)\ndef validateHost(host: String): Option[String] = ???\n\n// 3. Créer une fonction qui valide le timeout (&gt; 0)\ndef validateTimeout(timeout: Int): Option[Int] = ???\n\n// 4. Créer une fonction qui transforme une RawConfig en ValidatedConfig\n// Toutes les valeurs doivent être présentes et valides\ndef validateConfig(config: RawConfig): Option[ValidatedConfig] = ???\n\n// 5. Créer une fonction qui construit une URL depuis une ValidatedConfig\n// Format: \"http://host:port\"\ndef buildUrl(config: ValidatedConfig): String = ???\n\n// 6. BONUS : Créer une fonction qui valide avec des valeurs par défaut\n// Défauts : host = \"localhost\", port = 8080, timeout = 3000\ndef validateConfigWithDefaults(config: RawConfig): ValidatedConfig = ???\n\n\n\nval validRaw = RawConfig(Some(\"api.example.com\"), Some(443), Some(5000))\nval invalidHost = RawConfig(Some(\"\"), Some(443), Some(5000))\nval invalidPort = RawConfig(Some(\"api.example.com\"), Some(99999), Some(5000))\nval partialRaw = RawConfig(None, None, Some(1000))\nval completelyEmpty = RawConfig(None, None, None)\n\n\n\n\n\n\n\n\n\n\n\nTipMéthodes principales d’Option\n\n\n\n\nOption.map: transforme la valeur si elle existe\nOption.flatMap: transforme et aplatit\nOption.getOrElse: retourne la valeur ou un défaut\nOption.filter: filtre selon une condition\nOption.fold: fournit une valeur par défaut et une transformation\nOption.isDefined / Option.isEmpty: teste la présence de valeur",
+    "crumbs": [
+      "TPs",
+      "TP6 - Gestion des erreurs"
+    ]
   },
   {
     "objectID": "tp6.html#exercice-manipulation-basique-doption",
     "href": "tp6.html#exercice-manipulation-basique-doption",
     "title": "TP6 - Gestion des erreurs",
     "section": "",
-    "text": "Vous travaillez sur un système de gestion d’utilisateurs. Créez une classe User et implémentez des fonctions utilisant Option.\n\n\n\ncase class User(id: Int, name: String, email: Option[String], age: Option[Int])\n\n// 1. Créer une fonction qui retourne l'email d'un utilisateur ou \"Pas d'email\"\ndef getEmailOrDefault(user: User): String = ???\n\n// 2. Créer une fonction qui retourne true si l'utilisateur est majeur (&gt;= 18)\n// Retourner false si l'âge n'est pas défini\ndef isAdult(user: User): Boolean = ???\n\n// 3. Créer une fonction qui transforme l'email en majuscules s'il existe\ndef uppercaseEmail(user: User): Option[String] = ???\n\n\n\nval user1 = User(1, \"Alice\", Some(\"alice@example.com\"), Some(25))\nval user2 = User(2, \"Bob\", None, Some(16))\nval user3 = User(3, \"Charlie\", Some(\"charlie@example.com\"), None)"
+    "text": "Vous travaillez sur un système de gestion d’utilisateurs. Créez une classe User et implémentez des fonctions utilisant Option.\n\n\n\ncase class User(id: Int, name: String, email: Option[String], age: Option[Int])\n\n// 1. Créer une fonction qui retourne l'email d'un utilisateur ou \"Pas d'email\"\ndef getEmailOrDefault(user: User): String = ???\n\n// 2. Créer une fonction qui retourne true si l'utilisateur est majeur (&gt;= 18)\n// Retourner false si l'âge n'est pas défini\ndef isAdult(user: User): Boolean = ???\n\n// 3. Créer une fonction qui transforme l'email en majuscules s'il existe\ndef uppercaseEmail(user: User): Option[String] = ???\n\n\n\nval user1 = User(1, \"Alice\", Some(\"alice@example.com\"), Some(25))\nval user2 = User(2, \"Bob\", None, Some(16))\nval user3 = User(3, \"Charlie\", Some(\"charlie@example.com\"), None)",
+    "crumbs": [
+      "TPs",
+      "TP6 - Gestion des erreurs"
+    ]
   },
   {
     "objectID": "tp6.html#exercice-configuration",
     "href": "tp6.html#exercice-configuration",
     "title": "TP6 - Gestion des erreurs",
     "section": "",
-    "text": "Vous créez un système de configuration avec des valeurs optionnelles qui doivent être validées. On distingue la configuration brute (pouvant être invalide) de la configuration validée (garantie correcte).\n\n\n\n// Configuration brute issue d'un fichier ou de variables d'environnement\ncase class RawConfig(\n  host: Option[String],\n  port: Option[Int],\n  timeout: Option[Int]\n)\n\n// Configuration validée avec des valeurs garanties correctes\ncase class ValidatedConfig(\n  host: String,\n  port: Int,\n  timeout: Int\n)\n\n// 1. Créer une fonction qui valide le port (entre 1 et 65535)\ndef validatePort(port: Int): Option[Int] = ???\n\n// 2. Créer une fonction qui valide le host (non vide et non blanc)\ndef validateHost(host: String): Option[String] = ???\n\n// 3. Créer une fonction qui valide le timeout (&gt; 0)\ndef validateTimeout(timeout: Int): Option[Int] = ???\n\n// 4. Créer une fonction qui transforme une RawConfig en ValidatedConfig\n// Toutes les valeurs doivent être présentes et valides\ndef validateConfig(config: RawConfig): Option[ValidatedConfig] = ???\n\n// 5. Créer une fonction qui construit une URL depuis une ValidatedConfig\n// Format: \"http://host:port\"\ndef buildUrl(config: ValidatedConfig): String = ???\n\n// 6. BONUS : Créer une fonction qui valide avec des valeurs par défaut\n// Défauts : host = \"localhost\", port = 8080, timeout = 3000\ndef validateConfigWithDefaults(config: RawConfig): ValidatedConfig = ???\n\n\n\nval validRaw = RawConfig(Some(\"api.example.com\"), Some(443), Some(5000))\nval invalidHost = RawConfig(Some(\"\"), Some(443), Some(5000))\nval invalidPort = RawConfig(Some(\"api.example.com\"), Some(99999), Some(5000))\nval partialRaw = RawConfig(None, None, Some(1000))\nval completelyEmpty = RawConfig(None, None, None)"
+    "text": "Vous créez un système de configuration avec des valeurs optionnelles qui doivent être validées. On distingue la configuration brute (pouvant être invalide) de la configuration validée (garantie correcte).\n\n\n\n// Configuration brute issue d'un fichier ou de variables d'environnement\ncase class RawConfig(\n  host: Option[String],\n  port: Option[Int],\n  timeout: Option[Int]\n)\n\n// Configuration validée avec des valeurs garanties correctes\ncase class ValidatedConfig(\n  host: String,\n  port: Int,\n  timeout: Int\n)\n\n// 1. Créer une fonction qui valide le port (entre 1 et 65535)\ndef validatePort(port: Int): Option[Int] = ???\n\n// 2. Créer une fonction qui valide le host (non vide et non blanc)\ndef validateHost(host: String): Option[String] = ???\n\n// 3. Créer une fonction qui valide le timeout (&gt; 0)\ndef validateTimeout(timeout: Int): Option[Int] = ???\n\n// 4. Créer une fonction qui transforme une RawConfig en ValidatedConfig\n// Toutes les valeurs doivent être présentes et valides\ndef validateConfig(config: RawConfig): Option[ValidatedConfig] = ???\n\n// 5. Créer une fonction qui construit une URL depuis une ValidatedConfig\n// Format: \"http://host:port\"\ndef buildUrl(config: ValidatedConfig): String = ???\n\n// 6. BONUS : Créer une fonction qui valide avec des valeurs par défaut\n// Défauts : host = \"localhost\", port = 8080, timeout = 3000\ndef validateConfigWithDefaults(config: RawConfig): ValidatedConfig = ???\n\n\n\nval validRaw = RawConfig(Some(\"api.example.com\"), Some(443), Some(5000))\nval invalidHost = RawConfig(Some(\"\"), Some(443), Some(5000))\nval invalidPort = RawConfig(Some(\"api.example.com\"), Some(99999), Some(5000))\nval partialRaw = RawConfig(None, None, Some(1000))\nval completelyEmpty = RawConfig(None, None, None)",
+    "crumbs": [
+      "TPs",
+      "TP6 - Gestion des erreurs"
+    ]
   },
   {
     "objectID": "tp6.html#méthodes-utiles-à-connaître",
     "href": "tp6.html#méthodes-utiles-à-connaître",
     "title": "TP6 - Gestion des erreurs",
     "section": "",
-    "text": "TipMéthodes principales d’Option\n\n\n\n\nOption.map: transforme la valeur si elle existe\nOption.flatMap: transforme et aplatit\nOption.getOrElse: retourne la valeur ou un défaut\nOption.filter: filtre selon une condition\nOption.fold: fournit une valeur par défaut et une transformation\nOption.isDefined / Option.isEmpty: teste la présence de valeur"
+    "text": "TipMéthodes principales d’Option\n\n\n\n\nOption.map: transforme la valeur si elle existe\nOption.flatMap: transforme et aplatit\nOption.getOrElse: retourne la valeur ou un défaut\nOption.filter: filtre selon une condition\nOption.fold: fournit une valeur par défaut et une transformation\nOption.isDefined / Option.isEmpty: teste la présence de valeur",
+    "crumbs": [
+      "TPs",
+      "TP6 - Gestion des erreurs"
+    ]
   },
   {
     "objectID": "tp6.html#exercice-configuration-1",
     "href": "tp6.html#exercice-configuration-1",
     "title": "TP6 - Gestion des erreurs",
     "section": "2.1 Exercice : Configuration",
-    "text": "2.1 Exercice : Configuration\nReprenez l’exercice sur la configuration pour renvoyer une erreur explicite.\n\nCréez un sealed trait ConfigError\nPour chaque erreur possible, créez une classe implémentant ConfigError\nChangez les types de retour pour retourner un Either"
+    "text": "2.1 Exercice : Configuration\nReprenez l’exercice sur la configuration pour renvoyer une erreur explicite.\n\nCréez un sealed trait ConfigError\nPour chaque erreur possible, créez une classe implémentant ConfigError\nChangez les types de retour pour retourner un Either",
+    "crumbs": [
+      "TPs",
+      "TP6 - Gestion des erreurs"
+    ]
   },
   {
     "objectID": "tp6.html#exercice-configuration-2",
     "href": "tp6.html#exercice-configuration-2",
     "title": "TP6 - Gestion des erreurs",
     "section": "3.1 Exercice : Configuration",
-    "text": "3.1 Exercice : Configuration\n\nAjoutez la bibliothèque ZIO Prelude dans votre build.sbt :\nlibraryDependencies += \"dev.zio\" %% \"zio-prelude\" % \"1.0.0-RC42\"\nChangez les types Either en type zio.prelude.Validation\nTestez que validateConfig(completelyEmpty) contient bien 3 erreurs: pour le host, le port, et le timeout."
+    "text": "3.1 Exercice : Configuration\n\nAjoutez la bibliothèque ZIO Prelude dans votre build.sbt :\nlibraryDependencies += \"dev.zio\" %% \"zio-prelude\" % \"1.0.0-RC42\"\nChangez les types Either en type zio.prelude.Validation\nTestez que validateConfig(completelyEmpty) contient bien 3 erreurs: pour le host, le port, et le timeout.",
+    "crumbs": [
+      "TPs",
+      "TP6 - Gestion des erreurs"
+    ]
   },
   {
     "objectID": "exercices-scala-option.html",
@@ -735,7 +759,7 @@
     "href": "seance3.html",
     "title": "ALTN73 Programmation fonctionnelle avec Scala",
     "section": "",
-    "text": "correction liste chaînée\nfin CM3 sucre\nTP4 collections\nCM4\nTP5"
+    "text": "correction liste chaînée\nfin CM3 sucre\nTP4 collections 1h30\nCM4 30’\nTP5 30’"
   },
   {
     "objectID": "tp2.html",
@@ -841,7 +865,7 @@
     "href": "tp2.html#test",
     "title": "TP2 - Calculateur d’Impôt sur le Revenu",
     "section": "3.3 Test",
-    "text": "3.3 Test\nAjoutez une méthode de test contenant le code suivant :\nval marie = Celibataire(\"Marie Martin\", 40000.0)\nprintln(f\"${marie.nom}:\")\nprintln(f\"  Quotient familial: ${marie.calculerQuotientFamilial()}%.2f€\")\nprintln(f\"  Taux effectif: ${marie.calculerTauxEffectif(6000)}%.2f%%\")\n\n// Sortie attendue:\n// Marie Martin:\n//   Quotient familial: 40000.00€\n//   Impôt à 15%: 6000.00€\n//   Taux effectif: 15.00%",
+    "text": "3.3 Test\nAjoutez une méthode de test contenant le code suivant :\nval marie = Celibataire(\"Marie Martin\", 40000.0)\nprintln(f\"${marie.nom}:\")\nprintln(f\"  Quotient familial: ${marie.calculerQuotientFamilial()}%.2f€\")\nprintln(f\"  Taux effectif: ${marie.calculerTauxEffectif(6000)}%.2f%%\")\n\n// Sortie attendue:\n// Marie Martin:\n//   Quotient familial: 40000.00€\n//   Taux effectif: 15.00%",
     "crumbs": [
       "TPs",
       "TP2 - Calculateur d'Impôt sur le Revenu"
@@ -1264,70 +1288,110 @@
     "href": "cm5.html",
     "title": "CM5 - Gestion des erreurs",
     "section": "",
-    "text": "Exceptions and error handling\nZIO Validation"
+    "text": "Exceptions and error handling\nZIO Validation",
+    "crumbs": [
+      "Cours",
+      "CM5 - Gestion des erreurs"
+    ]
   },
   {
     "objectID": "cm5.html#throw",
     "href": "cm5.html#throw",
     "title": "CM5 - Gestion des erreurs",
     "section": "2.1 throw",
-    "text": "2.1 throw\n// En Java, cette exception serait \"checked\", car elle hérite d'Exception \n// En Java, les exceptions \"unchecked\" héritent de RuntimeException ou Error\nclass MinorException(s: String) extends Exception(s)\n\ncase class Person(name: String, age: Int)\n\n// pas de déclaration throws, MinorException est unchecked\ndef validateAge(ageStr: String) : Int = \n  val age = ageStr.toInt // peut lancer NumberFormatException\n  if (age &lt; 18)\n    throw new MinorException(\"Age must be &gt;= 18\")"
+    "text": "2.1 throw\n// En Java, cette exception serait \"checked\", car elle hérite d'Exception \n// En Java, les exceptions \"unchecked\" héritent de RuntimeException ou Error\nclass MinorException(s: String) extends Exception(s)\n\ncase class Person(name: String, age: Int)\n\n// pas de déclaration throws, MinorException est unchecked\ndef validateAge(ageStr: String) : Int = \n  val age = ageStr.toInt // peut lancer NumberFormatException\n  if (age &lt; 18)\n    throw new MinorException(\"Age must be &gt;= 18\")",
+    "crumbs": [
+      "Cours",
+      "CM5 - Gestion des erreurs"
+    ]
   },
   {
     "objectID": "cm5.html#trycatchfinally",
     "href": "cm5.html#trycatchfinally",
     "title": "CM5 - Gestion des erreurs",
     "section": "2.2 try/catch/finally",
-    "text": "2.2 try/catch/finally\n\nVous pouvez utiliser try, catch, finally comme en Java.\nla différence est que le block catch utilise le pattern matching, avec des case pour chaque exception\n\nOn peut utiliser NonFatal(e) pour intercepter les exceptions qui ne sont pas “fatales” pour l’application.\nLes exceptions fatales sont par exemple les OutOfMemoryError, StackOverflowError, … (voir le source de scala.util.control.NonFatal)\n\n\n/** @return \"ok\" ou un message d'erreur */\ndef validatePerson(name: String, age: String): String =\n  try\n    age = validateAge(ageStr)\n    \"ok\"\n  catch\n    case e: MinorException =&gt; e.getMessage\n    case e: (IllegalArgumentException | NumberFormatException) =&gt; e.getMessage\n    case NonFatal(e) =&gt;\n      logger.error(\"Not too bad\", e)\n      e.getMessage\n  finally\n    println(\"ce code s'exécute même si une exception n'est pas interceptée\")\n\n\n\n\n\n\nTip\n\n\n\nVous pouvez annoter une méthode avec @throws[MinorException] pour documenter quelles exceptions peuvent être lancées. Le compilateur Scala n’en tiendra pas compte pour valider votre code Scala.\nCependant, le byte-code généré aura une clause throws MinorException. Cela peut être utile si votre code est appelé depuis Java."
+    "text": "2.2 try/catch/finally\n\nVous pouvez utiliser try, catch, finally comme en Java.\nla différence est que le block catch utilise le pattern matching, avec des case pour chaque exception\n\nOn peut utiliser NonFatal(e) pour intercepter les exceptions qui ne sont pas “fatales” pour l’application.\nLes exceptions fatales sont par exemple les OutOfMemoryError, StackOverflowError, … (voir le source de scala.util.control.NonFatal)\n\n\n/** @return \"ok\" ou un message d'erreur */\ndef validatePerson(name: String, age: String): String =\n  try\n    age = validateAge(ageStr)\n    \"ok\"\n  catch\n    case e: MinorException =&gt; e.getMessage\n    case e: (IllegalArgumentException | NumberFormatException) =&gt; e.getMessage\n    case NonFatal(e) =&gt;\n      logger.error(\"Not too bad\", e)\n      e.getMessage\n  finally\n    println(\"ce code s'exécute même si une exception n'est pas interceptée\")\n\n\n\n\n\n\nTip\n\n\n\nVous pouvez annoter une méthode avec @throws[MinorException] pour documenter quelles exceptions peuvent être lancées. Le compilateur Scala n’en tiendra pas compte pour valider votre code Scala.\nCependant, le byte-code généré aura une clause throws MinorException. Cela peut être utile si votre code est appelé depuis Java.",
+    "crumbs": [
+      "Cours",
+      "CM5 - Gestion des erreurs"
+    ]
   },
   {
     "objectID": "cm5.html#option---exemple-dutilisation",
     "href": "cm5.html#option---exemple-dutilisation",
     "title": "CM5 - Gestion des erreurs",
     "section": "3.1 Option - Exemple d’utilisation",
-    "text": "3.1 Option - Exemple d’utilisation\nval myList = List(1, 2, 3)\nval head: Option[Int] = liste.headOption // Some(1)\n\nval myList2 = List.empty\nval head2: Option[Int] = liste.headOption // None\n\nval nameToAge = Map(\"alice\" -&gt; 18, \"bob\" -&gt; 17)\nval name1 = \"bob\"\nval optAge: Option[Int] = nameToAge.get(name1) // Some(17)\n\nval name2 = \"charles\"\nval optAge2: Option[Int] = nameToAge.get(name2) // None\nPour récupérer la valeur, nous utiliserons le pattern matching, ou getOrElse :\noptAge match\n  case Some(age) =&gt; age\n  case None =&gt; -1\n  \n// équivalent\noptAge.getOrElse(-1)\n\n\n\n\n\n\nImportant\n\n\n\nIl existe une méthode Option.get qui lance une NoSuchElementException lorsque l’option est un None.\nIl ne faut pas l’utiliser. Cela équivaut à utiliser un null et risquer des NullPointerException. L’objectif du type Option est justement d’éviter ces exceptions."
+    "text": "3.1 Option - Exemple d’utilisation\nval myList = List(1, 2, 3)\nval head: Option[Int] = liste.headOption // Some(1)\n\nval myList2 = List.empty\nval head2: Option[Int] = liste.headOption // None\n\nval nameToAge = Map(\"alice\" -&gt; 18, \"bob\" -&gt; 17)\nval name1 = \"bob\"\nval optAge: Option[Int] = nameToAge.get(name1) // Some(17)\n\nval name2 = \"charles\"\nval optAge2: Option[Int] = nameToAge.get(name2) // None\nPour récupérer la valeur, nous utiliserons le pattern matching, ou getOrElse :\noptAge match\n  case Some(age) =&gt; age\n  case None =&gt; -1\n  \n// équivalent\noptAge.getOrElse(-1)\n\n\n\n\n\n\nImportant\n\n\n\nIl existe une méthode Option.get qui lance une NoSuchElementException lorsque l’option est un None.\nIl ne faut pas l’utiliser. Cela équivaut à utiliser un null et risquer des NullPointerException. L’objectif du type Option est justement d’éviter ces exceptions.",
+    "crumbs": [
+      "Cours",
+      "CM5 - Gestion des erreurs"
+    ]
   },
   {
     "objectID": "cm5.html#option---remplacer-une-exception",
     "href": "cm5.html#option---remplacer-une-exception",
     "title": "CM5 - Gestion des erreurs",
     "section": "3.2 Option - Remplacer une exception",
-    "text": "3.2 Option - Remplacer une exception\nNous pouvons l’utiliser pour remplacer une gestion d’exception. L’inconvénient est que nous perdons le message d’erreur de l’exception :\ndef parseAge(age: String): Option[Int] =\n  try\n    Some(age.toInt)\n  catch\n    case e: NumberFormatException =&gt; None\n\nparseAge(\"toto\") // None \nparseAge(\"18\")   // Some(18)\nLorsque parseAge renvoie None, nous savons qu’il y a eu un problème, mais nous n’avons pas de message d’erreur.\nNous pouvons également modifier notre autre méthode checkAge pour utiliser Option au lieu de lancer une exception :\ndef checkAge(age: Int) : Option[Int] =\n  if (age &lt; 18) \n    None \n  else \n    Some(age)  \nPour combiner des méthodes qui renvoient une Option, nous pouvons utiliser le pattern matching :\ncase class Person(name: String, age: Int)\n\ndef checkName(name: String): Option[String] =\n  if (name.isEmpty) None else Some(name)\n\ndef validatePerson(name: String, ageStr: String): Option[Person] =\n  checkName(name) match\n    case Some(checkedName) =&gt;\n      parseAge(ageStr) match\n        case Some(age) =&gt;\n          checkAge(age) match\n            case Some(checkedAge) =&gt; Some(Person(checkedName, checkedAge))\n            case None =&gt; None\n        case None =&gt; None\n    case None =&gt; None"
+    "text": "3.2 Option - Remplacer une exception\nNous pouvons l’utiliser pour remplacer une gestion d’exception. L’inconvénient est que nous perdons le message d’erreur de l’exception :\ndef parseAge(age: String): Option[Int] =\n  try\n    Some(age.toInt)\n  catch\n    case e: NumberFormatException =&gt; None\n\nparseAge(\"toto\") // None \nparseAge(\"18\")   // Some(18)\nLorsque parseAge renvoie None, nous savons qu’il y a eu un problème, mais nous n’avons pas de message d’erreur.\nNous pouvons également modifier notre autre méthode checkAge pour utiliser Option au lieu de lancer une exception :\ndef checkAge(age: Int) : Option[Int] =\n  if (age &lt; 18) \n    None \n  else \n    Some(age)  \nPour combiner des méthodes qui renvoient une Option, nous pouvons utiliser le pattern matching :\ncase class Person(name: String, age: Int)\n\ndef checkName(name: String): Option[String] =\n  if (name.isEmpty) None else Some(name)\n\ndef validatePerson(name: String, ageStr: String): Option[Person] =\n  checkName(name) match\n    case Some(checkedName) =&gt;\n      parseAge(ageStr) match\n        case Some(age) =&gt;\n          checkAge(age) match\n            case Some(checkedAge) =&gt; Some(Person(checkedName, checkedAge))\n            case None =&gt; None\n        case None =&gt; None\n    case None =&gt; None",
+    "crumbs": [
+      "Cours",
+      "CM5 - Gestion des erreurs"
+    ]
   },
   {
     "objectID": "cm5.html#option---combiner-avec-map-et-flatmap",
     "href": "cm5.html#option---combiner-avec-map-et-flatmap",
     "title": "CM5 - Gestion des erreurs",
     "section": "3.3 Option - combiner avec map et flatMap",
-    "text": "3.3 Option - combiner avec map et flatMap\nCette approche est peu lisible. Nous pouvons simplifier ce code en utilisant map et flatMap. Le type Option peut en effet être considéré comme une Seq contenant 0 ou 1 élément. Il possède beaucoup de méthodes communes avec Seq.\ndef validatePerson2(name: String, ageStr: String): Option[Person] =\n  checkName(name)\n    .flatMap(checkedName =&gt; \n      parseAge(ageStr)\n        .flatMap(age =&gt; checkAge(age)) \n        .map(checkedAge =&gt; Person(checkedName, checkedAge))\n    )\nC’est un peu plus concis, mais pas encore très lisible !\nDans le CM3, nous avions vu que le for/yield de Scala est un “sucre syntaxique” qui permet de remplacer map et flatMap. Nous pouvons donc l’utiliser pour simplifier encore notre code !\ndef validatePerson3(name: String, ageStr: String): Option[Person] = \n  for \n    checkedName &lt;- checkName(name)\n    age &lt;- parseAge(ageStr)\n    checkedAge &lt;- checkAge(age)\n  yield\n    Person(checkedName, checkedAge)"
+    "text": "3.3 Option - combiner avec map et flatMap\nCette approche est peu lisible. Nous pouvons simplifier ce code en utilisant map et flatMap. Le type Option peut en effet être considéré comme une Seq contenant 0 ou 1 élément. Il possède beaucoup de méthodes communes avec Seq.\ndef validatePerson2(name: String, ageStr: String): Option[Person] =\n  checkName(name)\n    .flatMap(checkedName =&gt; \n      parseAge(ageStr)\n        .flatMap(age =&gt; checkAge(age)) \n        .map(checkedAge =&gt; Person(checkedName, checkedAge))\n    )\nC’est un peu plus concis, mais pas encore très lisible !\nDans le CM3, nous avions vu que le for/yield de Scala est un “sucre syntaxique” qui permet de remplacer map et flatMap. Nous pouvons donc l’utiliser pour simplifier encore notre code !\ndef validatePerson3(name: String, ageStr: String): Option[Person] = \n  for \n    checkedName &lt;- checkName(name)\n    age &lt;- parseAge(ageStr)\n    checkedAge &lt;- checkAge(age)\n  yield\n    Person(checkedName, checkedAge)",
+    "crumbs": [
+      "Cours",
+      "CM5 - Gestion des erreurs"
+    ]
   },
   {
     "objectID": "cm5.html#either---exemple",
     "href": "cm5.html#either---exemple",
     "title": "CM5 - Gestion des erreurs",
     "section": "4.1 Either - Exemple",
-    "text": "4.1 Either - Exemple\nReprenons nos méthodes précédentes pour utiliser Either :\ndef parseAge(ageStr: String): Either[String, Int] =\n  try\n    Right(ageStr.toInt)\n  catch\n    case e: NumberFormatException =&gt; Left(s\"$ageStr is not an int\")\n\n\ndef checkAge(age: Int) : Either[String, Int] =\n  if (age &lt; 18)\n    Left(s\"$age must be &gt;= 18\")\n  else\n    Right(age)\n\n\ndef checkName(name: String): Either[String, String] =\n  if (name.isEmpty) Left(\"name is required\") else Right(name)\nLe type Either est “right-biased”. Cela signifie que lorsqu’on appelle map ou flatMap, cela transforme les instances Right, et laisse les Left inchangés. Comme Either implémente map et flatMap, nous pouvons réutiliser validatePerson quasiment inchangé ! Nous avons juste à changer le type de retour :\ndef validatePerson(name: String, ageStr: String): Either[String, Person] =\n  for\n    checkedName &lt;- checkName(name)\n    age &lt;- parseAge(ageStr)\n    checkedAge &lt;- checkAge(age)\n  yield\n    Person(checkedName, checkedAge)\nExemple d’utilisation :\nvalidatePerson(\"\", \"17\")\n// Left(name is required)\n\nvalidatePerson(\"John\", \"abc\")\n// Left(abc is not an int)\n\nvalidatePerson(\"John\", \"17\")\n// Left(17 must be &gt;= 18)\n\nvalidatePerson(\"John\", \"20\")\n// Right(Person(John,20))"
+    "text": "4.1 Either - Exemple\nReprenons nos méthodes précédentes pour utiliser Either :\ndef parseAge(ageStr: String): Either[String, Int] =\n  try\n    Right(ageStr.toInt)\n  catch\n    case e: NumberFormatException =&gt; Left(s\"$ageStr is not an int\")\n\n\ndef checkAge(age: Int) : Either[String, Int] =\n  if (age &lt; 18)\n    Left(s\"$age must be &gt;= 18\")\n  else\n    Right(age)\n\n\ndef checkName(name: String): Either[String, String] =\n  if (name.isEmpty) Left(\"name is required\") else Right(name)\nLe type Either est “right-biased”. Cela signifie que lorsqu’on appelle map ou flatMap, cela transforme les instances Right, et laisse les Left inchangés. Comme Either implémente map et flatMap, nous pouvons réutiliser validatePerson quasiment inchangé ! Nous avons juste à changer le type de retour :\ndef validatePerson(name: String, ageStr: String): Either[String, Person] =\n  for\n    checkedName &lt;- checkName(name)\n    age &lt;- parseAge(ageStr)\n    checkedAge &lt;- checkAge(age)\n  yield\n    Person(checkedName, checkedAge)\nExemple d’utilisation :\nvalidatePerson(\"\", \"17\")\n// Left(name is required)\n\nvalidatePerson(\"John\", \"abc\")\n// Left(abc is not an int)\n\nvalidatePerson(\"John\", \"17\")\n// Left(17 must be &gt;= 18)\n\nvalidatePerson(\"John\", \"20\")\n// Right(Person(John,20))",
+    "crumbs": [
+      "Cours",
+      "CM5 - Gestion des erreurs"
+    ]
   },
   {
     "objectID": "cm5.html#either---modélisation-des-erreurs",
     "href": "cm5.html#either---modélisation-des-erreurs",
     "title": "CM5 - Gestion des erreurs",
     "section": "4.2 Either - modélisation des erreurs",
-    "text": "4.2 Either - modélisation des erreurs\nDans notre exemple, nous avions utilisé String comme type erreur dans Either[String, A]. Cela permet d’avoir un message sous forme de chaîne de caractères. Cela peut être suffisant pour afficher un message dans un programme simple.\nCependant, cette approche est souvent insuffisante en production :\n\nles messages d’erreurs sont couplés avec le code qui produit l’erreur\n\nles messages sont répartis partout dans le code.\ndifficile d’offrir d’autres langues\n\nles appelants ne peuvent pas traiter une erreur particulière\n\nIl est plus pratique d’avoir des types structurés pour pouvoir réagir différemment en fonction du type d’erreur, et pour pouvoir conserver plus d’informations sur l’erreur. En Java, nous utilisions des exceptions personnalisées. Avec Either, nous pouvons créer nos propres ADT pour modéliser nos erreurs :\nsealed trait PersonError:\n  def message: String\n\ncase class PersonIntFieldParsingError(field: String, value: String) extends PersonError:\n  override def message: String = s\"$field with value: $value is not an integer\"\n\ncase object PersonAgeMinorError extends PersonError:\n  override def message: String = s\"age must be &gt;= 18\"\n\ncase class PersonFieldRequiredError(field: String) extends PersonError:\n  override def message: String = s\"$field is required\"\nNos messages d’erreur sont maintenant centralisés. Nos fonctions de validation peuvent renvoyer un type qui indique clairement à l’appelant le problème qui peut se produire :\ndef parseAge(ageStr: String): Either[PersonIntFieldParsingError, Int] =\n  try\n    Right(ageStr.toInt)\n  catch\n    case e: NumberFormatException =&gt; Left(PersonIntFieldParsingError(\"age\", ageStr))\n\n\ndef checkAge(age: Int) : Either[PersonAgeMinorError.type, Int] =\n  if (age &lt; 18)\n    Left(PersonAgeMinorError)\n  else\n    Right(age)\n\n\ndef checkName(name: String): Either[PersonFieldRequiredError, String] =\n  if (name.isEmpty)\n    Left(PersonFieldRequiredError(\"name\"))\n  else\n    Right(name)\nLorsqu’on combine les fonctions de validations, on peut traiter toutes les erreurs en utilisant le trait PersonError :\ndef validatePerson(name: String, ageStr: String): Either[PersonError, Person] =\n  for\n    checkedName &lt;- checkName(name)\n    age &lt;- parseAge(ageStr)\n    checkedAge &lt;- checkAge(age)\n  yield\n    Person(checkedName, checkedAge)"
+    "text": "4.2 Either - modélisation des erreurs\nDans notre exemple, nous avions utilisé String comme type erreur dans Either[String, A]. Cela permet d’avoir un message sous forme de chaîne de caractères. Cela peut être suffisant pour afficher un message dans un programme simple.\nCependant, cette approche est souvent insuffisante en production :\n\nles messages d’erreurs sont couplés avec le code qui produit l’erreur\n\nles messages sont répartis partout dans le code.\ndifficile d’offrir d’autres langues\n\nles appelants ne peuvent pas traiter une erreur particulière\n\nIl est plus pratique d’avoir des types structurés pour pouvoir réagir différemment en fonction du type d’erreur, et pour pouvoir conserver plus d’informations sur l’erreur. En Java, nous utilisions des exceptions personnalisées. Avec Either, nous pouvons créer nos propres ADT pour modéliser nos erreurs :\nsealed trait PersonError:\n  def message: String\n\ncase class PersonIntFieldParsingError(field: String, value: String) extends PersonError:\n  override def message: String = s\"$field with value: $value is not an integer\"\n\ncase object PersonAgeMinorError extends PersonError:\n  override def message: String = s\"age must be &gt;= 18\"\n\ncase class PersonFieldRequiredError(field: String) extends PersonError:\n  override def message: String = s\"$field is required\"\nNos messages d’erreur sont maintenant centralisés. Nos fonctions de validation peuvent renvoyer un type qui indique clairement à l’appelant le problème qui peut se produire :\ndef parseAge(ageStr: String): Either[PersonIntFieldParsingError, Int] =\n  try\n    Right(ageStr.toInt)\n  catch\n    case e: NumberFormatException =&gt; Left(PersonIntFieldParsingError(\"age\", ageStr))\n\n\ndef checkAge(age: Int) : Either[PersonAgeMinorError.type, Int] =\n  if (age &lt; 18)\n    Left(PersonAgeMinorError)\n  else\n    Right(age)\n\n\ndef checkName(name: String): Either[PersonFieldRequiredError, String] =\n  if (name.isEmpty)\n    Left(PersonFieldRequiredError(\"name\"))\n  else\n    Right(name)\nLorsqu’on combine les fonctions de validations, on peut traiter toutes les erreurs en utilisant le trait PersonError :\ndef validatePerson(name: String, ageStr: String): Either[PersonError, Person] =\n  for\n    checkedName &lt;- checkName(name)\n    age &lt;- parseAge(ageStr)\n    checkedAge &lt;- checkAge(age)\n  yield\n    Person(checkedName, checkedAge)",
+    "crumbs": [
+      "Cours",
+      "CM5 - Gestion des erreurs"
+    ]
   },
   {
     "objectID": "cm5.html#constructeur",
     "href": "cm5.html#constructeur",
     "title": "CM5 - Gestion des erreurs",
     "section": "5.1 Constructeur",
-    "text": "5.1 Constructeur\nLa définition de Try.apply prend une fonction en paramètre “by-name” avec r: =&gt; T. Cela signifie que la fonction r ne sera évaluée que lorsqu’on l’appelle.\nTry:\n  def apply[T](r: =&gt; T): Try[T] =\n    try\n      val r1 = r\n      Success(r1)\n    catch\n      case NonFatal(e) =&gt; Failure(e)"
+    "text": "5.1 Constructeur\nLa définition de Try.apply prend une fonction en paramètre “by-name” avec r: =&gt; T. Cela signifie que la fonction r ne sera évaluée que lorsqu’on l’appelle.\nTry:\n  def apply[T](r: =&gt; T): Try[T] =\n    try\n      val r1 = r\n      Success(r1)\n    catch\n      case NonFatal(e) =&gt; Failure(e)",
+    "crumbs": [
+      "Cours",
+      "CM5 - Gestion des erreurs"
+    ]
   },
   {
     "objectID": "cm5.html#utilisation",
     "href": "cm5.html#utilisation",
     "title": "CM5 - Gestion des erreurs",
     "section": "5.2 Utilisation",
-    "text": "5.2 Utilisation\nimport scala.util.Try \n\ndef parseAgeTry(ageStr: String): Try[Int] =\n  Try(ageStr.toInt)\n\nparseAgeTry(\"abc\")\n// Failure(java.lang.NumberFormatException: For input string: \"abc\")\nparseAgeTry(\"18\")\n// Success(18)\nSi l’on souhaite conserver notre définition qui renvoyait un Either, on peut utiliser .toEither :\ndef parseAge(ageStr: String): Either[PersonIntFieldParsingError, Int] =\n  Try(ageStr.toInt)\n    .toEither\n    .left // on souhaite transformer la partie gauche\n    .map(exception =&gt; PersonIntFieldParsingError(\"age\", ageStr))"
+    "text": "5.2 Utilisation\nimport scala.util.Try \n\ndef parseAgeTry(ageStr: String): Try[Int] =\n  Try(ageStr.toInt)\n\nparseAgeTry(\"abc\")\n// Failure(java.lang.NumberFormatException: For input string: \"abc\")\nparseAgeTry(\"18\")\n// Success(18)\nSi l’on souhaite conserver notre définition qui renvoyait un Either, on peut utiliser .toEither :\ndef parseAge(ageStr: String): Either[PersonIntFieldParsingError, Int] =\n  Try(ageStr.toInt)\n    .toEither\n    .left // on souhaite transformer la partie gauche\n    .map(exception =&gt; PersonIntFieldParsingError(\"age\", ageStr))",
+    "crumbs": [
+      "Cours",
+      "CM5 - Gestion des erreurs"
+    ]
   },
   {
     "objectID": "tp5.html",
