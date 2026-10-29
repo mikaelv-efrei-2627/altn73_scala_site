@@ -161,63 +161,99 @@
     "href": "cm6.html",
     "title": "CM6 - Classes de Type",
     "section": "",
-    "text": "Scala 3 Given and Using clauses - RockTheJVM\nContext Parameters - scala-lang.org\nExtension Methods - scala-lang.org\nMonad (FP) - Wikipedia"
+    "text": "Scala 3 Given and Using clauses - RockTheJVM\nContext Parameters - scala-lang.org\nExtension Methods - scala-lang.org\nMonad (FP) - Wikipedia",
+    "crumbs": [
+      "Cours",
+      "CM6 - Classes de Type"
+    ]
   },
   {
     "objectID": "cm6.html#effets-de-bords",
     "href": "cm6.html#effets-de-bords",
     "title": "CM6 - Classes de Type",
     "section": "2.1 Effets de bords",
-    "text": "2.1 Effets de bords\nToute fonction qui a des effets de bord (side effect) est impure. Un effet de bord peut être :\n\nModifier une variable se trouvant en dehors de la fonction\nAfficher sur la console\nOuvrir une connection réseau\nLire/Écrire dans un fichier, une base de données\nDe manière générale, toute interaction avec le monde extérieur."
+    "text": "2.1 Effets de bords\nToute fonction qui a des effets de bord (side effect) est impure. Un effet de bord peut être :\n\nModifier une variable se trouvant en dehors de la fonction\nAfficher sur la console\nOuvrir une connection réseau\nLire/Écrire dans un fichier, une base de données\nDe manière générale, toute interaction avec le monde extérieur.",
+    "crumbs": [
+      "Cours",
+      "CM6 - Classes de Type"
+    ]
   },
   {
     "objectID": "cm6.html#exceptions-et-transparence-référentielle",
     "href": "cm6.html#exceptions-et-transparence-référentielle",
     "title": "CM6 - Classes de Type",
     "section": "2.2 Exceptions et transparence référentielle",
-    "text": "2.2 Exceptions et transparence référentielle\nEn programmation fonctionnelle, nous évitons d’utiliser les exceptions, car leur utilisation casse la transparence référentielle :\ndef area(width: Int, height: Int): Double =\n  if (width &gt; 5 || height &gt; 5)\n    throw new IllegalArgumentException(\"too big\")\n  else\n    width * height\nCe code :\nval total =\n  try\n    area(3, 2) + area(6, 2)\n  catch\n    case e: IllegalArgumentException =&gt; 0\n\nN’est pas équivalent à celui-ci :\nvar area1 = area(3, 2)\nval area2 = area(6, 2)\n\nval total2 =\n  try\n    area1 + area2\n  catch\n    case e: IllegalArgumentException =&gt; 0\nSi une fonction lance une exception, on ne peut pas toujours remplacer l’appel d’une fonction par son résultat. Nous n’avons pas ce problème lorsque nous utilisons des structures Either ou Validated."
+    "text": "2.2 Exceptions et transparence référentielle\nEn programmation fonctionnelle, nous évitons d’utiliser les exceptions, car leur utilisation casse la transparence référentielle :\ndef area(width: Int, height: Int): Double =\n  if (width &gt; 5 || height &gt; 5)\n    throw new IllegalArgumentException(\"too big\")\n  else\n    width * height\nCe code :\nval total =\n  try\n    area(3, 2) + area(6, 2)\n  catch\n    case e: IllegalArgumentException =&gt; 0\n\nN’est pas équivalent à celui-ci :\nvar area1 = area(3, 2)\nval area2 = area(6, 2)\n\nval total2 =\n  try\n    area1 + area2\n  catch\n    case e: IllegalArgumentException =&gt; 0\nSi une fonction lance une exception, on ne peut pas toujours remplacer l’appel d’une fonction par son résultat. Nous n’avons pas ce problème lorsque nous utilisons des structures Either ou Validated.",
+    "crumbs": [
+      "Cours",
+      "CM6 - Classes de Type"
+    ]
   },
   {
     "objectID": "cm6.html#avantages-des-fonctions-pures",
     "href": "cm6.html#avantages-des-fonctions-pures",
     "title": "CM6 - Classes de Type",
     "section": "2.3 Avantages des fonctions pures",
-    "text": "2.3 Avantages des fonctions pures\nLa transparence référentielle est un concept clé en programmation fonctionnelle. Si la majorité du code de votre programme est composé de fonctions pures, il devient beaucoup plus facile de :\n\nComprendre ce que fait le programme. Si on voit un appel de fonction, on sait que la valeur de retour dépend uniquement des arguments. Pas besoin de tenir compte de l’état d’un attribut, ou de risquer d’avoir des modifications d’attributs dans les arguments.\nRefactoriser. On peut utiliser le refactoring “introduce variable” sans se soucier de la position de la variable dans le code.\nTester ses fonctions. On a juste à passer différents arguments et tester la valeur de retour.\nÉcrire des programmes multithreads. Plusieurs appels de fonctions pures peuvent être exécutés en parallèle. Pas de risque de modification concurrente de la même variable."
+    "text": "2.3 Avantages des fonctions pures\nLa transparence référentielle est un concept clé en programmation fonctionnelle. Si la majorité du code de votre programme est composé de fonctions pures, il devient beaucoup plus facile de :\n\nComprendre ce que fait le programme. Si on voit un appel de fonction, on sait que la valeur de retour dépend uniquement des arguments. Pas besoin de tenir compte de l’état d’un attribut, ou de risquer d’avoir des modifications d’attributs dans les arguments.\nRefactoriser. On peut utiliser le refactoring “introduce variable” sans se soucier de la position de la variable dans le code.\nTester ses fonctions. On a juste à passer différents arguments et tester la valeur de retour.\nÉcrire des programmes multithreads. Plusieurs appels de fonctions pures peuvent être exécutés en parallèle. Pas de risque de modification concurrente de la même variable.",
+    "crumbs": [
+      "Cours",
+      "CM6 - Classes de Type"
+    ]
   },
   {
     "objectID": "cm6.html#cas-dutilisation-tri",
     "href": "cm6.html#cas-dutilisation-tri",
     "title": "CM6 - Classes de Type",
     "section": "3.1 Cas d’utilisation : Tri",
-    "text": "3.1 Cas d’utilisation : Tri\nNous souhaitons trier une liste d’objets Person en fonction d’un attribut surname. Dans notre programme, nous souhaitons offrir un tri “standard”, mais laisser la possibilité à l’appelant de passer un ordre de tri personnalisé.\ncase class Person(surname: String, name: String, age: Int)\nEn Java, nous aurions créé une classe qui implémente Comparator&lt;Person&gt;. En Scala, nous devons déclarer une instance de Ordering[Person] :\nobject Person:\n  val defaultPersonOrdering: Ordering[Person] = new Ordering[Person] {\n    override def compare(x: Person, y: Person): Int =\n      x.surname.compareTo(y.surname)\n  }\nL’inconvénient est qu’il faut passer cet objet Ordering partout où on a besoin de comparer des Person. :\ndef listPeople(persons: Seq[Person])\n              (ordering: Ordering[Person]) = persons.sorted(ordering)\n\ndef someOtherMethodRequiringOrdering(alice: Person, bob: Person)\n                                    (ordering: Ordering[Person]) = ???\n\ndef yetAnotherMethodRequiringOrdering(persons: List[Person])\n                                     (ordering: Ordering[Person]) = ???\nPour appeler ces méthodes, nous devons retrouver l’instance Ordering “standard” et la passer en argument, ce qui peut rapidement devenir répétitif.\nEn utilisant given et using, nous pouvons déléguer cette tâche ingrate au compilateur :\nobject Person: \n  given defaultPersonOrdering: Ordering[Person] = new Ordering[Person] {\n    override def compare(x: Person, y: Person): Int =\n      x.surname.compareTo(y.surname)\n  }\ndef listPeople(persons: Seq[Person])\n              (using ordering: Ordering[Person]) = persons.sorted(ordering)\nUtilisation :\nval people = List(Person(\"Weasley\", \"Ron\", 15), Person(\"Potter\", \"Harry\", 15)) \nlistPeople(people) // &lt;- le compilateur injecte l'ordering ici"
+    "text": "3.1 Cas d’utilisation : Tri\nNous souhaitons trier une liste d’objets Person en fonction d’un attribut surname. Dans notre programme, nous souhaitons offrir un tri “standard”, mais laisser la possibilité à l’appelant de passer un ordre de tri personnalisé.\ncase class Person(surname: String, name: String, age: Int)\nEn Java, nous aurions créé une classe qui implémente Comparator&lt;Person&gt;. En Scala, nous devons déclarer une instance de Ordering[Person] :\nobject Person:\n  val defaultPersonOrdering: Ordering[Person] = new Ordering[Person] {\n    override def compare(x: Person, y: Person): Int =\n      x.surname.compareTo(y.surname)\n  }\nL’inconvénient est qu’il faut passer cet objet Ordering partout où on a besoin de comparer des Person. :\ndef listPeople(persons: Seq[Person])\n              (ordering: Ordering[Person]) = persons.sorted(ordering)\n\ndef someOtherMethodRequiringOrdering(alice: Person, bob: Person)\n                                    (ordering: Ordering[Person]) = ???\n\ndef yetAnotherMethodRequiringOrdering(persons: List[Person])\n                                     (ordering: Ordering[Person]) = ???\nPour appeler ces méthodes, nous devons retrouver l’instance Ordering “standard” et la passer en argument, ce qui peut rapidement devenir répétitif.\nEn utilisant given et using, nous pouvons déléguer cette tâche ingrate au compilateur :\nobject Person: \n  given defaultPersonOrdering: Ordering[Person] = new Ordering[Person] {\n    override def compare(x: Person, y: Person): Int =\n      x.surname.compareTo(y.surname)\n  }\ndef listPeople(persons: Seq[Person])\n              (using ordering: Ordering[Person]) = persons.sorted(ordering)\nUtilisation :\nval people = List(Person(\"Weasley\", \"Ron\", 15), Person(\"Potter\", \"Harry\", 15)) \nlistPeople(people) // &lt;- le compilateur injecte l'ordering ici",
+    "crumbs": [
+      "Cours",
+      "CM6 - Classes de Type"
+    ]
   },
   {
     "objectID": "cm6.html#implicit-resolution",
     "href": "cm6.html#implicit-resolution",
     "title": "CM6 - Classes de Type",
     "section": "3.2 Implicit resolution",
-    "text": "3.2 Implicit resolution\nLorsque le compilateur voit un appel de méthode où un paramètre using est manquant, comme dans listPeople(people), il va utiliser un algorithme pour rechercher les instances given correspondantes. C’est le mécanisme implicit resolution.\nPour un paramètre using t: T, le compilateur va rechercher un given de type T dans cet ordre :\n\nportée locale : dans le même bloc ou méthode\nimport explicite : import Person.defaultPersonOrdering\nimport avec joker : import Person.*\ncompanion object : l’objet companion de T et les companions de ses paramètres de type\n\npour Ordering[Person], recherche dans l’object Ordering ET dans Person.\n\nles super-classes de T et les classes englobant T (lorsque T est une classe interne).\n\n\n\n\n\n\n\nNote\n\n\n\nLes mots-clé given et using ont été introduits dans Scala 3. Vous pouvez parfois tomber sur des API écrites en Scala 2 qui utilisent le mot-clé implicit. Voici l’équivalence :\n\n\n\n\n\n\n\nScala 3.x\nScala 2.x\n\n\n\n\ngiven ord: Ordering[Person] = ???\nimplicit val ord: Ordering[Person] = ???\n\n\ndef tri[A](seq: Seq[A])(using ord: Ordering[A]) = ???\ndef tri[A](seq: Seq[A])(implicit ord: Ordering[A]) = ???"
+    "text": "3.2 Implicit resolution\nLorsque le compilateur voit un appel de méthode où un paramètre using est manquant, comme dans listPeople(people), il va utiliser un algorithme pour rechercher les instances given correspondantes. C’est le mécanisme implicit resolution.\nPour un paramètre using t: T, le compilateur va rechercher un given de type T dans cet ordre :\n\nportée locale : dans le même bloc ou méthode\nimport explicite : import Person.defaultPersonOrdering\nimport avec joker : import Person.*\ncompanion object : l’objet companion de T et les companions de ses paramètres de type\n\npour Ordering[Person], recherche dans l’object Ordering ET dans Person.\n\nles super-classes de T et les classes englobant T (lorsque T est une classe interne).\n\n\n\n\n\n\n\nNote\n\n\n\nLes mots-clé given et using ont été introduits dans Scala 3. Vous pouvez parfois tomber sur des API écrites en Scala 2 qui utilisent le mot-clé implicit. Voici l’équivalence :\n\n\n\n\n\n\n\nScala 3.x\nScala 2.x\n\n\n\n\ngiven ord: Ordering[Person] = ???\nimplicit val ord: Ordering[Person] = ???\n\n\ndef tri[A](seq: Seq[A])(using ord: Ordering[A]) = ???\ndef tri[A](seq: Seq[A])(implicit ord: Ordering[A]) = ???",
+    "crumbs": [
+      "Cours",
+      "CM6 - Classes de Type"
+    ]
   },
   {
     "objectID": "cm6.html#dérivation-de-given",
     "href": "cm6.html#dérivation-de-given",
     "title": "CM6 - Classes de Type",
     "section": "3.3 Dérivation de given",
-    "text": "3.3 Dérivation de given\nNous pouvons déclarer des méthodes avec given. Cela va permettre au compilateur de construire des instances à la volée.\nPar exemple, supposons que :\n\nnotre code métier a besoin de comparer des Option[Person], puis des Option[Product].\nnous avons défini un given Ordering[Person] et un given Ordering[Product].\n\nCela ne suffit pas ! Il faudrait aussi déclarer :\n\ngiven Ordering[Option[Person]] et\ngiven Ordering[Option[Product]].\n\nNous pouvons déclarer un seul given de la manière suivante :\ngiven optionOrdering[T](using ord: Ordering[T]): Ordering[Option[T]] with\n  def compare(optA: Option[T], optB: Option[T]): Int = \n    (optA, optB) match \n      case (None, None) =&gt; 0\n      case (None, _) =&gt; -1\n      case (_, None) =&gt; 1\n      case (Some(a), Some(b)) =&gt; ord.compare(a, b)\nCette définition indique au compilateur :\n\n“si tu as une instance given Ordering[T],\ntu peux automatiquement créer une instance given Ordering[Option[T]] en appelant la méthode optionOrdering.\n\nCe mécanisme est très puissant, car le compilateur peut enchaîner plusieurs appels en cascade. On peut ainsi obtenir un Ordering[Option[Option[T]] sans code supplémentaire. C’est particulièrement utile pour encoder/décoder des données dans un format.\nAutre exemple : nous souhaitons pouvoir afficher des Double, ou des List[Double], ou des List[List[Double]], ou des Option[List[Option[Double]]] dans un format particulier :\nDéfinitions :\ntrait Show[A]:\n  def show(a: A): String\n\nobject Show:\n  // Show avec 2 chiffres décimaux\n  given Show[Double] with\n    def show(a: Double): String = f\"$a%6.2f\"\n\n  // Si on connaît Show[A], on sait construire Show[List[A]]\n  given [A](using showA: Show[A]): Show[List[A]] with\n    def show(list: List[A]): String =\n      list.map(showA.show).mkString(\"[\", \", \", \"]\")\n\n  // Si on connaît Show[A], on sait construire Show[Option[A]]\n  given [A](using showA: Show[A]): Show[Option[A]] with\n    def show(opt: Option[A]): String = opt match\n      case Some(a) =&gt; showA.show(a)\n      case None =&gt; \"None\"\nUtilisation :\ndef display[A](value: A)(using s: Show[A]): Unit =\n  println(s.show(value))\n\ndisplay(List(1.234, 2000, 3))\n// [  1.23, 2000.00,   3.00]\ndisplay(List(List(1.234, 2), List(3, 4.1), List(5.0)))\n// [[  1.23,   2.00], [  3.00,   4.10], [  5.00]]\ndisplay(Option(List(Some(1.234), Some(3.3), None)))\n// [  1.23,   3.30, None]"
+    "text": "3.3 Dérivation de given\nNous pouvons déclarer des méthodes avec given. Cela va permettre au compilateur de construire des instances à la volée.\nPar exemple, supposons que :\n\nnotre code métier a besoin de comparer des Option[Person], puis des Option[Product].\nnous avons défini un given Ordering[Person] et un given Ordering[Product].\n\nCela ne suffit pas ! Il faudrait aussi déclarer :\n\ngiven Ordering[Option[Person]] et\ngiven Ordering[Option[Product]].\n\nNous pouvons déclarer un seul given de la manière suivante :\ngiven optionOrdering[T](using ord: Ordering[T]): Ordering[Option[T]] with\n  def compare(optA: Option[T], optB: Option[T]): Int = \n    (optA, optB) match \n      case (None, None) =&gt; 0\n      case (None, _) =&gt; -1\n      case (_, None) =&gt; 1\n      case (Some(a), Some(b)) =&gt; ord.compare(a, b)\nCette définition indique au compilateur :\n\n“si tu as une instance given Ordering[T],\ntu peux automatiquement créer une instance given Ordering[Option[T]] en appelant la méthode optionOrdering.\n\nCe mécanisme est très puissant, car le compilateur peut enchaîner plusieurs appels en cascade. On peut ainsi obtenir un Ordering[Option[Option[T]] sans code supplémentaire. C’est particulièrement utile pour encoder/décoder des données dans un format.\nAutre exemple : nous souhaitons pouvoir afficher des Double, ou des List[Double], ou des List[List[Double]], ou des Option[List[Option[Double]]] dans un format particulier :\nDéfinitions :\ntrait Show[A]:\n  def show(a: A): String\n\nobject Show:\n  // Show avec 2 chiffres décimaux\n  given Show[Double] with\n    def show(a: Double): String = f\"$a%6.2f\"\n\n  // Si on connaît Show[A], on sait construire Show[List[A]]\n  given [A](using showA: Show[A]): Show[List[A]] with\n    def show(list: List[A]): String =\n      list.map(showA.show).mkString(\"[\", \", \", \"]\")\n\n  // Si on connaît Show[A], on sait construire Show[Option[A]]\n  given [A](using showA: Show[A]): Show[Option[A]] with\n    def show(opt: Option[A]): String = opt match\n      case Some(a) =&gt; showA.show(a)\n      case None =&gt; \"None\"\nUtilisation :\ndef display[A](value: A)(using s: Show[A]): Unit =\n  println(s.show(value))\n\ndisplay(List(1.234, 2000, 3))\n// [  1.23, 2000.00,   3.00]\ndisplay(List(List(1.234, 2), List(3, 4.1), List(5.0)))\n// [[  1.23,   2.00], [  3.00,   4.10], [  5.00]]\ndisplay(Option(List(Some(1.234), Some(3.3), None)))\n// [  1.23,   3.30, None]",
+    "crumbs": [
+      "Cours",
+      "CM6 - Classes de Type"
+    ]
   },
   {
     "objectID": "cm6.html#classe-de-type-jsonserializer",
     "href": "cm6.html#classe-de-type-jsonserializer",
     "title": "CM6 - Classes de Type",
     "section": "5.1 Classe de type : JsonSerializer",
-    "text": "5.1 Classe de type : JsonSerializer\nVoici un exemple de classe de type qui permet de convertir un objet en Json :\n// 1. Type class definition\ntrait JsonSerializer[A]:\n  def toJson(value: A): String\n\n// 2. Instances for different types\nobject JsonSerializer:\n  \n  given JsonSerializer[Int] with\n    def toJson(value: Int): String = value.toString\n  \n  given JsonSerializer[String] with\n    def toJson(value: String): String = s\"\"\"\"$value\"\"\"\"\n  \n  given JsonSerializer[Boolean] with\n    def toJson(value: Boolean): String = value.toString\n  \n  given [A](using serializer: JsonSerializer[A]): JsonSerializer[List[A]] with\n    def toJson(values: List[A]): String =\n      values.map(serializer.toJson).mkString(\"[\", \", \", \"]\")\n\n// 3. Extension method\nextension [A](value: A)(using s: JsonSerializer[A])\n  def toJson: String = s.toJson(value)\nAvec ces définitions, lorsqu’on appelle .toJson sur un objet de type T, le compilateur va rechercher une instance given de type JsonSerializer[T] dans le scope.\n// Utilisation\n42.toJson             // 42\n\"hello\".toJson        // \"hello\"\ntrue.toJson           // true\nList(1, 2, 3).toJson  // [1, 2, 3]\nList(\"a\", \"b\").toJson // [\"a\", \"b\"]\nLa flexibilité de cette approche est remarquable. Une bibliothèque JSON peut proposer des instances pour les types standards, que vous pouvez étendre facilement pour vos propres types :\ncase class Person(name: String, age: Int)\n\ngiven JsonSerializer[Person] with\n  def toJson(p: Person): String =\n    s\"\"\"{\"name\": \"${p.name}\", \"age\": ${p.age}}\"\"\"\n\nList(Person(\"Alice\", 30), Person(\"Bob\", 20)).toJson  \n// [{\"name\": \"Alice\", \"age\": 30}, {\"name\": \"Bob\", \"age\": 20}]\nTout est validé à la compilation. L’appel à .toJson ne compilera pas si les instances de type class du bon type ne sont pas déclarées."
+    "text": "5.1 Classe de type : JsonSerializer\nVoici un exemple de classe de type qui permet de convertir un objet en Json :\n// 1. Type class definition\ntrait JsonSerializer[A]:\n  def toJson(value: A): String\n\n// 2. Instances for different types\nobject JsonSerializer:\n  \n  given JsonSerializer[Int] with\n    def toJson(value: Int): String = value.toString\n  \n  given JsonSerializer[String] with\n    def toJson(value: String): String = s\"\"\"\"$value\"\"\"\"\n  \n  given JsonSerializer[Boolean] with\n    def toJson(value: Boolean): String = value.toString\n  \n  given [A](using serializer: JsonSerializer[A]): JsonSerializer[List[A]] with\n    def toJson(values: List[A]): String =\n      values.map(serializer.toJson).mkString(\"[\", \", \", \"]\")\n\n// 3. Extension method\nextension [A](value: A)(using s: JsonSerializer[A])\n  def toJson: String = s.toJson(value)\nAvec ces définitions, lorsqu’on appelle .toJson sur un objet de type T, le compilateur va rechercher une instance given de type JsonSerializer[T] dans le scope.\n// Utilisation\n42.toJson             // 42\n\"hello\".toJson        // \"hello\"\ntrue.toJson           // true\nList(1, 2, 3).toJson  // [1, 2, 3]\nList(\"a\", \"b\").toJson // [\"a\", \"b\"]\nLa flexibilité de cette approche est remarquable. Une bibliothèque JSON peut proposer des instances pour les types standards, que vous pouvez étendre facilement pour vos propres types :\ncase class Person(name: String, age: Int)\n\ngiven JsonSerializer[Person] with\n  def toJson(p: Person): String =\n    s\"\"\"{\"name\": \"${p.name}\", \"age\": ${p.age}}\"\"\"\n\nList(Person(\"Alice\", 30), Person(\"Bob\", 20)).toJson  \n// [{\"name\": \"Alice\", \"age\": 30}, {\"name\": \"Bob\", \"age\": 20}]\nTout est validé à la compilation. L’appel à .toJson ne compilera pas si les instances de type class du bon type ne sont pas déclarées.",
+    "crumbs": [
+      "Cours",
+      "CM6 - Classes de Type"
+    ]
   },
   {
     "objectID": "cm6.html#classes-de-types-dans-les-bibliothèques",
     "href": "cm6.html#classes-de-types-dans-les-bibliothèques",
     "title": "CM6 - Classes de Type",
     "section": "5.2 Classes de types dans les bibliothèques",
-    "text": "5.2 Classes de types dans les bibliothèques\nLe SDK Scala propose quelques classes de type :\n\nscala.math.Ordering pour trier et comparer\nscala.math.Numeric pour les opérations arithmétiques +, -, *, …\nscala.CanEqual permet d’avoir une erreur de compilation lorsqu’on compare 2 types différents avec == (voir TP).\n\nLa bibliothèque Cats définit plusieurs classes de types provenant de la théorie des cagégories. Cette théorie mathématique étudie les structures et leurs relations, et a des connexions avec la programmation fonctionnelle. Il n’est heureusement pas nécéssaire de comprendre cette théorie pour utiliser les principales classes de types de Cats.\n\n5.2.1 cats.Functor\nUn Functor est un type sur lequel on a l’opération map :\ntrait Functor[F[_]] {\n  def map[A, B](fa: F[A])(f: A =&gt; B): F[B]\n}\nNous avons vu que plusieurs types du SDK implémentaient map, comme Option, Either, Seq, … L’avantage du type Functor est que nous pouvons définir des méthodes qui s’appliquent à tous ces types.\nCela permet de renforcer le principle of least power : si la seule chose dont j’ai besoin dans mon paramètre est la fonction map, je peux le déclarer comme Functor.\nimport cats._\nimport cats.syntax.all._\nimport cats.instances.all._\n\n// Méthode générique - fonctionne avec TOUT Functor\ndef applyDiscount[F[_]](prices: F[Double], \n                        discount: Double)(using Functor[F]): F[Double] =\n  prices.map(_ * (1 - discount))\n\n// Tous ces exemples fonctionnent sans définir d'instances !\nval optPrice: Option[Double] = Some(100.0)\nval opt = applyDiscount(optPrice, 0.2)\n// Some(80.0)\n\nval listPrices = List(100.0, 200.0, 300.0)\nval lst = applyDiscount(listPrices, 0.2)\n// List(80.0, 160.0, 240.0)\n\nval eitherPrice: Either[String, Double] = Right(100.0)\nval eith = applyDiscount(eitherPrice, 0.2)\n// Right(80.0)\n\nimport scala.concurrent.Future\nimport scala.concurrent.ExecutionContext.Implicits.global\n\nval futurePrice = Future { Thread.sleep(10); 100.0 }\nval fut = applyDiscount(futurePrice, 0.2)\n// Future(80.0)\n\n\n\n\n\n\nNote\n\n\n\nScala offre un sucre syntaxique pour les fonctions qui utilisent une classe de type. Au lieu de déclarer :\ndef applyDiscount[F[_]](prices: F[Double], \n                        discount: Double)(using Functor[F]): F[Double] = ???\nNous pouvons déclarer Functor derrière le paramètre de type :\ndef applyDiscount[F[_] : Functor](prices: F[Double], \n                                  discount: Double): F[Double] = ???\nCette syntaxe reflète bien l’analogie entre objets/classes et types/classes de types :\ndog: Dog      // objet dog, classe Dog\nF[_]: Functor // type F[_], classe de type Functor\n\n\n\n\n5.2.2 cats.Monad\nFrom A Brief, Incomplete, and Mostly Wrong History of Programming Languages “a monad is a monoid in the category of endofunctors, what’s the problem?”\nLa classe de type Monad a des “pouvoirs” en plus par rapport à Functor : elle permet d’aplatir (flatten) des structures, et de construire (pure) une structure à partir d’une valeur. Comme elle dérive de Functor, elle implémente également flatMap, qui est une combinaison de map et flatten.\nUne définition simplifiée de la classe de type Monad ressemblerait à ceci :\ntrait Monad[F[_]] extends Functor[F] {\n  // construit un F avec une valeur\n  def pure[A](x: A): F[A]\n\n  // la méthode clé qui caractérise une structure monadique \n  def flatMap[A, B](fa: F[A])(f: A =&gt; F[B]): F[B]\n\n  // flatten peut être implémenté avec flatMap\n  def flatten[A](ffa: F[F[A]]): F[A] =\n    flatMap(ffa)(fa =&gt; fa)\n}\nLa méthode flatMap est fondamentale : elle permet de chaîner des opérations qui produisent elles-mêmes des Monads. Cela permet d’enchaîner des traitements les uns à la suite des autres dans un contexte donné. Un Monad représente en quelque sorte un contexte de calcul avec des capacités spécifiques :\n\nOption =&gt; contexte “ce calcul peut ne pas renvoyer de valeur”\nEither =&gt; contexte “ce calcul peut échouer avec une erreur typée”\nFuture =&gt; contexte “ce calcul est asynchrone/effectue des effets de bord”\ncats.IO =&gt; contexte “ce calcul a des effets de bord”\nWriter =&gt; contexte “ce calcul produit des logs en plus de sa valeur”\nState =&gt; contexte “ce calcul peut lire/modifier un état”\n\nNous avions vu que for en Scala était du sucre syntaxique permettant d’enchaîner des flatMap et map. Cela signifie que nous pouvons utiliser for sur tous les types monadiques !\nCats fournit :\n\ndes instances de Monad pour les types courants du SDK comme Option, List, Either, …\nd’autres types monadiques, comme IO, State, NonEmptyList, Writer…\ndes “Monad transformers”, qui permettent de combiner plusieurs Monads\n\nExemple utilisant Writer[L, A], qui permet de logger des informations :\nimport cats.data.Writer\nimport cats.syntax.all._\n\n// type alias: évite de répéter Writer[...] partout\ntype Logged[A] = Writer[List[String], A]\n\ndef validateUser(name: String): Logged[Boolean] =\n  if name.isEmpty then\n    Writer(List(\"Validation: Name is empty\"), false)\n  else\n    Writer(List(s\"Validation: Name '$name' is valid\"), true)\n\ndef saveToDatabase(name: String): Logged[Int] =\n  Writer(List(s\"Database: Saved user '$name'\"), name.hashCode)\n\ndef sendEmail(userId: Int): Logged[Unit] =\n  Writer(List(s\"Email: Sent welcome email to user $userId\"), ())\n\n// For-comprehension avec Writer\ndef registerUser(name: String): Logged[Option[Int]] =\n  for {\n    isValid &lt;- validateUser(name)\n    result  &lt;- if isValid then\n                 for {\n                   userId &lt;- saveToDatabase(name)\n                   _      &lt;- sendEmail(userId)  // _ pour ignorer Unit\n                 } yield Some(userId)\n               else\n                 Writer(List[String](), None)\n  } yield result\n\nval (logs, result) = registerUser(\"Alice\").run\nlogs.foreach(println)\n// Validation: Name 'Alice' is valid\n// Database: Saved user 'Alice'\n// Email: Sent welcome email to user 63679911\n\nprintln(s\"Result: User ID = $result\")\n// Result: User ID = Some(63679911)"
+    "text": "5.2 Classes de types dans les bibliothèques\nLe SDK Scala propose quelques classes de type :\n\nscala.math.Ordering pour trier et comparer\nscala.math.Numeric pour les opérations arithmétiques +, -, *, …\nscala.CanEqual permet d’avoir une erreur de compilation lorsqu’on compare 2 types différents avec == (voir TP).\n\nLa bibliothèque Cats définit plusieurs classes de types provenant de la théorie des cagégories. Cette théorie mathématique étudie les structures et leurs relations, et a des connexions avec la programmation fonctionnelle. Il n’est heureusement pas nécéssaire de comprendre cette théorie pour utiliser les principales classes de types de Cats.\n\n5.2.1 cats.Functor\nUn Functor est un type sur lequel on a l’opération map :\ntrait Functor[F[_]] {\n  def map[A, B](fa: F[A])(f: A =&gt; B): F[B]\n}\nNous avons vu que plusieurs types du SDK implémentaient map, comme Option, Either, Seq, … L’avantage du type Functor est que nous pouvons définir des méthodes qui s’appliquent à tous ces types.\nCela permet de renforcer le principle of least power : si la seule chose dont j’ai besoin dans mon paramètre est la fonction map, je peux le déclarer comme Functor.\nimport cats._\nimport cats.syntax.all._\nimport cats.instances.all._\n\n// Méthode générique - fonctionne avec TOUT Functor\ndef applyDiscount[F[_]](prices: F[Double], \n                        discount: Double)(using Functor[F]): F[Double] =\n  prices.map(_ * (1 - discount))\n\n// Tous ces exemples fonctionnent sans définir d'instances !\nval optPrice: Option[Double] = Some(100.0)\nval opt = applyDiscount(optPrice, 0.2)\n// Some(80.0)\n\nval listPrices = List(100.0, 200.0, 300.0)\nval lst = applyDiscount(listPrices, 0.2)\n// List(80.0, 160.0, 240.0)\n\nval eitherPrice: Either[String, Double] = Right(100.0)\nval eith = applyDiscount(eitherPrice, 0.2)\n// Right(80.0)\n\nimport scala.concurrent.Future\nimport scala.concurrent.ExecutionContext.Implicits.global\n\nval futurePrice = Future { Thread.sleep(10); 100.0 }\nval fut = applyDiscount(futurePrice, 0.2)\n// Future(80.0)\n\n\n\n\n\n\nNote\n\n\n\nScala offre un sucre syntaxique pour les fonctions qui utilisent une classe de type. Au lieu de déclarer :\ndef applyDiscount[F[_]](prices: F[Double], \n                        discount: Double)(using Functor[F]): F[Double] = ???\nNous pouvons déclarer Functor derrière le paramètre de type :\ndef applyDiscount[F[_] : Functor](prices: F[Double], \n                                  discount: Double): F[Double] = ???\nCette syntaxe reflète bien l’analogie entre objets/classes et types/classes de types :\ndog: Dog      // objet dog, classe Dog\nF[_]: Functor // type F[_], classe de type Functor\n\n\n\n\n5.2.2 cats.Monad\nFrom A Brief, Incomplete, and Mostly Wrong History of Programming Languages “a monad is a monoid in the category of endofunctors, what’s the problem?”\nLa classe de type Monad a des “pouvoirs” en plus par rapport à Functor : elle permet d’aplatir (flatten) des structures, et de construire (pure) une structure à partir d’une valeur. Comme elle dérive de Functor, elle implémente également flatMap, qui est une combinaison de map et flatten.\nUne définition simplifiée de la classe de type Monad ressemblerait à ceci :\ntrait Monad[F[_]] extends Functor[F] {\n  // construit un F avec une valeur\n  def pure[A](x: A): F[A]\n\n  // la méthode clé qui caractérise une structure monadique \n  def flatMap[A, B](fa: F[A])(f: A =&gt; F[B]): F[B]\n\n  // flatten peut être implémenté avec flatMap\n  def flatten[A](ffa: F[F[A]]): F[A] =\n    flatMap(ffa)(fa =&gt; fa)\n}\nLa méthode flatMap est fondamentale : elle permet de chaîner des opérations qui produisent elles-mêmes des Monads. Cela permet d’enchaîner des traitements les uns à la suite des autres dans un contexte donné. Un Monad représente en quelque sorte un contexte de calcul avec des capacités spécifiques :\n\nOption =&gt; contexte “ce calcul peut ne pas renvoyer de valeur”\nEither =&gt; contexte “ce calcul peut échouer avec une erreur typée”\nFuture =&gt; contexte “ce calcul est asynchrone/effectue des effets de bord”\ncats.IO =&gt; contexte “ce calcul a des effets de bord”\nWriter =&gt; contexte “ce calcul produit des logs en plus de sa valeur”\nState =&gt; contexte “ce calcul peut lire/modifier un état”\n\nNous avions vu que for en Scala était du sucre syntaxique permettant d’enchaîner des flatMap et map. Cela signifie que nous pouvons utiliser for sur tous les types monadiques !\nCats fournit :\n\ndes instances de Monad pour les types courants du SDK comme Option, List, Either, …\nd’autres types monadiques, comme IO, State, NonEmptyList, Writer…\ndes “Monad transformers”, qui permettent de combiner plusieurs Monads\n\nExemple utilisant Writer[L, A], qui permet de logger des informations :\nimport cats.data.Writer\nimport cats.syntax.all._\n\n// type alias: évite de répéter Writer[...] partout\ntype Logged[A] = Writer[List[String], A]\n\ndef validateUser(name: String): Logged[Boolean] =\n  if name.isEmpty then\n    Writer(List(\"Validation: Name is empty\"), false)\n  else\n    Writer(List(s\"Validation: Name '$name' is valid\"), true)\n\ndef saveToDatabase(name: String): Logged[Int] =\n  Writer(List(s\"Database: Saved user '$name'\"), name.hashCode)\n\ndef sendEmail(userId: Int): Logged[Unit] =\n  Writer(List(s\"Email: Sent welcome email to user $userId\"), ())\n\n// For-comprehension avec Writer\ndef registerUser(name: String): Logged[Option[Int]] =\n  for {\n    isValid &lt;- validateUser(name)\n    result  &lt;- if isValid then\n                 for {\n                   userId &lt;- saveToDatabase(name)\n                   _      &lt;- sendEmail(userId)  // _ pour ignorer Unit\n                 } yield Some(userId)\n               else\n                 Writer(List[String](), None)\n  } yield result\n\nval (logs, result) = registerUser(\"Alice\").run\nlogs.foreach(println)\n// Validation: Name 'Alice' is valid\n// Database: Saved user 'Alice'\n// Email: Sent welcome email to user 63679911\n\nprintln(s\"Result: User ID = $result\")\n// Result: User ID = Some(63679911)",
+    "crumbs": [
+      "Cours",
+      "CM6 - Classes de Type"
+    ]
   },
   {
     "objectID": "tp6.html",
@@ -485,98 +521,154 @@
     "href": "tp7.html",
     "title": "TP7 - Classes de type",
     "section": "",
-    "text": "Avant de démarrer, cliquez sur le lien GitHub Classroom pour créer votre repository."
+    "text": "Avant de démarrer, cliquez sur le lien GitHub Classroom pour créer votre repository.",
+    "crumbs": [
+      "TPs",
+      "TP7 - Classes de type"
+    ]
   },
   {
     "objectID": "tp7.html#objectif",
     "href": "tp7.html#objectif",
     "title": "TP7 - Classes de type",
     "section": "1.1 Objectif",
-    "text": "1.1 Objectif\nCréer un système de gestion de notifications qui utilise given/using pour injecter la configuration de différents environnements (dev, staging, prod)."
+    "text": "1.1 Objectif\nCréer un système de gestion de notifications qui utilise given/using pour injecter la configuration de différents environnements (dev, staging, prod).",
+    "crumbs": [
+      "TPs",
+      "TP7 - Classes de type"
+    ]
   },
   {
     "objectID": "tp7.html#contexte",
     "href": "tp7.html#contexte",
     "title": "TP7 - Classes de type",
     "section": "1.2 Contexte",
-    "text": "1.2 Contexte\nVous développez un système de notifications pour une application. Selon l’environnement, les notifications doivent se comporter différemment :\n\nDev : logs en console uniquement\nStaging : logs + email de test\nProduction : email réel + SMS"
+    "text": "1.2 Contexte\nVous développez un système de notifications pour une application. Selon l’environnement, les notifications doivent se comporter différemment :\n\nDev : logs en console uniquement\nStaging : logs + email de test\nProduction : email réel + SMS",
+    "crumbs": [
+      "TPs",
+      "TP7 - Classes de type"
+    ]
   },
   {
     "objectID": "tp7.html#définir-les-structures",
     "href": "tp7.html#définir-les-structures",
     "title": "TP7 - Classes de type",
     "section": "1.3 Définir les structures",
-    "text": "1.3 Définir les structures\nLes structures suivantes sont fournies dans un package exo1_notification :\n// 1. Configuration d'environnement\ncase class AppConfig(\n  environment: String,\n  enableEmail: Boolean,\n  enableSMS: Boolean,\n  emailEndpoint: String,\n  smsEndpoint: String,\n  debugMode: Boolean\n)\n\n// 2. Service email \nobject EmailService:\n  def sendEmail(to: String, message: String)(using config: AppConfig): Unit =\n    if config.enableEmail then\n      println(s\"[${config.environment}] Email envoyé à $to via ${config.emailEndpoint}: $message\")\n    else\n      println(s\"[${config.environment}] Email désactivé\")\n\n// 3. Service SMS \nobject SmsService:\n  def sendSMS(to: String, message: String)(using config: AppConfig): Unit =\n    if config.enableSMS then\n      println(s\"[${config.environment}] SMS envoyé à $to via ${config.smsEndpoint}: $message\")\n    else\n      println(s\"[${config.environment}] SMS désactivé\")"
+    "text": "1.3 Définir les structures\nLes structures suivantes sont fournies dans un package exo1_notification :\n// 1. Configuration d'environnement\ncase class AppConfig(\n  environment: String,\n  enableEmail: Boolean,\n  enableSMS: Boolean,\n  emailEndpoint: String,\n  smsEndpoint: String,\n  debugMode: Boolean\n)\n\n// 2. Service email \nobject EmailService:\n  def sendEmail(to: String, message: String)(using config: AppConfig): Unit =\n    if config.enableEmail then\n      println(s\"[${config.environment}] Email envoyé à $to via ${config.emailEndpoint}: $message\")\n    else\n      println(s\"[${config.environment}] Email désactivé\")\n\n// 3. Service SMS \nobject SmsService:\n  def sendSMS(to: String, message: String)(using config: AppConfig): Unit =\n    if config.enableSMS then\n      println(s\"[${config.environment}] SMS envoyé à $to via ${config.smsEndpoint}: $message\")\n    else\n      println(s\"[${config.environment}] SMS désactivé\")",
+    "crumbs": [
+      "TPs",
+      "TP7 - Classes de type"
+    ]
   },
   {
     "objectID": "tp7.html#créer-les-configurations-given",
     "href": "tp7.html#créer-les-configurations-given",
     "title": "TP7 - Classes de type",
     "section": "1.4 Créer les configurations given",
-    "text": "1.4 Créer les configurations given\nDéfinissez trois configurations implicites différentes :\nobject Environments:\n  // TODO: Créer given devConfig: AppConfig pour dev\n  // environment = \"DEV\", email + SMS désactivés, debugMode = true\n  \n  // TODO: Créer given stagingConfig: AppConfig pour staging  \n  // environment = \"STAGING\", email activé, SMS désactivé, debugMode = true\n  \n  // TODO: Créer given prodConfig: AppConfig pour production\n  // environment = \"PROD\", email + SMS activés, debugMode = false"
+    "text": "1.4 Créer les configurations given\nDéfinissez trois configurations implicites différentes :\nobject Environments:\n  // TODO: Créer given devConfig: AppConfig pour dev\n  // environment = \"DEV\", email + SMS désactivés, debugMode = true\n  \n  // TODO: Créer given stagingConfig: AppConfig pour staging  \n  // environment = \"STAGING\", email activé, SMS désactivé, debugMode = true\n  \n  // TODO: Créer given prodConfig: AppConfig pour production\n  // environment = \"PROD\", email + SMS activés, debugMode = false",
+    "crumbs": [
+      "TPs",
+      "TP7 - Classes de type"
+    ]
   },
   {
     "objectID": "tp7.html#implémenter-notificationservice",
     "href": "tp7.html#implémenter-notificationservice",
     "title": "TP7 - Classes de type",
     "section": "1.5 Implémenter NotificationService",
-    "text": "1.5 Implémenter NotificationService\nCréez un object NotificationManager avec une méthode send qui :\n\nAccepte une configuration implicite via using\nUtilise EmailService et SmsService\nImplémente la logique d’envoi selon la config :\n\nsi config.debugMode est true, logger l’action\nEnvoyer email si activé (EmailService.sendEmail)\nEnvoyer SMS si activé (SmsService.sendSMS)"
+    "text": "1.5 Implémenter NotificationService\nCréez un object NotificationManager avec une méthode send qui :\n\nAccepte une configuration implicite via using\nUtilise EmailService et SmsService\nImplémente la logique d’envoi selon la config :\n\nsi config.debugMode est true, logger l’action\nEnvoyer email si activé (EmailService.sendEmail)\nEnvoyer SMS si activé (SmsService.sendSMS)",
+    "crumbs": [
+      "TPs",
+      "TP7 - Classes de type"
+    ]
   },
   {
     "objectID": "tp7.html#tester-le-système",
     "href": "tp7.html#tester-le-système",
     "title": "TP7 - Classes de type",
     "section": "1.6 Tester le système",
-    "text": "1.6 Tester le système\nCréez un object Main qui teste les trois environnements :\nobject Main:\n  @main def testNotifications(): Unit =\n    println(\"=== Test DEV ===\")\n    // TODO: Importer devConfig et créer NotificationManager\n  \n    println(\"\\n=== Test STAGING ===\")\n    // TODO: Importer stagingConfig et créer NotificationManager\n  \n    println(\"\\n=== Test PROD ===\")\n    // TODO: Importer prodConfig et créer NotificationManager\nQuand vous exécutez le programme, vous devriez voir :\n=== Test DEV ===\n[DEV] DEBUG: Envoi notification à user@example.com\n[DEV] Email désactivé\n[DEV] SMS désactivé\n\n=== Test STAGING ===\n[STAGING] DEBUG: Envoi notification à user@example.com\n[STAGING] Email envoyé à user@example.com via smtp.staging.com: Alerte importante\n[STAGING] SMS désactivé\n\n=== Test PROD ===\n[PROD] Email envoyé à user@example.com via smtp.prod.com: Alerte importante\n[PROD] SMS envoyé à user@example.com via api.sms.com: Alerte importante\nRemarque : Dans vrai système, il serait préférable de charger la configuration depuis un fichier. Mais le principe d’injecter AppConfig avec using serait conservé."
+    "text": "1.6 Tester le système\nCréez un object Main qui teste les trois environnements :\nobject Main:\n  @main def testNotifications(): Unit =\n    println(\"=== Test DEV ===\")\n    // TODO: Importer devConfig et créer NotificationManager\n  \n    println(\"\\n=== Test STAGING ===\")\n    // TODO: Importer stagingConfig et créer NotificationManager\n  \n    println(\"\\n=== Test PROD ===\")\n    // TODO: Importer prodConfig et créer NotificationManager\nQuand vous exécutez le programme, vous devriez voir :\n=== Test DEV ===\n[DEV] DEBUG: Envoi notification à user@example.com\n[DEV] Email désactivé\n[DEV] SMS désactivé\n\n=== Test STAGING ===\n[STAGING] DEBUG: Envoi notification à user@example.com\n[STAGING] Email envoyé à user@example.com via smtp.staging.com: Alerte importante\n[STAGING] SMS désactivé\n\n=== Test PROD ===\n[PROD] Email envoyé à user@example.com via smtp.prod.com: Alerte importante\n[PROD] SMS envoyé à user@example.com via api.sms.com: Alerte importante\nRemarque : Dans vrai système, il serait préférable de charger la configuration depuis un fichier. Mais le principe d’injecter AppConfig avec using serait conservé.",
+    "crumbs": [
+      "TPs",
+      "TP7 - Classes de type"
+    ]
   },
   {
     "objectID": "tp7.html#points-clés-à-retenir",
     "href": "tp7.html#points-clés-à-retenir",
     "title": "TP7 - Classes de type",
     "section": "1.7 Points clés à retenir",
-    "text": "1.7 Points clés à retenir\n\ngiven déclare des valeurs implicites disponibles dans un scope\nusing demande l’injection d’une valeur implicite\nLes given peuvent être importés sélectivement\nParfait pour l’injection de dépendances sans framework\nAlternative moderne aux implicit de Scala 2"
+    "text": "1.7 Points clés à retenir\n\ngiven déclare des valeurs implicites disponibles dans un scope\nusing demande l’injection d’une valeur implicite\nLes given peuvent être importés sélectivement\nParfait pour l’injection de dépendances sans framework\nAlternative moderne aux implicit de Scala 2",
+    "crumbs": [
+      "TPs",
+      "TP7 - Classes de type"
+    ]
   },
   {
     "objectID": "tp7.html#code-fourni",
     "href": "tp7.html#code-fourni",
     "title": "TP7 - Classes de type",
     "section": "3.1 Code fourni",
-    "text": "3.1 Code fourni\n\n3.1.1 Structure YamlValue\nenum YamlValue:\n  case YString(value: String)\n  case YNumber(value: Double)\n  case YBoolean(value: Boolean)\n  case YNull\n  case YArray(values: List[YamlValue])\n  case YObject(fields: Map[String, YamlValue])\n\n\n3.1.2 Classe de type YamlEncoder\ntrait YamlEncoder[A]:\n  def encode(value: A): YamlValue\n\n\n3.1.3 Renderer YAML\nobject YamlRenderer:\n  def render(yaml: YamlValue, indent: Int = 0): String =\n    val spaces = \"  \" * indent\n    yaml match\n      case YamlValue.YString(s) =&gt; \n        if s.contains('\\n') || s.contains(':') then\n          s\"|\\n${s.linesIterator.map(l =&gt; s\"$spaces  $l\").mkString(\"\\n\")}\"\n        else if s.matches(\".*[:#\\\\[\\\\]{}].*\") then s\"'$s'\"\n        else s\n      \n      case YamlValue.YNumber(n) =&gt; \n        if n.isWhole then n.toLong.toString else n.toString\n      \n      case YamlValue.YBoolean(b) =&gt; b.toString\n      \n      case YamlValue.YNull =&gt; \"null\"\n      \n      case YamlValue.YArray(values) if values.isEmpty =&gt; \"[]\"\n      \n      case YamlValue.YArray(values) =&gt;\n        values.map(v =&gt; s\"\\n$spaces- ${render(v, indent + 1).trim}\")\n              .mkString(\"\")\n      \n      case YamlValue.YObject(fields) if fields.isEmpty =&gt; \"{}\"\n      \n      case YamlValue.YObject(fields) =&gt;\n        fields.map { (key, value) =&gt;\n          value match\n            case YamlValue.YObject(_) | YamlValue.YArray(_) =&gt;\n              s\"\\n$spaces$key:${render(value, indent + 1)}\"\n            case _ =&gt;\n              s\"\\n$spaces$key: ${render(value, indent + 1)}\"\n        }.mkString(\"\")\n\n\n3.1.4 Code de test\nVoir YamlEncoderSpec dans le code fourni."
+    "text": "3.1 Code fourni\n\n3.1.1 Structure YamlValue\nenum YamlValue:\n  case YString(value: String)\n  case YNumber(value: Double)\n  case YBoolean(value: Boolean)\n  case YNull\n  case YArray(values: List[YamlValue])\n  case YObject(fields: Map[String, YamlValue])\n\n\n3.1.2 Classe de type YamlEncoder\ntrait YamlEncoder[A]:\n  def encode(value: A): YamlValue\n\n\n3.1.3 Renderer YAML\nobject YamlRenderer:\n  def render(yaml: YamlValue, indent: Int = 0): String =\n    val spaces = \"  \" * indent\n    yaml match\n      case YamlValue.YString(s) =&gt; \n        if s.contains('\\n') || s.contains(':') then\n          s\"|\\n${s.linesIterator.map(l =&gt; s\"$spaces  $l\").mkString(\"\\n\")}\"\n        else if s.matches(\".*[:#\\\\[\\\\]{}].*\") then s\"'$s'\"\n        else s\n      \n      case YamlValue.YNumber(n) =&gt; \n        if n.isWhole then n.toLong.toString else n.toString\n      \n      case YamlValue.YBoolean(b) =&gt; b.toString\n      \n      case YamlValue.YNull =&gt; \"null\"\n      \n      case YamlValue.YArray(values) if values.isEmpty =&gt; \"[]\"\n      \n      case YamlValue.YArray(values) =&gt;\n        values.map(v =&gt; s\"\\n$spaces- ${render(v, indent + 1).trim}\")\n              .mkString(\"\")\n      \n      case YamlValue.YObject(fields) if fields.isEmpty =&gt; \"{}\"\n      \n      case YamlValue.YObject(fields) =&gt;\n        fields.map { (key, value) =&gt;\n          value match\n            case YamlValue.YObject(_) | YamlValue.YArray(_) =&gt;\n              s\"\\n$spaces$key:${render(value, indent + 1)}\"\n            case _ =&gt;\n              s\"\\n$spaces$key: ${render(value, indent + 1)}\"\n        }.mkString(\"\")\n\n\n3.1.4 Code de test\nVoir YamlEncoderSpec dans le code fourni.",
+    "crumbs": [
+      "TPs",
+      "TP7 - Classes de type"
+    ]
   },
   {
     "objectID": "tp7.html#travail-à-réaliser",
     "href": "tp7.html#travail-à-réaliser",
     "title": "TP7 - Classes de type",
     "section": "3.2 Travail à réaliser",
-    "text": "3.2 Travail à réaliser\n\n3.2.1 Instances pour les types primitifs\nImplémentez les instances given de YamlEncoder pour les types suivants : - String - Int - Double - Boolean - Long\n// TODO: Implémentez les instances ici\ngiven YamlEncoder[String] = ???\ngiven YamlEncoder[Int] = ???\ngiven YamlEncoder[Double] = ???\ngiven YamlEncoder[Boolean] = ???\ngiven YamlEncoder[Long] = ???\n\n\n3.2.2 Instances pour les classes Person, Address, Employee\n\n\n3.2.3 Combinateurs pour collections\nImplémentez les instances pour les types génériques :\n\nList[A] (si A a un encoder)\nOption[A] (si A a un encoder)\n\n// TODO: Implémentez les combinateurs\ngiven [A](using enc: YamlEncoder[A]): YamlEncoder[List[A]] = ???\n\ngiven [A](using enc: YamlEncoder[A]): YamlEncoder[Option[A]] = ???\n\n\n\n3.2.4 Extension method\nCréez une extension method toYaml qui permet d’appeler .toYaml sur n’importe quelle valeur ayant un YamlEncoder.\n// TODO: Implémentez l'extension method\nextension [A](value: A)\n  def toYaml(using enc: YamlEncoder[A]): YamlValue = ???"
+    "text": "3.2 Travail à réaliser\n\n3.2.1 Instances pour les types primitifs\nImplémentez les instances given de YamlEncoder pour les types suivants : - String - Int - Double - Boolean - Long\n// TODO: Implémentez les instances ici\ngiven YamlEncoder[String] = ???\ngiven YamlEncoder[Int] = ???\ngiven YamlEncoder[Double] = ???\ngiven YamlEncoder[Boolean] = ???\ngiven YamlEncoder[Long] = ???\n\n\n3.2.2 Instances pour les classes Person, Address, Employee\n\n\n3.2.3 Combinateurs pour collections\nImplémentez les instances pour les types génériques :\n\nList[A] (si A a un encoder)\nOption[A] (si A a un encoder)\n\n// TODO: Implémentez les combinateurs\ngiven [A](using enc: YamlEncoder[A]): YamlEncoder[List[A]] = ???\n\ngiven [A](using enc: YamlEncoder[A]): YamlEncoder[Option[A]] = ???\n\n\n\n3.2.4 Extension method\nCréez une extension method toYaml qui permet d’appeler .toYaml sur n’importe quelle valeur ayant un YamlEncoder.\n// TODO: Implémentez l'extension method\nextension [A](value: A)\n  def toYaml(using enc: YamlEncoder[A]): YamlValue = ???",
+    "crumbs": [
+      "TPs",
+      "TP7 - Classes de type"
+    ]
   },
   {
     "objectID": "tp7.html#résultat-attendu",
     "href": "tp7.html#résultat-attendu",
     "title": "TP7 - Classes de type",
     "section": "3.3 Résultat attendu",
-    "text": "3.3 Résultat attendu\nExécutez les tests YamlEncoderSpec, tous les tests doivent passer."
+    "text": "3.3 Résultat attendu\nExécutez les tests YamlEncoderSpec, tous les tests doivent passer.",
+    "crumbs": [
+      "TPs",
+      "TP7 - Classes de type"
+    ]
   },
   {
     "objectID": "tp7.html#bonus-support-pour-mapstring-a",
     "href": "tp7.html#bonus-support-pour-mapstring-a",
     "title": "TP7 - Classes de type",
     "section": "3.4 (Bonus) Support pour Map[String, A]",
-    "text": "3.4 (Bonus) Support pour Map[String, A]\nImplémentez le support pour Map[String, A] :\ngiven [A](using enc: YamlEncoder[A]): YamlEncoder[Map[String, A]] = ???\nPuis testez avec :\ntest(\"encoder Map[String, A]\") {\n   case class Config(host: String, port: Int, ssl: Boolean) derives YamlEncoder\n\n   val configMap = Map(\n      \"database\" -&gt; Config(\"localhost\", 5432, true),\n      \"cache\" -&gt; Config(\"redis.local\", 6379, false)\n   )\n\n   val yaml = YamlRenderer.render(configMap.toYaml)\n\n   yaml shouldBe \"\"\"\ndatabase:\n  host: localhost\n  port: 5432\n  ssl: true\ncache:\n  host: redis.local\n  port: 6379\n  ssl: false\"\"\".trim\n}"
+    "text": "3.4 (Bonus) Support pour Map[String, A]\nImplémentez le support pour Map[String, A] :\ngiven [A](using enc: YamlEncoder[A]): YamlEncoder[Map[String, A]] = ???\nPuis testez avec :\ntest(\"encoder Map[String, A]\") {\n   case class Config(host: String, port: Int, ssl: Boolean) derives YamlEncoder\n\n   val configMap = Map(\n      \"database\" -&gt; Config(\"localhost\", 5432, true),\n      \"cache\" -&gt; Config(\"redis.local\", 6379, false)\n   )\n\n   val yaml = YamlRenderer.render(configMap.toYaml)\n\n   yaml shouldBe \"\"\"\ndatabase:\n  host: localhost\n  port: 5432\n  ssl: true\ncache:\n  host: redis.local\n  port: 6379\n  ssl: false\"\"\".trim\n}",
+    "crumbs": [
+      "TPs",
+      "TP7 - Classes de type"
+    ]
   },
   {
     "objectID": "tp7.html#bonus-dérivation-automatique-pour-case-classes",
     "href": "tp7.html#bonus-dérivation-automatique-pour-case-classes",
     "title": "TP7 - Classes de type",
     "section": "3.5 (Bonus) Dérivation automatique pour case classes",
-    "text": "3.5 (Bonus) Dérivation automatique pour case classes\nImplémentez la dérivation automatique en utilisant les méthodes de Product. Ce trait est implémenté par toutes les case classes.\nimport scala.deriving.*\n\n// TODO: Fonction helper pour encoder n'importe quel type\nprivate def encodeAny(value: Any): YamlValue = ???\n\n// TODO: Instance dérivée automatiquement\ngiven derivedProduct[T &lt;: Product]: YamlEncoder[T] = ???"
+    "text": "3.5 (Bonus) Dérivation automatique pour case classes\nImplémentez la dérivation automatique en utilisant les méthodes de Product. Ce trait est implémenté par toutes les case classes.\nimport scala.deriving.*\n\n// TODO: Fonction helper pour encoder n'importe quel type\nprivate def encodeAny(value: Any): YamlValue = ???\n\n// TODO: Instance dérivée automatiquement\ngiven derivedProduct[T &lt;: Product]: YamlEncoder[T] = ???",
+    "crumbs": [
+      "TPs",
+      "TP7 - Classes de type"
+    ]
   },
   {
     "objectID": "tp7.html#bonus---difficile-dérivation-automatique-pour-case-classes-avec-macros",
     "href": "tp7.html#bonus---difficile-dérivation-automatique-pour-case-classes-avec-macros",
     "title": "TP7 - Classes de type",
     "section": "3.6 (Bonus - Difficile) Dérivation automatique pour case classes avec macros",
-    "text": "3.6 (Bonus - Difficile) Dérivation automatique pour case classes avec macros\nL’approche précédente avec Product n’est pas satisfaisante. En effet, si notre case class possède des attributs d’un type que nous ne savons pas encoder, le programme compilera quand même.\nIl serait préférable de tout valider à la compilation. Scala 3 offre un mécanisme permettant de séparer les composants d’un ADT avec la classe Mirror. Lisez cet article et implémentez la dérivation automatique de case class pour YamlEncoder :\nType Class Derivation in Scala 3"
+    "text": "3.6 (Bonus - Difficile) Dérivation automatique pour case classes avec macros\nL’approche précédente avec Product n’est pas satisfaisante. En effet, si notre case class possède des attributs d’un type que nous ne savons pas encoder, le programme compilera quand même.\nIl serait préférable de tout valider à la compilation. Scala 3 offre un mécanisme permettant de séparer les composants d’un ADT avec la classe Mirror. Lisez cet article et implémentez la dérivation automatique de case class pour YamlEncoder :\nType Class Derivation in Scala 3",
+    "crumbs": [
+      "TPs",
+      "TP7 - Classes de type"
+    ]
   },
   {
     "objectID": "cm3.html",
