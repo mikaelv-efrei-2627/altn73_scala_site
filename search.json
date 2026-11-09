@@ -84,121 +84,77 @@
     "href": "projet_mapreduce.html#commandes-utiles",
     "title": "Projet MapReduce",
     "section": "3.1 Commandes utiles",
-    "text": "3.1 Commandes utiles\n# Compiler\nsbt compile\n\n# Lancer les tests\nsbt test\n\n# Lancer un test spécifique\nsbt \"testOnly mapreduce.LocalExecutionSpec\"\n\n# Exécution locale du WordCount\nsbt \"runMain mapreduce.examples.WordCountLocalApp data/input.txt\"\n\n# Exécution distribuée (1 JVM, plusieurs workers)\nsbt \"runMain mapreduce.examples.WordCountDistOneJvmApp data/input.txt 2\"",
-    "crumbs": [
-      "Projet",
-      "Projet MapReduce"
-    ]
+    "text": "3.1 Commandes utiles\n# Compiler\nsbt compile\n\n# Lancer les tests\nsbt test\n\n# Lancer un test spécifique\nsbt \"testOnly mapreduce.LocalExecutionSpec\"\n\n# Exécution locale du WordCount\nsbt \"runMain mapreduce.examples.WordCountLocalApp data/input.txt\"\n\n# Exécution distribuée (1 JVM, plusieurs workers)\nsbt \"runMain mapreduce.examples.WordCountDistOneJvmApp data/input.txt 2\""
   },
   {
     "objectID": "projet_mapreduce.html#structure-du-projet",
     "href": "projet_mapreduce.html#structure-du-projet",
     "title": "Projet MapReduce",
     "section": "4.1 Structure du projet",
-    "text": "4.1 Structure du projet\nsrc/main/scala/mapreduce/\n├── api/\n│   └── Dataset.scala       # API utilisateur (comme Spark RDD)\n├── plan/\n│   ├── Op.scala            # AST des opérations (DAG)\n│   ├── Stage.scala         # Regroupement d'opérations\n│   └── Planner.scala       # Conversion Op -&gt; Stages\n├── execution/\n│   ├── Driver.scala        # Orchestrateur (master)\n│   ├── Worker.scala        # Exécuteur de tâches\n│   └── StageExecutor.scala # Exécution locale d'un stage\n├── protocol/\n│   └── Messages.scala      # Messages Driver &lt;-&gt; Worker\n├── serde/\n│   └── SocketUtils.scala   # Sérialisation réseau\n└── examples/               # Exemples : WordCount local et distribué",
-    "crumbs": [
-      "Projet",
-      "Projet MapReduce"
-    ]
+    "text": "4.1 Structure du projet\nsrc/main/scala/mapreduce/\n├── api/\n│   └── Dataset.scala       # API utilisateur (comme Spark RDD)\n├── plan/\n│   ├── Op.scala            # AST des opérations (DAG)\n│   ├── Stage.scala         # Regroupement d'opérations\n│   └── Planner.scala       # Conversion Op -&gt; Stages\n├── execution/\n│   ├── Driver.scala        # Orchestrateur (master)\n│   ├── Worker.scala        # Exécuteur de tâches\n│   └── StageExecutor.scala # Exécution locale d'un stage\n├── protocol/\n│   └── Messages.scala      # Messages Driver &lt;-&gt; Worker\n├── serde/\n│   └── SocketUtils.scala   # Sérialisation réseau\n└── examples/               # Exemples : WordCount local et distribué"
   },
   {
     "objectID": "projet_mapreduce.html#architecture-driver-worker",
     "href": "projet_mapreduce.html#architecture-driver-worker",
     "title": "Projet MapReduce",
     "section": "4.2 Architecture Driver-Worker",
-    "text": "4.2 Architecture Driver-Worker\n                      ┌─────────────────┐\n                      │     Driver      │\n                      │  (orchestrateur)│\n                      └────────┬────────┘\n                               │\n              ┌────────────────┼────────────────┐\n              │                                 │\n              ▼                                 ▼\n    ┌───────────────────┐             ┌───────────────────┐\n    │     Worker 0      │             │     Worker 1      │\n    │ ┌─────┐ ┌─────┐   │             │ ┌─────┐ ┌─────┐   │\n    │ │ P0  │ │ P2  │   │             │ │ P1  │ │ P3  │   │\n    │ └─────┘ └─────┘   │             │ └─────┘ └─────┘   │\n    └───────────────────┘             └───────────────────┘\n\nDriver : Planifie l’exécution, distribue les tâches, coordonne le shuffle\nWorker : Exécute les tâches sur ses partitions de données\nPartitions : Le nombre de partitions (numPartitions) peut être supérieur au nombre de workers. Chaque worker traite les partitions où partitionId % numWorkers == workerId.",
-    "crumbs": [
-      "Projet",
-      "Projet MapReduce"
-    ]
+    "text": "4.2 Architecture Driver-Worker\n                      ┌─────────────────┐\n                      │     Driver      │\n                      │  (orchestrateur)│\n                      └────────┬────────┘\n                               │\n              ┌────────────────┼────────────────┐\n              │                                 │\n              ▼                                 ▼\n    ┌───────────────────┐             ┌───────────────────┐\n    │     Worker 0      │             │     Worker 1      │\n    │ ┌─────┐ ┌─────┐   │             │ ┌─────┐ ┌─────┐   │\n    │ │ P0  │ │ P2  │   │             │ │ P1  │ │ P3  │   │\n    │ └─────┘ └─────┘   │             │ └─────┘ └─────┘   │\n    └───────────────────┘             └───────────────────┘\n\nDriver : Planifie l’exécution, distribue les tâches, coordonne le shuffle\nWorker : Exécute les tâches sur ses partitions de données\nPartitions : Le nombre de partitions (numPartitions) peut être supérieur au nombre de workers. Chaque worker traite les partitions où partitionId % numWorkers == workerId."
   },
   {
     "objectID": "projet_mapreduce.html#cycle-de-vie-dun-job",
     "href": "projet_mapreduce.html#cycle-de-vie-dun-job",
     "title": "Projet MapReduce",
     "section": "4.3 Cycle de vie d’un job",
-    "text": "4.3 Cycle de vie d’un job\n\n\n\n\n\nsequenceDiagram\n    participant D as Driver\n    participant W0 as Worker 0\n    participant W1 as Worker 1\n\n    rect rgb(230, 245, 255)\n        Note over D,W1: Registration\n        W0-&gt;&gt;D: Register\n        W1-&gt;&gt;D: Register\n        D-&gt;&gt;W0: AssignId(0)\n        D-&gt;&gt;W1: AssignId(1)\n    end\n\n    rect rgb(255, 245, 230)\n        Note over D,W1: Stage 1 (Map)\n        D-&gt;&gt;W0: RunTask\n        D-&gt;&gt;W1: RunTask\n        W0-&gt;&gt;D: TaskCompleted\n        W1-&gt;&gt;D: TaskCompleted\n    end\n\n    rect rgb(255, 230, 230)\n        Note over D,W1: Shuffle\n        D-&gt;&gt;W0: StartShuffle\n        D-&gt;&gt;W1: StartShuffle\n        W0-&gt;&gt;D: ShuffleData\n        W1-&gt;&gt;D: ShuffleData\n        Note over D: Merge by partition\n        D-&gt;&gt;W0: ShuffleData\n        D-&gt;&gt;W1: ShuffleData\n    end\n\n    rect rgb(230, 255, 230)\n        Note over D,W1: Stage 2 (Reduce)\n        D-&gt;&gt;W0: RunTask\n        D-&gt;&gt;W1: RunTask\n        W0-&gt;&gt;D: TaskCompleted\n        W1-&gt;&gt;D: TaskCompleted\n    end\n\n    rect rgb(245, 230, 255)\n        Note over D,W1: Collect\n        D-&gt;&gt;W0: CollectResults\n        D-&gt;&gt;W1: CollectResults\n        W0-&gt;&gt;D: Result\n        W1-&gt;&gt;D: Result\n        D-&gt;&gt;W0: Shutdown\n        D-&gt;&gt;W1: Shutdown\n    end",
-    "crumbs": [
-      "Projet",
-      "Projet MapReduce"
-    ]
+    "text": "4.3 Cycle de vie d’un job\n\n\n\n\n\nsequenceDiagram\n    participant D as Driver\n    participant W0 as Worker 0\n    participant W1 as Worker 1\n\n    rect rgb(230, 245, 255)\n        Note over D,W1: Registration\n        W0-&gt;&gt;D: Register\n        W1-&gt;&gt;D: Register\n        D-&gt;&gt;W0: AssignId(0)\n        D-&gt;&gt;W1: AssignId(1)\n    end\n\n    rect rgb(255, 245, 230)\n        Note over D,W1: Stage 1 (Map)\n        D-&gt;&gt;W0: RunTask\n        D-&gt;&gt;W1: RunTask\n        W0-&gt;&gt;D: TaskCompleted\n        W1-&gt;&gt;D: TaskCompleted\n    end\n\n    rect rgb(255, 230, 230)\n        Note over D,W1: Shuffle\n        D-&gt;&gt;W0: StartShuffle\n        D-&gt;&gt;W1: StartShuffle\n        W0-&gt;&gt;D: ShuffleData\n        W1-&gt;&gt;D: ShuffleData\n        Note over D: Merge by partition\n        D-&gt;&gt;W0: ShuffleData\n        D-&gt;&gt;W1: ShuffleData\n    end\n\n    rect rgb(230, 255, 230)\n        Note over D,W1: Stage 2 (Reduce)\n        D-&gt;&gt;W0: RunTask\n        D-&gt;&gt;W1: RunTask\n        W0-&gt;&gt;D: TaskCompleted\n        W1-&gt;&gt;D: TaskCompleted\n    end\n\n    rect rgb(245, 230, 255)\n        Note over D,W1: Collect\n        D-&gt;&gt;W0: CollectResults\n        D-&gt;&gt;W1: CollectResults\n        W0-&gt;&gt;D: Result\n        W1-&gt;&gt;D: Result\n        D-&gt;&gt;W0: Shutdown\n        D-&gt;&gt;W1: Shutdown\n    end"
   },
   {
     "objectID": "projet_mapreduce.html#le-shuffle-reducebykey",
     "href": "projet_mapreduce.html#le-shuffle-reducebykey",
     "title": "Projet MapReduce",
     "section": "4.4 Le Shuffle (reduceByKey)",
-    "text": "4.4 Le Shuffle (reduceByKey)\nLe shuffle est nécessaire quand on doit regrouper des données par clé. Exemple : compter les mots.\nAvant shuffle : Chaque worker a des mots arbitraires\nWorker 0: [(hello,1), (world,1), (hello,1)]\nWorker 1: [(foo,1), (hello,1), (bar,1)]\nAprès shuffle : Chaque worker a toutes les valeurs pour certaines clés\nWorker 0: [(hello,1), (hello,1), (hello,1)]  → (hello, 3)\nWorker 1: [(world,1), (foo,1), (bar,1)]      → (world,1), (foo,1), (bar,1)\n\n4.4.1 Protocole\n\nLe Driver envoie StartShuffle à tous les workers\nChaque worker partitionne ses données par hash(key) % numPartitions\nChaque worker envoie ses partitions au Driver (ShuffleData)\nLe Driver fusionne : toutes les données destinées au worker N\nLe Driver redistribue à chaque worker sa partition",
-    "crumbs": [
-      "Projet",
-      "Projet MapReduce"
-    ]
+    "text": "4.4 Le Shuffle (reduceByKey)\nLe shuffle est nécessaire quand on doit regrouper des données par clé. Exemple : compter les mots.\nAvant shuffle : Chaque worker a des mots arbitraires\nWorker 0: [(hello,1), (world,1), (hello,1)]\nWorker 1: [(foo,1), (hello,1), (bar,1)]\nAprès shuffle : Chaque worker a toutes les valeurs pour certaines clés\nWorker 0: [(hello,1), (hello,1), (hello,1)]  → (hello, 3)\nWorker 1: [(world,1), (foo,1), (bar,1)]      → (world,1), (foo,1), (bar,1)\n\n4.4.1 Protocole\n\nLe Driver envoie StartShuffle à tous les workers\nChaque worker partitionne ses données par hash(key) % numPartitions\nChaque worker envoie ses partitions au Driver (ShuffleData)\nLe Driver fusionne : toutes les données destinées au worker N\nLe Driver redistribue à chaque worker sa partition"
   },
   {
     "objectID": "projet_mapreduce.html#déroulement-dune-séance",
     "href": "projet_mapreduce.html#déroulement-dune-séance",
     "title": "Projet MapReduce",
     "section": "5.1 Déroulement d’une séance",
-    "text": "5.1 Déroulement d’une séance\n\nLecture du cahier des charges, questions à l’enseignant\nRépartition des tâches (vous pouvez travailler en pair programming)\nDéveloppement, tests, rédaction de la documentation\nAu cours de la séance, votre enseignant invitera votre groupe à un échange de 10-15 mn :\n\n\nIl vous posera des questions de compréhension de votre code\nIl répondra à vos questions et pourra vous donner des conseils\n\n\nVous devrez soumettre votre travail (commit & push) avant la fin de la séance.\n\n\npas de travail en dehors des heures de classe, pas de rush pour finir à la dernière minute.\n\nrespect du principe eXtreme Programming Sustainable Pace\n\nvous devez utiliser le temps disponible efficacement.\nles commits contenant beaucoup de modifications seront considérés comme suspects : fait avec IA ?\n\ncommittez souvent",
-    "crumbs": [
-      "Projet",
-      "Projet MapReduce"
-    ]
+    "text": "5.1 Déroulement d’une séance\n\nLecture du cahier des charges, questions à l’enseignant\nRépartition des tâches (vous pouvez travailler en pair programming)\nDéveloppement, tests, rédaction de la documentation\nAu cours de la séance, votre enseignant invitera votre groupe à un échange de 10-15 mn :\n\n\nIl vous posera des questions de compréhension de votre code\nIl répondra à vos questions et pourra vous donner des conseils\n\n\nVous devrez soumettre votre travail (commit & push) avant la fin de la séance.\n\n\npas de travail en dehors des heures de classe, pas de rush pour finir à la dernière minute.\n\nrespect du principe eXtreme Programming Sustainable Pace\n\nvous devez utiliser le temps disponible efficacement.\nles commits contenant beaucoup de modifications seront considérés comme suspects : fait avec IA ?\n\ncommittez souvent"
   },
   {
     "objectID": "projet_mapreduce.html#phase-1-warm-up",
     "href": "projet_mapreduce.html#phase-1-warm-up",
     "title": "Projet MapReduce",
     "section": "7.1 Phase 1 : Warm-up",
-    "text": "7.1 Phase 1 : Warm-up\nImplémenter les opérations de base dans Dataset.scala et StageExecutor.scala :\n\nmap : transformer chaque élément\nflatMap : transformer chaque élément en zéro ou plusieurs éléments\nfilter : garder les éléments satisfaisant un prédicat\nStageExecutor.executeLocal : exécute chaque stage localement\n\nTests : mapreduce.DatasetSpec et mapreduce.LocalExecutionSpec",
-    "crumbs": [
-      "Projet",
-      "Projet MapReduce"
-    ]
+    "text": "7.1 Phase 1 : Warm-up\nImplémenter les opérations de base dans Dataset.scala et StageExecutor.scala :\n\nmap : transformer chaque élément\nflatMap : transformer chaque élément en zéro ou plusieurs éléments\nfilter : garder les éléments satisfaisant un prédicat\nStageExecutor.executeLocal : exécute chaque stage localement\n\nTests : mapreduce.DatasetSpec et mapreduce.LocalExecutionSpec"
   },
   {
     "objectID": "projet_mapreduce.html#phase-2-shuffle",
     "href": "projet_mapreduce.html#phase-2-shuffle",
     "title": "Projet MapReduce",
     "section": "7.2 Phase 2 : Shuffle",
-    "text": "7.2 Phase 2 : Shuffle\nImplémenter l’opération :\n\nreduceByKey : réduire des couples clé-valeur avec une opération sur les valeurs.\n\nImplémenter le shuffle distribué (médié par le Driver) :\n\nWorker.handleWorkerMessage : gérer StartShuffle et ShuffleData\nDriver.coordinateShuffle : orchestrer le shuffle\n\nTests : mapreduce.ShuffleSpec et mapreduce.DistributedSpec.\nConseil : Ecrire un test pour la fusion de partitions.\n\n7.2.1 Validation sur un fichier public\nTélécharger un livre de Project Gutenberg pour tester WordCount sur un vrai fichier :\n# Download several large books and combine\ncurl -O https://www.gutenberg.org/files/100/100-0.txt  # Shakespeare (~5MB)\nfor i in {1..10}; do cat 100-0.txt &gt;&gt; large-test-file.txt; done\nLancer WordCount et vérifier les résultats attendus.\n\n\n\nMot\nOccurrences attendues\n\n\n\n\nthe\n~303000\n\n\nand\n~285000\n\n\nyou\n~146000\n\n\nthat\n~122000\n\n\nnot\n~90000\n\n\n\nDans le fichier README.md, notez les temps d’exécution pour :\n\nle mode local : WordCountLocalApp\nle mode distribué avec 2 puis 4 workers : WordCountDistributed\nBONUS : le mode distribué sur plusieurs machines\n\nchoisissez le nombre de workers en fonction du nombre de cores des CPUs\nPar exemple : PC_A a 8 cores, PC_B a 12 cores =&gt; lancer max 6 workers sur PC_A, max 11 workers sur PC_B (on laisse 1 core pour le système et 1 pour le Driver)\n\n\nVous pouvez utiliser les logs ou modifier le code pour mesurer le temps total entre \"All ... workers connected\" et \"Found ... unique words\".",
-    "crumbs": [
-      "Projet",
-      "Projet MapReduce"
-    ]
+    "text": "7.2 Phase 2 : Shuffle\nImplémenter l’opération :\n\nreduceByKey : réduire des couples clé-valeur avec une opération sur les valeurs.\n\nImplémenter le shuffle distribué (médié par le Driver) :\n\nWorker.handleWorkerMessage : gérer StartShuffle et ShuffleData\nDriver.coordinateShuffle : orchestrer le shuffle\n\nTests : mapreduce.ShuffleSpec et mapreduce.DistributedSpec.\nConseil : Ecrire un test pour la fusion de partitions.\n\n7.2.1 Validation sur un fichier public\nTélécharger un livre de Project Gutenberg pour tester WordCount sur un vrai fichier :\n# Download several large books and combine\ncurl -O https://www.gutenberg.org/files/100/100-0.txt  # Shakespeare (~5MB)\nfor i in {1..10}; do cat 100-0.txt &gt;&gt; large-test-file.txt; done\nLancer WordCount et vérifier les résultats attendus.\n\n\n\nMot\nOccurrences attendues\n\n\n\n\nthe\n~303000\n\n\nand\n~285000\n\n\nyou\n~146000\n\n\nthat\n~122000\n\n\nnot\n~90000\n\n\n\nDans le fichier README.md, notez les temps d’exécution pour :\n\nle mode local : WordCountLocalApp\nle mode distribué avec 2 puis 4 workers : WordCountDistributed\nBONUS : le mode distribué sur plusieurs machines\n\nchoisissez le nombre de workers en fonction du nombre de cores des CPUs\nPar exemple : PC_A a 8 cores, PC_B a 12 cores =&gt; lancer max 6 workers sur PC_A, max 11 workers sur PC_B (on laisse 1 core pour le système et 1 pour le Driver)\n\n\nVous pouvez utiliser les logs ou modifier le code pour mesurer le temps total entre \"All ... workers connected\" et \"Found ... unique words\"."
   },
   {
     "objectID": "projet_mapreduce.html#phase-3-job-movielens",
     "href": "projet_mapreduce.html#phase-3-job-movielens",
     "title": "Projet MapReduce",
     "section": "7.3 Phase 3 : Job MovieLens",
-    "text": "7.3 Phase 3 : Job MovieLens\nTélécharger le dataset MovieLens (ml-latest-small) :\n\nhttps://grouplens.org/datasets/movielens/\n\nFichiers utilisés :\n\nmovies.csv : movieId, title, genres (genres séparés par |)\nratings.csv : userId, movieId, rating, timestamp\n\nObjectif : Calculer la note moyenne par genre.\nVous avez deux possibilités pour implémenter le join enter les deux fichiers.\n\n7.3.1 Solution A : Broadcast join (plus simple)\nCharger le petit fichier (movies.csv) en mémoire dans une Map, puis enrichir le grand fichier :\n// Charger movies en mémoire (petit fichier)\nval moviesMap: Map[Int, String] = Source.fromFile(\"movies.csv\")\n  .getLines().drop(1)  // skip header\n  .map(line =&gt; /* parse to (movieId, genres) */)\n  .toMap\n\n// Utiliser map pour enrichir ratings avec les genres\nDataset.fromTextFile(\"ratings.csv\")\n  .map(line =&gt; /* parse to (movieId, rating), use moviesMap to get genres */)\n  // ...      \n\n\n7.3.2 Solution B : Distributed join (avancé)\nImplémenter une vraie opération join distribuée :\nÀ implémenter (Dataset.scala, Op.scala, Planner.scala) :\n\nOp.Join[K, V, W] avec deux upstreams (le DAG devient un arbre)\nMise à jour du Planner pour gérer les branches multiples\njoin dans l’API : Dataset[(K, V)].join(other: Dataset[(K, W)]): Dataset[(K, (V, W))]\n\nAstuce : Shuffler les deux datasets par clé, puis combiner les partitions localement.\n\n\n7.3.3 Bonus\nQuels sont les 10 films les mieux notés (avec au moins 50 notes) ?",
-    "crumbs": [
-      "Projet",
-      "Projet MapReduce"
-    ]
+    "text": "7.3 Phase 3 : Job MovieLens\nTélécharger le dataset MovieLens (ml-latest-small) :\n\nhttps://grouplens.org/datasets/movielens/\n\nFichiers utilisés :\n\nmovies.csv : movieId, title, genres (genres séparés par |)\nratings.csv : userId, movieId, rating, timestamp\n\nObjectif : Calculer la note moyenne par genre.\nVous avez deux possibilités pour implémenter le join enter les deux fichiers.\n\n7.3.1 Solution A : Broadcast join (plus simple)\nCharger le petit fichier (movies.csv) en mémoire dans une Map, puis enrichir le grand fichier :\n// Charger movies en mémoire (petit fichier)\nval moviesMap: Map[Int, String] = Source.fromFile(\"movies.csv\")\n  .getLines().drop(1)  // skip header\n  .map(line =&gt; /* parse to (movieId, genres) */)\n  .toMap\n\n// Utiliser map pour enrichir ratings avec les genres\nDataset.fromTextFile(\"ratings.csv\")\n  .map(line =&gt; /* parse to (movieId, rating), use moviesMap to get genres */)\n  // ...      \n\n\n7.3.2 Solution B : Distributed join (avancé)\nImplémenter une vraie opération join distribuée :\nÀ implémenter (Dataset.scala, Op.scala, Planner.scala) :\n\nOp.Join[K, V, W] avec deux upstreams (le DAG devient un arbre)\nMise à jour du Planner pour gérer les branches multiples\njoin dans l’API : Dataset[(K, V)].join(other: Dataset[(K, W)]): Dataset[(K, (V, W))]\n\nAstuce : Shuffler les deux datasets par clé, puis combiner les partitions localement.\n\n\n7.3.3 Bonus\nQuels sont les 10 films les mieux notés (avec au moins 50 notes) ?"
   },
   {
     "objectID": "projet_mapreduce.html#phase-4-questions-de-réflexion",
     "href": "projet_mapreduce.html#phase-4-questions-de-réflexion",
     "title": "Projet MapReduce",
     "section": "7.4 Phase 4 : Questions de réflexion",
-    "text": "7.4 Phase 4 : Questions de réflexion\n\nChargement des sources : Regardez Worker.getInput. Chaque worker charge le fichier entier puis filtre sa partition. Pourquoi est-ce inefficace ? Comment un système réel comme Spark gère-t-il cela ?\nShuffle peer-to-peer : Notre shuffle passe par le Driver (goulot d’étranglement). Comment implémenter un shuffle direct entre Workers ?\nOptimisation de count() : Regardez Dataset.count(). L’implémentation actuelle appelle collect().map(_.size), ce qui rapatrie toutes les données avant de compter. Comment optimiser cette action pour ne transférer que les comptages partiels ?\n\n\nécrivez vos réponses dans README.md\nimplémentez l’une des 3 optimisations\ncomparez les performances avant/après optimisation",
-    "crumbs": [
-      "Projet",
-      "Projet MapReduce"
-    ]
+    "text": "7.4 Phase 4 : Questions de réflexion\n\nChargement des sources : Regardez Worker.getInput. Chaque worker charge le fichier entier puis filtre sa partition. Pourquoi est-ce inefficace ? Comment un système réel comme Spark gère-t-il cela ?\nShuffle peer-to-peer : Notre shuffle passe par le Driver (goulot d’étranglement). Comment implémenter un shuffle direct entre Workers ?\nOptimisation de count() : Regardez Dataset.count(). L’implémentation actuelle appelle collect().map(_.size), ce qui rapatrie toutes les données avant de compter. Comment optimiser cette action pour ne transférer que les comptages partiels ?\n\n\nécrivez vos réponses dans README.md\nimplémentez l’une des 3 optimisations\ncomparez les performances avant/après optimisation"
   },
   {
     "objectID": "projet_mapreduce.html#ressources",
     "href": "projet_mapreduce.html#ressources",
     "title": "Projet MapReduce",
     "section": "7.5 Ressources",
-    "text": "7.5 Ressources\n\nZIO Cheat Sheet.md : Patterns ZIO utilisés dans ce projet\nSpark RDD Programming Guide : Documentation Spark pour référence",
-    "crumbs": [
-      "Projet",
-      "Projet MapReduce"
-    ]
+    "text": "7.5 Ressources\n\nZIO Cheat Sheet.md : Patterns ZIO utilisés dans ce projet\nSpark RDD Programming Guide : Documentation Spark pour référence"
   },
   {
     "objectID": "cm6.html",
@@ -488,49 +444,77 @@
     "href": "projet_lsi_2627.html",
     "title": "Projet Conduit",
     "section": "",
-    "text": "Le site RealWorld propose différentes implémentations du même logiciel de blogging, Conduit, qui est similaire à Medium. Cela permet de comparer différentes stacks technologiques sur un projet réaliste.\nVous pouvez tester le frontend ici sans installation : Demo Conduit Vue3\nNotre projet consiste à améliorer ce logiciel avec des corrections de bugs et des nouvelles fonctionnalités. Nous utiliserons :\n\nun frontend Vue.js, dérivé de Vue.js + Vite. C’est le même frontend que pour le projet Java Spring Boot (ALTN72).\nun backend Scala 3 / ZIO, dérivé de zio-conduit-doobie\n\nLe backend utilise les bibliothèques suivantes :\n\nZIO : système d’effets fonctionnel, injection de dépendances avec ZLayer\nZIO HTTP : serveur HTTP et routes de l’API REST\nDoobie : accès fonctionnel à la base de données en SQL\nFlyway : migrations du schéma de la base PostgreSQL\nCirce : sérialisation JSON\nZIO Test : tests unitaires et tests par propriétés (générateurs)"
+    "text": "Le site RealWorld propose différentes implémentations du même logiciel de blogging, Conduit, qui est similaire à Medium. Cela permet de comparer différentes stacks technologiques sur un projet réaliste.\nVous pouvez tester le frontend ici sans installation : Demo Conduit Vue3\nNotre projet consiste à améliorer ce logiciel avec des corrections de bugs et des nouvelles fonctionnalités. Nous utiliserons :\n\nun frontend Vue.js, dérivé de Vue.js + Vite. C’est le même frontend que pour le projet Java Spring Boot (ALTN72).\nun backend Scala 3 / ZIO, dérivé de zio-conduit-doobie\n\nLe backend utilise les bibliothèques suivantes :\n\nZIO : système d’effets fonctionnel, injection de dépendances avec ZLayer\nZIO HTTP : serveur HTTP et routes de l’API REST\nDoobie : accès fonctionnel à la base de données en SQL\nFlyway : migrations du schéma de la base PostgreSQL\nCirce : sérialisation JSON\nZIO Test : tests unitaires et tests par propriétés (générateurs)",
+    "crumbs": [
+      "Projet",
+      "Projet Conduit"
+    ]
   },
   {
     "objectID": "projet_lsi_2627.html#validation-règles-sur-les-tags",
     "href": "projet_lsi_2627.html#validation-règles-sur-les-tags",
     "title": "Projet Conduit",
     "section": "7.1 VALIDATION : règles sur les tags",
-    "text": "7.1 VALIDATION : règles sur les tags\nCréez un article avec des tags. Aujourd’hui, seul un tag vide est refusé : on peut créer des tags comme Hello World!!! ou scala et Scala, qui sont deux tags différents.\nAjoutez deux règles de validation :\n\nun tag ne contient que des lettres minuscules, des chiffres et des tirets (par exemple cats-effect, scala3)\nun article a au plus 5 tags\n\nCes deux règles ne se placent pas au même endroit dans le code. Cherchez où est faite la vérification du tag vide, puis demandez-vous si la deuxième règle porte sur un tag ou sur un article.\n\nToutes les erreurs doivent être renvoyées en une seule fois : un article avec 6 tags dont un invalide renvoie deux erreurs. Voir Validation.\nTestez vos règles avec des tests unitaires\nVérifiez dans le navigateur que le frontend affiche bien les erreurs.\n\nBONUS : Testez les règles avec des Générateurs : générez des tags valides, vérifiez qu’ils sont acceptés. Générez des tags invalides, vérifiez qu’ils sont rejetés."
+    "text": "7.1 VALIDATION : règles sur les tags\nCréez un article avec des tags. Aujourd’hui, seul un tag vide est refusé : on peut créer des tags comme Hello World!!! ou scala et Scala, qui sont deux tags différents.\nAjoutez deux règles de validation :\n\nun tag ne contient que des lettres minuscules, des chiffres et des tirets (par exemple cats-effect, scala3)\nun article a au plus 5 tags\n\nCes deux règles ne se placent pas au même endroit dans le code. Cherchez où est faite la vérification du tag vide, puis demandez-vous si la deuxième règle porte sur un tag ou sur un article.\n\nToutes les erreurs doivent être renvoyées en une seule fois : un article avec 6 tags dont un invalide renvoie deux erreurs. Voir Validation.\nTestez vos règles avec des tests unitaires\nVérifiez dans le navigateur que le frontend affiche bien les erreurs.\n\nBONUS : Testez les règles avec des Générateurs : générez des tags valides, vérifiez qu’ils sont acceptés. Générez des tags invalides, vérifiez qu’ils sont rejetés.",
+    "crumbs": [
+      "Projet",
+      "Projet Conduit"
+    ]
   },
   {
     "objectID": "projet_lsi_2627.html#bug-tagrepository",
     "href": "projet_lsi_2627.html#bug-tagrepository",
     "title": "Projet Conduit",
     "section": "7.2 BUG : TagRepository",
-    "text": "7.2 BUG : TagRepository\nDans TagRepositorySpec, le test « Add tags and retrieve them » appelle addTagsAndRetrieveThem avec une liste fixe de deux tags. Modifiez-le avec check pour qu’il vérifie la même chose avec n’importe quelle liste de tags générée. Il vous faudra écrire un générateur de tags.\n\nLancez le test. ZIO Test trouve un contre-exemple qui fait échouer le test : lequel ?\nCorrigez le bug\nRépondez dans le README.md :\n\npourquoi les tests de CommentEntrypointServiceSpec, qui utilisent les repositories en mémoire, n’auraient pas trouvé ce bug ?\nest-ce qu’on peut reproduire ce bug avec l’interface ?\nqu’apporte check par rapport à un test écrit avec quelques exemples choisis à la main ?"
+    "text": "7.2 BUG : TagRepository\nDans TagRepositorySpec, le test « Add tags and retrieve them » appelle addTagsAndRetrieveThem avec une liste fixe de deux tags. Modifiez-le avec check pour qu’il vérifie la même chose avec n’importe quelle liste de tags générée. Il vous faudra écrire un générateur de tags.\n\nLancez le test. ZIO Test trouve un contre-exemple qui fait échouer le test : lequel ?\nCorrigez le bug\nRépondez dans le README.md :\n\npourquoi les tests de CommentEntrypointServiceSpec, qui utilisent les repositories en mémoire, n’auraient pas trouvé ce bug ?\nest-ce qu’on peut reproduire ce bug avec l’interface ?\nqu’apporte check par rapport à un test écrit avec quelques exemples choisis à la main ?",
+    "crumbs": [
+      "Projet",
+      "Projet Conduit"
+    ]
   },
   {
     "objectID": "projet_lsi_2627.html#feature-modifier-un-commentaire",
     "href": "projet_lsi_2627.html#feature-modifier-un-commentaire",
     "title": "Projet Conduit",
     "section": "7.3 FEATURE : Modifier un commentaire",
-    "text": "7.3 FEATURE : Modifier un commentaire\nOn peut créer ou supprimer ses commentaires, mais on ne peut pas les éditer. Modifiez le backend et le frontend pour le permettre. Si vous avez déjà réalisé cette fonctionnalité dans le projet ALTN72, vous pouvez réutiliser votre frontend.\n\nLa route est PUT /api/articles/:slug/comments/:id, avec le même corps JSON que la création\n⚠️ Attention aux droits : seul l’auteur d’un commentaire peut le modifier\nSuivez le parcours d’une requête : chaque couche a quelque chose à ajouter. N’oubliez pas l’implémentation en mémoire du repository.\nAjoutez les tests correspondants\nRépondez dans le README.md : le slug de l’article présent dans l’URL est-il vérifié lors de la suppression d’un commentaire ? Que se passe-t-il si on appelle DELETE /api/articles/un-autre-article/comments/:id ? Faites en sorte que la modification ne présente pas ce problème.\n\nBONUS\nL’utilisateur essaie de modifier le même commentaire en ayant deux navigateurs ouverts.\n\nDécrivez dans le README.md le problème que cela peut poser\nCorrigez le problème"
+    "text": "7.3 FEATURE : Modifier un commentaire\nOn peut créer ou supprimer ses commentaires, mais on ne peut pas les éditer. Modifiez le backend et le frontend pour le permettre. Si vous avez déjà réalisé cette fonctionnalité dans le projet ALTN72, vous pouvez réutiliser votre frontend.\n\nLa route est PUT /api/articles/:slug/comments/:id, avec le même corps JSON que la création\n⚠️ Attention aux droits : seul l’auteur d’un commentaire peut le modifier\nSuivez le parcours d’une requête : chaque couche a quelque chose à ajouter. N’oubliez pas l’implémentation en mémoire du repository.\nAjoutez les tests correspondants\nRépondez dans le README.md : le slug de l’article présent dans l’URL est-il vérifié lors de la suppression d’un commentaire ? Que se passe-t-il si on appelle DELETE /api/articles/un-autre-article/comments/:id ? Faites en sorte que la modification ne présente pas ce problème.\n\nBONUS\nL’utilisateur essaie de modifier le même commentaire en ayant deux navigateurs ouverts.\n\nDécrivez dans le README.md le problème que cela peut poser\nCorrigez le problème",
+    "crumbs": [
+      "Projet",
+      "Projet Conduit"
+    ]
   },
   {
     "objectID": "projet_lsi_2627.html#feature-rôles",
     "href": "projet_lsi_2627.html#feature-rôles",
     "title": "Projet Conduit",
     "section": "7.4 FEATURE : Rôles",
-    "text": "7.4 FEATURE : Rôles\n\nAjoutez un rôle aux utilisateurs. Ils peuvent avoir l’un de ces rôles :\n\nwriter : rôle par défaut, mêmes droits que maintenant.\nmoderator : writer + peut modifier/supprimer les articles et commentaires de tout le monde.\nadmin : moderator + peut changer les rôles des utilisateurs\n\nModifiez le schéma de la base avec une nouvelle migration Flyway (V2__...sql), et mettez des rôles aux utilisateurs des données d’exemple (R__seed_data.sql)\nAffichez le rôle dans l’écran Settings\nAjoutez un écran de gestion des utilisateurs pour l’admin\n\nl’écran liste tous les utilisateurs\non peut cliquer sur un utilisateur pour aller sur l’écran des settings\ndans Settings, l’admin peut modifier le rôle\n\nLe rôle est enregistré en base de données. Au moment de vérifier les droits d’un utilisateur, faut-il relire son rôle en base, ou le copier dans le token JWT au moment du login (voir TokenAuthenticationService) ?\n\nÉcrivez vos réflexions dans le README.md.\nQue se passe-t-il dans chaque cas quand un admin retire le rôle moderator à un utilisateur connecté ?\n\nModifiez l’UI et les services d’autorisation (domain/service/authorisation) pour autoriser/interdire les opérations correspondant à chaque rôle"
+    "text": "7.4 FEATURE : Rôles\n\nAjoutez un rôle aux utilisateurs. Ils peuvent avoir l’un de ces rôles :\n\nwriter : rôle par défaut, mêmes droits que maintenant.\nmoderator : writer + peut modifier/supprimer les articles et commentaires de tout le monde.\nadmin : moderator + peut changer les rôles des utilisateurs\n\nModifiez le schéma de la base avec une nouvelle migration Flyway (V2__...sql), et mettez des rôles aux utilisateurs des données d’exemple (R__seed_data.sql)\nAffichez le rôle dans l’écran Settings\nAjoutez un écran de gestion des utilisateurs pour l’admin\n\nl’écran liste tous les utilisateurs\non peut cliquer sur un utilisateur pour aller sur l’écran des settings\ndans Settings, l’admin peut modifier le rôle\n\nLe rôle est enregistré en base de données. Au moment de vérifier les droits d’un utilisateur, faut-il relire son rôle en base, ou le copier dans le token JWT au moment du login (voir TokenAuthenticationService) ?\n\nÉcrivez vos réflexions dans le README.md.\nQue se passe-t-il dans chaque cas quand un admin retire le rôle moderator à un utilisateur connecté ?\n\nModifiez l’UI et les services d’autorisation (domain/service/authorisation) pour autoriser/interdire les opérations correspondant à chaque rôle",
+    "crumbs": [
+      "Projet",
+      "Projet Conduit"
+    ]
   },
   {
     "objectID": "projet_lsi_2627.html#ressources",
     "href": "projet_lsi_2627.html#ressources",
     "title": "Projet Conduit",
     "section": "8.1 Ressources",
-    "text": "8.1 Ressources\n\nZIO Cheat Sheet : les éléments clés pour comprendre le code du projet\nDocumentation ZIO : en particulier ZIO, ZLayer et ZIO Test\nBook of Doobie\nSpécification de l’API RealWorld"
+    "text": "8.1 Ressources\n\nZIO Cheat Sheet : les éléments clés pour comprendre le code du projet\nDocumentation ZIO : en particulier ZIO, ZLayer et ZIO Test\nBook of Doobie\nSpécification de l’API RealWorld",
+    "crumbs": [
+      "Projet",
+      "Projet Conduit"
+    ]
   },
   {
     "objectID": "projet_lsi_2627.html#faq",
     "href": "projet_lsi_2627.html#faq",
     "title": "Projet Conduit",
     "section": "8.2 FAQ",
-    "text": "8.2 FAQ"
+    "text": "8.2 FAQ",
+    "crumbs": [
+      "Projet",
+      "Projet Conduit"
+    ]
   },
   {
     "objectID": "zio_cheatsheet.html",
