@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Mikaël Valot">
+
+<title>ZIO Cheat Sheet - Projet Conduit – ALTN73 Programmation fonctionnelle avec Scala</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./figures/favicon.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-88e8eab2b9e74ff2b2dcb2dc0227e102.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-35673c1328022ec05f8a1bab69fe76b7.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-88e8eab2b9e74ff2b2dcb2dc0227e102.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-626bc743731229bd8adb76e0f8fa352c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-626bc743731229bd8adb76e0f8fa352c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-626bc743731229bd8adb76e0f8fa352c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./projet_mapreduce.html">Projet</a></li><li class="breadcrumb-item"><a href="./zio_cheatsheet_2627.html">ZIO Cheat Sheet - Projet Conduit</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./figures/logo-noir.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="./figures/logo-noir.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index-lsi.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ALTN73 Programmation Fonctionnelle avec Scala</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Cours</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cm1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CM1 - Introduction à la programmation fonctionnelle</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cm2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CM2 - Introduction à Scala</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cm3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CM3 - Collections, Fonctions, Boucles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cm4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CM4 - Paramètres de type</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cm5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CM5 - Gestion des erreurs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cm6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CM6 - Classes de Type</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">TPs</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tp1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TD1 - Calcul Lambda</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tp2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TP2 - Calculateur d’Impôt sur le Revenu</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tp3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TP3 - Liste chaînée</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tp4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TP4 - Collections</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tp5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TP5 - Paramètres de type</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tp6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TP6 - Gestion des erreurs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tp7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TP7 - Classes de type</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Projet</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./projet_mapreduce.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Projet MapReduce</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./zio_cheatsheet_2627.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">ZIO Cheat Sheet - Projet Conduit</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#le-type-zior-e-a" id="toc-le-type-zior-e-a" class="nav-link active" data-scroll-target="#le-type-zior-e-a"><span class="header-section-number">1</span> Le type <code>ZIO[R, E, A]</code></a></li>
+  <li><a href="#enchaîner-des-effets-for-comprehension" id="toc-enchaîner-des-effets-for-comprehension" class="nav-link" data-scroll-target="#enchaîner-des-effets-for-comprehension"><span class="header-section-number">2</span> Enchaîner des effets : for-comprehension</a></li>
+  <li><a href="#erreurs-typées" id="toc-erreurs-typées" class="nav-link" data-scroll-target="#erreurs-typées"><span class="header-section-number">3</span> Erreurs typées</a>
+  <ul class="collapse">
+  <li><a href="#hiérarchie-des-erreurs" id="toc-hiérarchie-des-erreurs" class="nav-link" data-scroll-target="#hiérarchie-des-erreurs"><span class="header-section-number">3.1</span> Hiérarchie des erreurs</a></li>
+  <li><a href="#opérateurs-sur-les-erreurs" id="toc-opérateurs-sur-les-erreurs" class="nav-link" data-scroll-target="#opérateurs-sur-les-erreurs"><span class="header-section-number">3.2</span> Opérateurs sur les erreurs</a></li>
+  </ul></li>
+  <li><a href="#types-du-domaine-et-validation" id="toc-types-du-domaine-et-validation" class="nav-link" data-scroll-target="#types-du-domaine-et-validation"><span class="header-section-number">4</span> Types du domaine et validation</a>
+  <ul class="collapse">
+  <li><a href="#subtype" id="toc-subtype" class="nav-link" data-scroll-target="#subtype"><span class="header-section-number">4.1</span> Subtype</a></li>
+  <li><a href="#validation" id="toc-validation" class="nav-link" data-scroll-target="#validation"><span class="header-section-number">4.2</span> Validation</a></li>
+  </ul></li>
+  <li><a href="#services-et-injection-de-dépendances-avec-zlayer" id="toc-services-et-injection-de-dépendances-avec-zlayer" class="nav-link" data-scroll-target="#services-et-injection-de-dépendances-avec-zlayer"><span class="header-section-number">5</span> Services et injection de dépendances avec <code>ZLayer</code></a>
+  <ul class="collapse">
+  <li><a href="#un-service" id="toc-un-service" class="nav-link" data-scroll-target="#un-service"><span class="header-section-number">5.1</span> Un service</a></li>
+  <li><a href="#un-zlayer" id="toc-un-zlayer" class="nav-link" data-scroll-target="#un-zlayer"><span class="header-section-number">5.2</span> Un <code>ZLayer</code></a></li>
+  <li><a href="#assembler-les-layers" id="toc-assembler-les-layers" class="nav-link" data-scroll-target="#assembler-les-layers"><span class="header-section-number">5.3</span> Assembler les layers</a></li>
+  </ul></li>
+  <li><a href="#transactions" id="toc-transactions" class="nav-link" data-scroll-target="#transactions"><span class="header-section-number">6</span> Transactions</a></li>
+  <li><a href="#doobie-requêtes-sql" id="toc-doobie-requêtes-sql" class="nav-link" data-scroll-target="#doobie-requêtes-sql"><span class="header-section-number">7</span> Doobie : requêtes SQL</a></li>
+  <li><a href="#zio-http-routes" id="toc-zio-http-routes" class="nav-link" data-scroll-target="#zio-http-routes"><span class="header-section-number">8</span> ZIO HTTP : routes</a></li>
+  <li><a href="#parcours-dune-requête" id="toc-parcours-dune-requête" class="nav-link" data-scroll-target="#parcours-dune-requête"><span class="header-section-number">9</span> Parcours d’une requête</a></li>
+  <li><a href="#zio-test" id="toc-zio-test" class="nav-link" data-scroll-target="#zio-test"><span class="header-section-number">10</span> ZIO Test</a>
+  <ul class="collapse">
+  <li><a href="#structure-dun-test" id="toc-structure-dun-test" class="nav-link" data-scroll-target="#structure-dun-test"><span class="header-section-number">10.1</span> Structure d’un test</a></li>
+  <li><a href="#générateurs" id="toc-générateurs" class="nav-link" data-scroll-target="#générateurs"><span class="header-section-number">10.2</span> Générateurs</a></li>
+  <li><a href="#tests-des-repositories-postgresql" id="toc-tests-des-repositories-postgresql" class="nav-link" data-scroll-target="#tests-des-repositories-postgresql"><span class="header-section-number">10.3</span> Tests des repositories PostgreSQL</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./projet_mapreduce.html">Projet</a></li><li class="breadcrumb-item"><a href="./zio_cheatsheet_2627.html">ZIO Cheat Sheet - Projet Conduit</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">ZIO Cheat Sheet - Projet Conduit</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Mikaël Valot </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Ce document présente les éléments clés pour lire et modifier le code du projet Conduit. Il ne remplace pas la <a href="https://zio.dev/reference/">documentation de ZIO</a> : il montre seulement les patterns que vous rencontrerez dans le projet, avec des exemples tirés du code.</p>
+<section id="le-type-zior-e-a" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Le type <code>ZIO[R, E, A]</code></h1>
+<p>Une valeur de type <code>ZIO[R, E, A]</code> est la <strong>description</strong> d’un programme, qui :</p>
+<ul>
+<li>a besoin d’un environnement <code>R</code> pour s’exécuter (des services, une transaction…)</li>
+<li>peut échouer avec une erreur de type <code>E</code></li>
+<li>peut réussir avec une valeur de type <code>A</code></li>
+</ul>
+<p>Créer un <code>ZIO</code> <strong>n’exécute rien</strong> : c’est une valeur immuable, qu’on peut combiner avec d’autres. Le programme n’est exécuté qu’une seule fois, au démarrage de l’application (<code>Main</code>) ou d’un test.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ZIO<span class="op">.</span><span class="fu">succeed</span><span class="op">(</span><span class="dv">42</span><span class="op">)</span>                <span class="co">// ZIO[Any, Nothing, Int]   : réussit toujours</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>ZIO<span class="op">.</span><span class="fu">fail</span><span class="op">(</span><span class="ex">NotFound</span><span class="op">.</span><span class="fu">user</span><span class="op">(</span>id<span class="op">))</span>    <span class="co">// ZIO[Any, NotFound, Nothing] : échoue toujours</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>ZIO<span class="op">.</span><span class="dt">unit</span>                       <span class="co">// ZIO[Any, Nothing, Unit]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>Any</code> en position <code>R</code> signifie « n’a besoin de rien », <code>Nothing</code> en position <code>E</code> signifie « ne peut pas échouer ».</p>
+<p>Le projet définit des alias pour rendre les signatures plus lisibles, par exemple :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">trait</span> CommentRepository <span class="op">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">protected</span> <span class="kw">type</span> <span class="ex">Result</span><span class="op">[</span>A<span class="op">]</span> <span class="op">=</span> ZIO<span class="op">[</span>Transaction<span class="op">,</span> PersistenceError<span class="op">,</span> A<span class="op">]</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> <span class="fu">find</span><span class="op">(</span>commentId<span class="op">:</span> CommentId<span class="op">):</span> <span class="ex">Result</span><span class="op">[</span><span class="ex">Option</span><span class="op">[</span><span class="ex">Comment</span><span class="op">]]</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> <span class="fu">save</span><span class="op">(</span>comment<span class="op">:</span> <span class="ex">Comment</span><span class="op">.</span><span class="ex">Data</span><span class="op">):</span> <span class="ex">Result</span><span class="op">[</span><span class="ex">Comment</span><span class="op">]</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Lisez les types</strong> : la signature d’une méthode indique ce dont elle a besoin, comment elle peut échouer et ce qu’elle renvoie.</p>
+</section>
+<section id="enchaîner-des-effets-for-comprehension" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Enchaîner des effets : for-comprehension</h1>
+<p>On enchaîne des <code>ZIO</code> avec une for-comprehension, comme pour <code>Option</code> ou <code>Either</code> :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  validated <span class="op">&lt;-</span> validation<span class="op">.</span><span class="fu">parse</span><span class="op">(</span>request<span class="op">).</span>validOrFail       <span class="co">// &lt;- : exécute un effet et récupère son résultat</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  slug       <span class="op">=</span> validated<span class="op">.</span>slug                              <span class="co">// =  : simple valeur, pas d'effet</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  articleId <span class="op">&lt;-</span> permalinks<span class="op">.</span><span class="fu">resolve</span><span class="op">(</span>slug<span class="op">)</span> <span class="op">?!</span> <span class="ex">NotFound</span><span class="op">.</span><span class="fu">article</span><span class="op">(</span>slug<span class="op">)</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  comment   <span class="op">&lt;-</span> comments<span class="op">.</span><span class="fu">save</span><span class="op">(</span><span class="ex">Comment</span><span class="op">.</span><span class="ex">Data</span><span class="op">(</span>articleId<span class="op">,</span> validated<span class="op">.</span>body<span class="op">,</span> validated<span class="op">.</span>author<span class="op">))</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">yield</span> GetCommentResponse<span class="op">.</span><span class="fu">make</span><span class="op">(</span>comment<span class="op">,</span> author<span class="op">,</span> following<span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>Les étapes s’exécutent <strong>dans l’ordre</strong>.</li>
+<li>Si une étape échoue, les suivantes ne sont <strong>pas exécutées</strong> : l’erreur est propagée (comme une exception, mais visible dans le type).</li>
+<li>Le type <code>R</code> du résultat combine les besoins de chaque étape, et le type <code>E</code> combine leurs erreurs.</li>
+</ul>
+<p>Autres opérations utiles :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>effect<span class="op">.</span><span class="fu">map</span><span class="op">(</span>f<span class="op">)</span>                  <span class="co">// transforme la valeur de succès</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>effect<span class="op">.</span><span class="fu">flatMap</span><span class="op">(</span>a <span class="op">=&gt;</span> <span class="fu">other</span><span class="op">(</span>a<span class="op">))</span>  <span class="co">// ce qu'utilise la for-comprehension</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>effect1 <span class="op">*&gt;</span> effect2             <span class="co">// exécute effect1, ignore son résultat, puis exécute effect2</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>ZIO<span class="op">.</span><span class="fu">foreach</span><span class="op">(</span>list<span class="op">)(</span>a <span class="op">=&gt;</span> <span class="fu">f</span><span class="op">(</span>a<span class="op">))</span>   <span class="co">// exécute un effet pour chaque élément, renvoie la liste des résultats</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>ZIO.foreach</code> fonctionne aussi sur une <code>Option</code> : l’effet est exécuté seulement si l’<code>Option</code> contient une valeur. Exemple tiré de <code>CommentEntrypointService.listComments</code>, où l’utilisateur peut ne pas être connecté :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> userId<span class="op">:</span> <span class="ex">Option</span><span class="op">[</span>UserId<span class="op">]</span> <span class="op">=</span> request<span class="op">.</span>requester<span class="op">.</span>option<span class="op">.</span><span class="fu">map</span><span class="op">(</span>_<span class="op">.</span>userId<span class="op">)</span>   <span class="co">// None si non connecté</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">// ZIO.foreach(userId)(...) : ZIO[Transaction, PersistenceError, Option[List[AuthorId]]]</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">//   - None    : aucune requête, résultat None</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">//   - Some(id): exécute followers.list(id, authorIds), résultat Some(auteurs suivis)</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>followed <span class="op">&lt;-</span> ZIO<span class="op">.</span><span class="fu">foreach</span><span class="op">(</span>userId<span class="op">)(</span>id <span class="op">=&gt;</span> followers<span class="op">.</span><span class="fu">list</span><span class="op">(</span>id<span class="op">,</span> authorIds<span class="op">)).</span><span class="fu">map</span><span class="op">(</span>_<span class="op">.</span><span class="fu">getOrElse</span><span class="op">(</span>Nil<span class="op">))</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="erreurs-typées" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Erreurs typées</h1>
+<section id="hiérarchie-des-erreurs" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="hiérarchie-des-erreurs"><span class="header-section-number">3.1</span> Hiérarchie des erreurs</h2>
+<p>Toutes les erreurs métier étendent <code>ApplicationError</code> (<code>domain/model/error</code>). Ce ne sont <strong>pas</strong> des exceptions : on ne les lance pas avec <code>throw</code>, on les renvoie avec <code>ZIO.fail</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">trait</span> ApplicationError<span class="op">:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> message<span class="op">:</span> <span class="ex">String</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">object</span> ApplicationError<span class="op">:</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">trait</span> NotFoundError     <span class="kw">extends</span> ApplicationError</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">trait</span> UnauthorisedError <span class="kw">extends</span> ApplicationError</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">trait</span> ValidationError   <span class="kw">extends</span> DomainError</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">...</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Le type <code>E</code> peut être une <strong>union</strong> d’erreurs : <code>ZIO[R, PersistenceError | NotFound, A]</code>.</p>
+<p>Dans la couche HTTP, <code>ErrorMiddleware</code> transforme chaque catégorie d’erreur en code HTTP : <code>NotFoundError</code> → 404, <code>UnauthorisedError</code> → 403, <code>InvalidInput</code> (validation) → 400, le reste → 500.</p>
+</section>
+<section id="opérateurs-sur-les-erreurs" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="opérateurs-sur-les-erreurs"><span class="header-section-number">3.2</span> Opérateurs sur les erreurs</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>effect<span class="op">.</span><span class="fu">mapError</span><span class="op">(</span>e <span class="op">=&gt;</span> <span class="fu">OtherError</span><span class="op">(</span>e<span class="op">))</span>      <span class="co">// transforme l'erreur</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>effect<span class="op">.</span><span class="fu">someOrFail</span><span class="op">(</span><span class="ex">NotFound</span><span class="op">.</span><span class="fu">user</span><span class="op">(</span>id<span class="op">))</span>     <span class="co">// ZIO[R, E, Option[A]] =&gt; ZIO[R, E | NotFound, A]</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>effect<span class="op">.</span>orDie                             <span class="co">// erreur "impossible" : transforme l'erreur en défaut (crash)</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>effect<span class="op">.</span>flip                              <span class="co">// inverse succès et erreur (utile dans les tests)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Le projet définit l’opérateur <code>?!</code> comme raccourci de <code>someOrFail</code> (voir <code>EntrypointDsl</code>) :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>articleId <span class="op">&lt;-</span> permalinks<span class="op">.</span><span class="fu">resolve</span><span class="op">(</span>slug<span class="op">)</span> <span class="op">?!</span> <span class="ex">NotFound</span><span class="op">.</span><span class="fu">article</span><span class="op">(</span>slug<span class="op">)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">// si resolve renvoie None, le programme échoue avec NotFound.article(slug)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="types-du-domaine-et-validation" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Types du domaine et validation</h1>
+<section id="subtype" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="subtype"><span class="header-section-number">4.1</span> Subtype</h2>
+<p>Plutôt que des <code>Long</code> et des <code>String</code> partout, le domaine utilise des types dédiés, définis avec <code>Subtype</code> de <a href="https://zio.dev/zio-prelude/newtypes/">ZIO Prelude</a> :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> CommentId <span class="op">=</span> CommentId<span class="op">.</span><span class="ex">Type</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">object</span> CommentId <span class="kw">extends</span> Subtype<span class="op">[</span><span class="ex">Long</span><span class="op">]</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> id<span class="op">:</span> CommentId <span class="op">=</span> <span class="fu">CommentId</span><span class="op">(</span><span class="dv">42L</span><span class="op">)</span>   <span class="co">// construction</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> n<span class="op">:</span> <span class="ex">Long</span>       <span class="op">=</span> id               <span class="co">// un CommentId EST un Long (Subtype)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Le compilateur empêche alors de passer un <code>ArticleId</code> là où on attend un <code>CommentId</code>. À l’exécution, il n’y a aucun surcoût : un <code>CommentId</code> est un simple <code>Long</code>.</p>
+</section>
+<section id="validation" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="validation"><span class="header-section-number">4.2</span> Validation</h2>
+<p><code>Validation[E, A]</code> (ZIO Prelude) ressemble à <code>Either[E, A]</code>, mais <strong>accumule</strong> les erreurs au lieu de s’arrêter à la première. Voir le cours : <a href="./cm5.html#le-type-validation">CM5 - Le type Validation</a>.</p>
+<p>Exemple du projet :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">object</span> CommentBody <span class="kw">extends</span> Subtype<span class="op">[</span><span class="ex">String</span><span class="op">]</span> <span class="op">{</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> <span class="fu">validated</span><span class="op">(</span>body<span class="op">:</span> <span class="ex">String</span><span class="op">):</span> Validation<span class="op">[</span><span class="ex">Error</span><span class="op">,</span> CommentBody<span class="op">]</span> <span class="op">=</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    Validation</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">validate</span><span class="op">(</span><span class="fu">validateIsNotTooShort</span><span class="op">(</span>body<span class="op">),</span> <span class="fu">validateIsNotTooLong</span><span class="op">(</span>body<span class="op">))</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">map</span><span class="op">(</span>_ <span class="op">=&gt;</span> <span class="fu">CommentBody</span><span class="op">(</span>body<span class="op">))</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Les services de validation (<code>domain/service/validation</code>) transforment une requête brute en données typées. Dans les entrypoints, <code>validOrFail</code> convertit une <code>Validation</code> en <code>ZIO</code> qui échoue avec <code>InvalidInput</code> (la liste de toutes les erreurs) :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>validated <span class="op">&lt;-</span> validation<span class="op">.</span><span class="fu">parse</span><span class="op">(</span>request<span class="op">).</span>validOrFail</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="services-et-injection-de-dépendances-avec-zlayer" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Services et injection de dépendances avec <code>ZLayer</code></h1>
+<section id="un-service" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="un-service"><span class="header-section-number">5.1</span> Un service</h2>
+<p>Un service est un <code>trait</code> (l’interface, dans <code>domain/logic</code>) et une classe qui l’implémente (dans <code>domain/service</code> ou <code>infrastructure</code>). Les dépendances sont passées au constructeur. Par exemple, <code>CommentEntrypointService</code> a besoin de plusieurs autres services :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> <span class="fu">CommentEntrypointService</span><span class="op">(</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  unitOfWork<span class="op">:</span> UnitOfWork<span class="op">,</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  authorisation<span class="op">:</span> CommentAuthorisation<span class="op">,</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  validation<span class="op">:</span> CommentValidator<span class="op">,</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  comments<span class="op">:</span> CommentRepository<span class="op">,</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">...</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="op">)</span> <span class="kw">extends</span> CommentEntrypoint</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="un-zlayer" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="un-zlayer"><span class="header-section-number">5.2</span> Un <code>ZLayer</code></h2>
+<p>Un <code>ZLayer[RIn, E, ROut]</code> est une recette pour construire le service <code>ROut</code> à partir des services <code>RIn</code>. Chaque service a un <code>layer</code> dans son objet compagnon, qui récupère ses dépendances avec <code>ZIO.service</code> puis appelle le constructeur :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">object</span> CommentEntrypointService<span class="op">:</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">val</span> layer<span class="op">:</span> ZLayer<span class="op">[</span>UnitOfWork <span class="op">&amp;</span> CommentAuthorisation <span class="op">&amp;</span> CommentValidator <span class="op">&amp;</span> CommentRepository <span class="op">&amp;</span> <span class="op">...,</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                    Nothing<span class="op">,</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                    CommentEntrypointService<span class="op">]</span> <span class="op">=</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    ZLayer <span class="op">{</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> <span class="op">{</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>        unitOfWork    <span class="op">&lt;-</span> ZIO<span class="op">.</span>service<span class="op">[</span>UnitOfWork<span class="op">]</span>            <span class="co">// récupère un service de l'environnement</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        authorisation <span class="op">&lt;-</span> ZIO<span class="op">.</span>service<span class="op">[</span>CommentAuthorisation<span class="op">]</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>        validator     <span class="op">&lt;-</span> ZIO<span class="op">.</span>service<span class="op">[</span>CommentValidator<span class="op">]</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        comments      <span class="op">&lt;-</span> ZIO<span class="op">.</span>service<span class="op">[</span>CommentRepository<span class="op">]</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        <span class="op">...</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>      <span class="op">}</span> <span class="cf">yield</span> <span class="fu">CommentEntrypointService</span><span class="op">(</span>unitOfWork<span class="op">,</span> authorisation<span class="op">,</span> validator<span class="op">,</span> comments<span class="op">,</span> <span class="op">...)</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Le type <code>RIn</code> (<code>UnitOfWork &amp; CommentAuthorisation &amp; ...</code>) liste les dépendances : le layer ne peut être construit que si on lui fournit tous ces services.</p>
+<p>Ces dépendances ont elles-mêmes des dépendances. Pour une requête sur les commentaires :</p>
+<pre><code>CommentRoutes ──► CommentEntrypoint ──► CommentAuthorisation ──► CommentRepository
+                        │                                              ▲
+                        ├──► CommentValidator (aucune dépendance)      │
+                        └──► CommentRepository ────────────────────────┘</code></pre>
+<p>Un service sans dépendance utilise <code>ZLayer.succeed</code> :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">object</span> CommentValidationService<span class="op">:</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">val</span> layer<span class="op">:</span> ZLayer<span class="op">[</span><span class="ex">Any</span><span class="op">,</span> Nothing<span class="op">,</span> CommentValidator<span class="op">]</span> <span class="op">=</span> ZLayer<span class="op">.</span><span class="fu">succeed</span><span class="op">(</span><span class="fu">CommentValidationService</span><span class="op">())</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="assembler-les-layers" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="assembler-les-layers"><span class="header-section-number">5.3</span> Assembler les layers</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>layerA <span class="op">++</span> layerB     <span class="co">// fournit les services de layerA et de layerB</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>layerA <span class="op">&gt;&gt;&gt;</span> layerB    <span class="co">// layerA fournit les dépendances de layerB</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Exemple dans <code>PostgresModule</code> :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">object</span> PostgresModule <span class="op">{</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ZLayer[DatabaseSourceConfig, Nothing, HikariDataSource] : pool de connexions, construit à partir de la configuration,</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">// et fermé automatiquement à l'arrêt de l'application (withFinalizerAuto)</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">val</span> datasource <span class="op">=</span> ZLayer<span class="op">.</span>scoped<span class="op">:</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    ZIO<span class="op">.</span>service<span class="op">[</span>DatabaseSourceConfig<span class="op">].</span><span class="fu">map</span><span class="op">(</span>config <span class="op">=&gt;</span> <span class="kw">new</span> <span class="fu">HikariDataSource</span><span class="op">(</span>config<span class="op">.</span>toHikariConfig<span class="op">)).</span>withFinalizerAuto</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// &gt;&gt;&gt; : le pool de connexions est fourni à PostgresUnitOfWork, qui en a besoin pour ouvrir les transactions</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">val</span> unitOfWork <span class="op">=</span> datasource <span class="op">&gt;&gt;&gt;</span> PostgresUnitOfWork<span class="op">.</span>layer</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ++ : le module fournit tous les repositories, le UnitOfWork et le pool de connexions</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">val</span> layer      <span class="op">=</span> PostgresRepositoryModule<span class="op">.</span>layer <span class="op">++</span> unitOfWork <span class="op">++</span> datasource</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Et <code>InMemoryRepositoryModule</code> regroupe tous les repositories en mémoire avec <code>++</code> :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">val</span> layer <span class="op">=</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  InMemoryUnitOfWork<span class="op">.</span>layer <span class="op">++</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    InMemoryUserRepository<span class="op">.</span>layer <span class="op">++</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    InMemoryCommentRepository<span class="op">.</span>layer <span class="op">++</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">...</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>En pratique, on donne simplement la liste des layers à <code>.provide(...)</code> : ZIO trouve tout seul dans quel ordre les construire, et construit <strong>une seule instance</strong> de chaque service, partagée par tous ceux qui en dépendent (ici, le même <code>CommentRepository</code> pour l’entrypoint et l’autorisation).</p>
+<p>Exemple dans <code>CommentEntrypointServiceSpec</code>, où l’ordre des layers n’a pas d’importance :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>spec<span class="op">.</span><span class="fu">provide</span><span class="op">(</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  CommentEntrypointService<span class="op">.</span>layer<span class="op">,</span>       <span class="co">// a besoin de CommentAuthorisation, CommentValidator, repositories...</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  CommentValidationService<span class="op">.</span>layer<span class="op">,</span>       <span class="co">// aucune dépendance</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  CommentAuthorisationService<span class="op">.</span>layer<span class="op">,</span>    <span class="co">// a besoin de CommentRepository</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  InMemoryRepositoryModule<span class="op">.</span>layer<span class="op">,</span>       <span class="co">// fournit les repositories et UnitOfWork (en mémoire)</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Les modules (<code>DomainServiceModule</code>, <code>PostgresModule</code>, <code>InMemoryModule</code>…) regroupent les layers d’une couche. Les modes de lancement (<code>HttpApplication.dev</code>, <code>inmemory</code>…) les assemblent de la même façon. Pour passer de PostgreSQL à la mémoire, il suffit de remplacer <code>PostgresModule.layer</code> par <code>InMemoryModule.layer</code> : les services du domaine ne changent pas.</p>
+<p><code>provide</code> vérifie <strong>à la compilation</strong> que toutes les dépendances sont fournies. Si vous ajoutez une dépendance à un service, le message d’erreur indique le layer manquant.</p>
+<p>C’est l’équivalent de l’injection de dépendances de Spring, mais vérifié par le compilateur, sans annotations ni réflexion.</p>
+</section>
+</section>
+<section id="transactions" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Transactions</h1>
+<p>Les méthodes des repositories renvoient un <code>ZIO[Transaction, ...]</code> : elles ont besoin d’une <strong>transaction ouverte</strong> pour s’exécuter. Seul <code>UnitOfWork.execute</code> peut fournir cette transaction : il l’ouvre, exécute le programme, puis fait un <em>commit</em> (succès) ou un <em>rollback</em> (échec).</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">trait</span> UnitOfWork <span class="op">{</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> execute<span class="op">[</span>R<span class="op">,</span> A<span class="op">](</span>effect<span class="op">:</span> ZIO<span class="op">[</span>R <span class="op">&amp;</span> Transaction<span class="op">,</span> ApplicationError<span class="op">,</span> A<span class="op">]):</span> ZIO<span class="op">[</span>R<span class="op">,</span> ApplicationError<span class="op">,</span> A<span class="op">]</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Remarquez le type : <code>execute</code> <strong>retire</strong> <code>Transaction</code> de l’environnement. Le compilateur empêche donc d’appeler un repository en dehors d’une transaction.</p>
+<p>Dans les entrypoints, la méthode <code>authorise</code> (voir <code>EntrypointDsl</code>) ouvre la transaction, vérifie les droits, puis exécute la logique métier :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">override</span> <span class="kw">def</span> <span class="fu">deleteComment</span><span class="op">(</span>request<span class="op">:</span> DeleteCommentRequest<span class="op">):</span> <span class="ex">Result</span><span class="op">[</span>DeleteCommentResponse<span class="op">]</span> <span class="op">=</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">authorise</span><span class="op">(</span>request<span class="op">):</span>     <span class="co">// transaction + vérification des droits (CommentAuthorisation)</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">{</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>      commentId <span class="op">&lt;-</span> validation<span class="op">.</span><span class="fu">parse</span><span class="op">(</span>request<span class="op">).</span>validOrFail</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>      deleted   <span class="op">&lt;-</span> comments<span class="op">.</span><span class="fu">delete</span><span class="op">(</span>commentId<span class="op">)</span> <span class="op">?!</span> <span class="ex">NotFound</span><span class="op">.</span><span class="fu">comment</span><span class="op">(</span>commentId<span class="op">)</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">yield</span> <span class="fu">DeleteCommentResponse</span><span class="op">(</span>deleted<span class="op">.</span>id<span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Il existe deux implémentations : PostgreSQL (<code>PostgresUnitOfWork</code>) et en mémoire (<code>InMemoryUnitOfWork</code>), utilisée pour les tests des services et le mode <code>inmemory</code>.</p>
+</section>
+<section id="doobie-requêtes-sql" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Doobie : requêtes SQL</h1>
+<p>Les repositories PostgreSQL écrivent leurs requêtes en SQL avec l’interpolateur <code>sql"..."</code> :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">override</span> <span class="kw">def</span> <span class="fu">find</span><span class="op">(</span>commentId<span class="op">:</span> CommentId<span class="op">):</span> <span class="ex">Result</span><span class="op">[</span><span class="ex">Option</span><span class="op">[</span><span class="ex">Comment</span><span class="op">]]</span> <span class="op">=</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  PostgresTransaction<span class="op">.</span>execute<span class="op">:</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    sql<span class="st">"""SELECT c.id, c.article_id, c.body, c.author_id, c.created_at, c.updated_at</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="st">         |FROM comments c</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="st">         |WHERE c.id = $commentId"""</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span>stripMargin</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span>query<span class="op">[</span><span class="ex">Comment</span><span class="op">]</span>   <span class="co">// chaque ligne est convertie en Comment, dans l'ordre des colonnes</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span>option           <span class="co">// 0 ou 1 ligne</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><code>$commentId</code> n’est <strong>pas</strong> une concaténation de chaîne : c’est un paramètre de requête préparée (pas d’injection SQL possible).</li>
+<li><code>.query[A]</code> puis <code>.option</code> (0 ou 1 ligne), <code>.unique</code> (exactement 1 ligne) ou <code>.to[List]</code> (toutes les lignes).</li>
+<li><code>PostgresTransaction.execute</code> exécute la requête dans la transaction courante et renvoie un <code>ZIO</code>.</li>
+<li><code>PostgresTransaction.withTime(now =&gt; ...)</code> fournit en plus l’heure courante, pour <code>created_at</code> / <code>updated_at</code>.</li>
+</ul>
+<p>Le schéma de la base est dans <code>src/main/resources/migrations/schema</code> (migrations Flyway). Pour modifier le schéma, ajoutez un nouveau fichier <code>V2__....sql</code> plutôt que de modifier <code>V1__conduit.sql</code>.</p>
+</section>
+<section id="zio-http-routes" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> ZIO HTTP : routes</h1>
+<p>Les routes sont dans <code>application/http/route</code>. Chaque route associe une méthode et un chemin à un <code>handler</code> qui renvoie un <code>ZIO</code> :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">literal</span><span class="op">(</span><span class="st">"api/articles"</span><span class="op">)</span> <span class="op">/</span> <span class="fu">Routes</span><span class="op">(</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  DELETE <span class="op">/</span> <span class="fu">string</span><span class="op">(</span><span class="st">"slug"</span><span class="op">)</span> <span class="op">/</span> <span class="st">"comments"</span> <span class="op">/</span> <span class="dt">long</span><span class="op">(</span><span class="st">"id"</span><span class="op">)</span> <span class="op">-&gt;</span> handler <span class="op">{</span> <span class="op">(</span>slug<span class="op">:</span> <span class="ex">String</span><span class="op">,</span> id<span class="op">:</span> <span class="ex">Long</span><span class="op">,</span> request<span class="op">:</span> <span class="ex">Request</span><span class="op">)</span> <span class="op">=&gt;</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">{</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>      user <span class="op">&lt;-</span> auth<span class="op">.</span><span class="fu">authenticated</span><span class="op">(</span>request<span class="op">)</span>                                <span class="co">// utilisateur connecté, sinon erreur</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>      _    <span class="op">&lt;-</span> logic<span class="op">.</span><span class="fu">deleteComment</span><span class="op">(</span><span class="fu">DeleteCommentRequest</span><span class="op">(</span>user<span class="op">,</span> slug<span class="op">,</span> id<span class="op">))</span>  <span class="co">// appel du domaine</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">yield</span> <span class="ex">Response</span><span class="op">.</span><span class="fu">status</span><span class="op">(</span>Status<span class="op">.</span>NoContent<span class="op">)</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">},</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><code>string("slug")</code>, <code>long("id")</code> : paramètres du chemin, passés au handler</li>
+<li><code>auth.authenticated(request)</code> / <code>auth.anyone(request)</code> : lit le token JWT ; <code>anyone</code> accepte aussi les utilisateurs non connectés (<code>User.Anonymous</code>)</li>
+<li><code>parser.decode[XyzRequest.Payload](request)</code> : lit le corps JSON</li>
+<li><code>Response.json(result.asJson.toString)</code> : sérialise la réponse avec Circe (codecs dans <code>JsonCodecs</code>)</li>
+</ul>
+</section>
+<section id="parcours-dune-requête" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Parcours d’une requête</h1>
+<p>Exemple avec l’ajout d’un commentaire (<code>POST /api/articles/:slug/comments</code>) :</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+    Client(["Frontend&lt;br/&gt;POST /api/articles/:slug/comments"])
+
+    subgraph application ["application/http"]
+        Route["&lt;b&gt;CommentRoutes&lt;/b&gt;&lt;br/&gt;authentification (JWT), lecture du JSON"]
+    end
+
+    subgraph domain ["domain/service"]
+        Entrypoint["&lt;b&gt;CommentEntrypointService&lt;/b&gt;&lt;br/&gt;orchestration, dans une transaction"]
+        Auth["&lt;b&gt;CommentAuthorisation&lt;/b&gt;&lt;br/&gt;l'utilisateur a-t-il le droit ?"]
+        Validation["&lt;b&gt;CommentValidator&lt;/b&gt;&lt;br/&gt;données valides et typées"]
+    end
+
+    subgraph infrastructure ["infrastructure/postgres"]
+        Repo["&lt;b&gt;CommentRepository&lt;/b&gt;&lt;br/&gt;requêtes SQL (Doobie)"]
+    end
+
+    DB[("PostgreSQL")]
+
+    Client --&gt; Route
+    Route --&gt;|"AddCommentRequest"| Entrypoint
+    Entrypoint --&gt;|"1"| Auth
+    Entrypoint --&gt;|"2"| Validation
+    Entrypoint --&gt;|"3"| Repo
+    Repo --&gt; DB
+    Entrypoint -.-&gt;|"GetCommentResponse"| Route
+    Route -.-&gt;|"JSON"| Client
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Pour ajouter une fonctionnalité, on suit en général ce chemin : requête et réponse (<code>domain/model/request</code>, <code>response</code>), validation, autorisation, méthode du repository (trait, implémentation PostgreSQL <strong>et</strong> en mémoire), entrypoint, route, codecs JSON.</p>
+</section>
+<section id="zio-test" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> ZIO Test</h1>
+<section id="structure-dun-test" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="structure-dun-test"><span class="header-section-number">10.1</span> Structure d’un test</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">object</span> CommentEntrypointServiceSpec <span class="kw">extends</span> ZIOSpecDefault <span class="op">{</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">def</span> spec <span class="op">=</span> <span class="fu">suite</span><span class="op">(</span><span class="st">"CommentEntrypointService"</span><span class="op">)(</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">test</span><span class="op">(</span><span class="st">"adds a comment to an article"</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> <span class="op">{</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>        fixture  <span class="op">&lt;-</span> givenArticle</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>        service  <span class="op">&lt;-</span> ZIO<span class="op">.</span>service<span class="op">[</span>CommentEntrypointService<span class="op">]</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>        response <span class="op">&lt;-</span> service<span class="op">.</span><span class="fu">addComment</span><span class="op">(</span><span class="fu">addComment</span><span class="op">(</span>fixture<span class="op">.</span>profile<span class="op">.</span>id<span class="op">,</span> fixture<span class="op">.</span>slug<span class="op">,</span> <span class="st">"Nice article!"</span><span class="op">))</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>      <span class="op">}</span> <span class="cf">yield</span> <span class="fu">assertTrue</span><span class="op">(</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>        response<span class="op">.</span>comment<span class="op">.</span>body <span class="op">==</span> <span class="st">"Nice article!"</span><span class="op">,</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>        <span class="op">!</span>response<span class="op">.</span>comment<span class="op">.</span>author<span class="op">.</span>following<span class="op">,</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>      <span class="op">)</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">},</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">).</span><span class="fu">provide</span><span class="op">(</span>                             <span class="co">// layers fournis aux tests</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    CommentEntrypointService<span class="op">.</span>layer<span class="op">,</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    CommentValidationService<span class="op">.</span>layer<span class="op">,</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>    CommentAuthorisationService<span class="op">.</span>layer<span class="op">,</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>    InMemoryRepositoryModule<span class="op">.</span>layer<span class="op">,</span>      <span class="co">// repositories en mémoire : rapide, pas de Docker</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>  <span class="op">)</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>Un test est lui-même un <code>ZIO</code> : on utilise une for-comprehension et on termine par <code>assertTrue(...)</code>.</li>
+<li><code>assertTrue</code> accepte plusieurs conditions et affiche clairement celle qui échoue.</li>
+<li>Pour tester un cas d’erreur, <code>.flip</code> transforme l’erreur en succès :</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span><span class="op">(</span><span class="st">"fails with NotFound when the article does not exist"</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="op">{</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    service <span class="op">&lt;-</span> ZIO<span class="op">.</span>service<span class="op">[</span>CommentEntrypointService<span class="op">]</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    unknown  <span class="op">=</span> <span class="fu">ArticleSlug</span><span class="op">(</span><span class="st">"unknown-article"</span><span class="op">)</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    error   <span class="op">&lt;-</span> service<span class="op">.</span><span class="fu">addComment</span><span class="op">(</span><span class="fu">addComment</span><span class="op">(</span>userId<span class="op">,</span> unknown<span class="op">,</span> <span class="st">"Nice article!"</span><span class="op">)).</span>flip</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span> <span class="cf">yield</span> <span class="fu">assertTrue</span><span class="op">(</span>error <span class="op">==</span> <span class="ex">NotFound</span><span class="op">.</span><span class="fu">article</span><span class="op">(</span>unknown<span class="op">))</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="générateurs" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="générateurs"><span class="header-section-number">10.2</span> Générateurs</h2>
+<p><code>Generator</code> (<code>src/test/scala/.../entity/Generator.scala</code>) produit des données de test aléatoires avec <code>Gen</code> :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> userName<span class="op">:</span> Gen<span class="op">[</span><span class="ex">Any</span><span class="op">,</span> UserName<span class="op">]</span> <span class="op">=</span> Gen<span class="op">.</span><span class="fu">stringBounded</span><span class="op">(</span><span class="dv">3</span><span class="op">,</span> <span class="dv">20</span><span class="op">)(</span>Gen<span class="op">.</span>alphaChar<span class="op">).</span><span class="fu">map</span><span class="op">(</span><span class="fu">UserName</span><span class="op">(</span>_<span class="op">))</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>userId <span class="op">&lt;-</span> Generator<span class="op">.</span>userId<span class="op">.</span>runHead<span class="op">.</span>someOrFailException   <span class="co">// une seule valeur aléatoire</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>On peut aussi vérifier une propriété sur <strong>beaucoup</strong> de valeurs générées avec <code>check</code> (tests par propriétés) :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span><span class="op">(</span><span class="st">"a valid body is accepted"</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">check</span><span class="op">(</span>Gen<span class="op">.</span><span class="fu">stringBounded</span><span class="op">(</span><span class="dv">3</span><span class="op">,</span> <span class="dv">500</span><span class="op">)(</span>Gen<span class="op">.</span>alphaChar<span class="op">))</span> <span class="op">{</span> body <span class="op">=&gt;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">assertTrue</span><span class="op">(</span>CommentBody<span class="op">.</span><span class="fu">fromString</span><span class="op">(</span>body<span class="op">).</span>toEither<span class="op">.</span>isRight<span class="op">)</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="tests-des-repositories-postgresql" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="tests-des-repositories-postgresql"><span class="header-section-number">10.3</span> Tests des repositories PostgreSQL</h2>
+<p>Les specs de <code>infrastructure/postgres/repository</code> utilisent une vraie base PostgreSQL dans Docker. Chaque test s’exécute dans une transaction (<code>transaction:</code>) sur une base recréée (<code>@@ withMigration</code>) :</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode scala code-with-copy"><code class="sourceCode scala"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span><span class="op">(</span><span class="st">"Adds a comment and retrieves it"</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  transaction<span class="op">:</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">{</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>      <span class="op">...</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>      created <span class="op">&lt;-</span> comments<span class="op">.</span><span class="fu">save</span><span class="op">(</span>comment<span class="op">)</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>      fetched <span class="op">&lt;-</span> comments<span class="op">.</span><span class="fu">find</span><span class="op">(</span>created<span class="op">.</span>id<span class="op">)</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">yield</span> <span class="fu">assertTrue</span><span class="op">(</span>fetched<span class="op">.</span><span class="fu">contains</span><span class="op">(</span>created<span class="op">))</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> @@ withMigration</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

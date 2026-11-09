@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Mikaël Valot">
+
+<title>Projet Conduit – ALTN73 Programmation fonctionnelle avec Scala</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./figures/favicon.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-88e8eab2b9e74ff2b2dcb2dc0227e102.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-35673c1328022ec05f8a1bab69fe76b7.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-88e8eab2b9e74ff2b2dcb2dc0227e102.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-626bc743731229bd8adb76e0f8fa352c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-626bc743731229bd8adb76e0f8fa352c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-626bc743731229bd8adb76e0f8fa352c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Projet Conduit</li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./figures/logo-noir.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="./figures/logo-noir.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index-lsi.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ALTN73 Programmation Fonctionnelle avec Scala</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Cours</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cm1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CM1 - Introduction à la programmation fonctionnelle</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cm2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CM2 - Introduction à Scala</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cm3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CM3 - Collections, Fonctions, Boucles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cm4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CM4 - Paramètres de type</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cm5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CM5 - Gestion des erreurs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./cm6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">CM6 - Classes de Type</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">TPs</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tp1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TD1 - Calcul Lambda</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tp2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TP2 - Calculateur d’Impôt sur le Revenu</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tp3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TP3 - Liste chaînée</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tp4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TP4 - Collections</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tp5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TP5 - Paramètres de type</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tp6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TP6 - Gestion des erreurs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tp7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">TP7 - Classes de type</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">Projet</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./projet_mapreduce.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Projet MapReduce</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./zio_cheatsheet_2627.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">ZIO Cheat Sheet - Projet Conduit</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#objectifs-pédagogiques" id="toc-objectifs-pédagogiques" class="nav-link" data-scroll-target="#objectifs-pédagogiques"><span class="header-section-number">2</span> Objectifs pédagogiques</a></li>
+  <li><a href="#architecture" id="toc-architecture" class="nav-link" data-scroll-target="#architecture"><span class="header-section-number">3</span> Architecture</a></li>
+  <li><a href="#déroulement-du-projet" id="toc-déroulement-du-projet" class="nav-link" data-scroll-target="#déroulement-du-projet"><span class="header-section-number">4</span> Déroulement du projet</a></li>
+  <li><a href="#critères-dévaluation" id="toc-critères-dévaluation" class="nav-link" data-scroll-target="#critères-dévaluation"><span class="header-section-number">5</span> Critères d’évaluation</a></li>
+  <li><a href="#démarrage" id="toc-démarrage" class="nav-link" data-scroll-target="#démarrage"><span class="header-section-number">6</span> Démarrage</a></li>
+  <li><a href="#travail-à-réaliser" id="toc-travail-à-réaliser" class="nav-link" data-scroll-target="#travail-à-réaliser"><span class="header-section-number">7</span> Travail à réaliser</a>
+  <ul class="collapse">
+  <li><a href="#validation-règles-sur-les-tags" id="toc-validation-règles-sur-les-tags" class="nav-link" data-scroll-target="#validation-règles-sur-les-tags"><span class="header-section-number">7.1</span> VALIDATION : règles sur les tags</a></li>
+  <li><a href="#bug-tagrepository" id="toc-bug-tagrepository" class="nav-link" data-scroll-target="#bug-tagrepository"><span class="header-section-number">7.2</span> BUG : TagRepository</a></li>
+  <li><a href="#feature-modifier-un-commentaire" id="toc-feature-modifier-un-commentaire" class="nav-link" data-scroll-target="#feature-modifier-un-commentaire"><span class="header-section-number">7.3</span> FEATURE : Modifier un commentaire</a></li>
+  <li><a href="#feature-rôles" id="toc-feature-rôles" class="nav-link" data-scroll-target="#feature-rôles"><span class="header-section-number">7.4</span> FEATURE : Rôles</a></li>
+  </ul></li>
+  <li><a href="#conseils-et-bonnes-pratiques" id="toc-conseils-et-bonnes-pratiques" class="nav-link" data-scroll-target="#conseils-et-bonnes-pratiques"><span class="header-section-number">8</span> Conseils et bonnes pratiques</a>
+  <ul class="collapse">
+  <li><a href="#ressources" id="toc-ressources" class="nav-link" data-scroll-target="#ressources"><span class="header-section-number">8.1</span> Ressources</a></li>
+  <li><a href="#faq" id="toc-faq" class="nav-link" data-scroll-target="#faq"><span class="header-section-number">8.2</span> FAQ</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Projet Conduit</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Mikaël Valot </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<p>Le site <a href="https://codebase.show/projects/realworld?category=backend">RealWorld</a> propose différentes implémentations du même logiciel de blogging, <strong>Conduit</strong>, qui est similaire à Medium. Cela permet de comparer différentes stacks technologiques sur un projet réaliste.</p>
+<p>Vous pouvez tester le frontend ici sans installation : <a href="https://vue3-realworld-example-app-mutoe.vercel.app/#/">Demo Conduit Vue3</a></p>
+<p>Notre projet consiste à améliorer ce logiciel avec des corrections de bugs et des nouvelles fonctionnalités. Nous utiliserons :</p>
+<ul>
+<li>un frontend Vue.js, dérivé de <a href="https://github.com/mutoe/vue3-realworld-example-app">Vue.js + Vite</a>. C’est le même frontend que pour le projet Java Spring Boot (ALTN72).</li>
+<li>un backend Scala 3 / ZIO, dérivé de <a href="https://github.com/AndreMeira/zio-conduit-doobie">zio-conduit-doobie</a></li>
+</ul>
+<p>Le backend utilise les bibliothèques suivantes :</p>
+<ul>
+<li><a href="https://zio.dev/">ZIO</a> : système d’effets fonctionnel, injection de dépendances avec <code>ZLayer</code></li>
+<li><a href="https://zio.dev/zio-http/">ZIO HTTP</a> : serveur HTTP et routes de l’API REST</li>
+<li><a href="https://typelevel.org/doobie/">Doobie</a> : accès fonctionnel à la base de données en SQL</li>
+<li><a href="https://documentation.red-gate.com/flyway">Flyway</a> : migrations du schéma de la base PostgreSQL</li>
+<li><a href="https://circe.github.io/circe/">Circe</a> : sérialisation JSON</li>
+<li><a href="https://zio.dev/reference/test/">ZIO Test</a> : tests unitaires et tests par propriétés (générateurs)</li>
+</ul>
+</section>
+<section id="objectifs-pédagogiques" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Objectifs pédagogiques</h1>
+<ul>
+<li>Savoir se repérer dans une base de code existante et la faire évoluer.
+<ul>
+<li>Il est rare en entreprise de démarrer un nouveau projet “from scratch”.</li>
+</ul></li>
+<li>Observer et intégrer les bonnes pratiques de programmation fonctionnelle en naviguant dans ce code : immutabilité, fonctions pures, effets, erreurs typées, types forts pour le domaine.</li>
+<li>Comparer avec l’implémentation Spring Boot du même logiciel : avantages et inconvénients de chaque paradigme.</li>
+<li>Développer de nouvelles fonctionnalités en respectant le style du code existant et les principes de la clean architecture.</li>
+<li>Écrire des tests en utilisant des générateurs et mesurer la couverture de code.</li>
+</ul>
+</section>
+<section id="architecture" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Architecture</h1>
+<p>Le code est organisé en trois couches. Le <code>README_original.md</code> du projet les décrit en détail.</p>
+<pre><code>src/main/scala/conduit/
+├── application/      # couche application : point d'entrée HTTP, migrations
+│   └── http/         #   routes, middlewares, codecs JSON
+├── domain/           # couche domaine : ne dépend d'aucune bibliothèque technique
+│   ├── model/        #   entités, types, requêtes, réponses, erreurs
+│   ├── logic/        #   interfaces (traits) : repositories, entrypoints, autorisations...
+│   └── service/      #   implémentations des règles métier
+└── infrastructure/   # couche infrastructure : implémentations techniques des interfaces
+    ├── postgres/     #   repositories Doobie / PostgreSQL
+    ├── inmemory/     #   repositories en mémoire
+    └── opentelemetry/#   supervision</code></pre>
+<p>Le traitement d’une requête traverse les couches dans cet ordre : <em>route</em> (<code>application/http/route</code>) → <em>entrypoint</em> (<code>domain/service/entrypoint</code>) → <em>validation</em>, <em>autorisation</em> → <em>repositories</em> (<code>infrastructure/postgres/repository</code>).</p>
+</section>
+<section id="déroulement-du-projet" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Déroulement du projet</h1>
+<p>Trois séances, en <strong>groupes de 3</strong>.</p>
+<ul>
+<li>séance 1 (semaine 46) : découverte du code, corrections des premiers bugs</li>
+<li>séance 2 (semaine 48) : séance plus courte pour faire la <strong>2ème évaluation (20 %)</strong>, développement des fonctionnalités plus avancées</li>
+<li>séance 3 (semaine 48) : développement des fonctionnalités, puis <strong>DE de projet</strong></li>
+<li>Rendu final pour le <strong>20/12 23:59</strong></li>
+</ul>
+</section>
+<section id="critères-dévaluation" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Critères d’évaluation</h1>
+<ul>
+<li><strong>60% DE de projet</strong> : questions sur les fonctionnalités développées
+<ul>
+<li>évalue la compréhension et la prise de recul</li>
+<li>vous devez comprendre le code que votre binôme a réalisé</li>
+<li>plus équitable qu’une soutenance : tout le monde a les mêmes questions, je peux comparer les réponses</li>
+<li>permet de passer plus de temps sur le projet</li>
+</ul></li>
+<li><strong>40% Rendu</strong>
+<ul>
+<li>fonctionnalités couvertes</li>
+<li>réponses dans le README.md</li>
+<li>code coverage</li>
+<li>code quality</li>
+<li>qualité des commits
+<ul>
+<li>commentaires</li>
+<li>commit du test qui échoue <strong>avant</strong> le commit du code de prod</li>
+<li>pas trop de code modifié en une seule fois</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="démarrage" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Démarrage</h1>
+<p>Cliquez sur ce <a href="https://classroom50.org/mikaelv-efrei-2627/altn72-fsjava/assignments/conduit/accept">Lien d’invitation Classroom50</a></p>
+<p>Dans le groupe, un étudiant utilise le lien pour créer l’équipe et le repository. Une fois créé, les autres étudiants doivent utiliser le même lien pour rejoindre l’équipe.</p>
+<p>Prérequis :</p>
+<ul>
+<li><strong>Docker</strong> doit être installé et lancé : le backend et les tests démarrent une base PostgreSQL dans un conteneur.</li>
+<li>IntelliJ IDEA Ultimate avec les plugins <strong>Scala</strong> et <strong>ZIO for IntelliJ</strong>.</li>
+<li>Pour le frontend : Node.js ≥ 20 et pnpm, comme pour le projet ALTN72.</li>
+</ul>
+<p>Lisez le README.md du projet pour démarrer l’application, consulter la base de données et lancer les tests.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Avant de lire le code : la ZIO Cheat Sheet
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La <a href="./zio_cheatsheet_2627.html">ZIO Cheat Sheet du projet</a> présente les éléments clés pour comprendre le code : <code>ZIO[R, E, A]</code>, erreurs typées, <code>ZLayer</code>, transactions, requêtes Doobie, routes et tests. Lisez-la avant de commencer, et gardez-la ouverte pendant le projet.</p>
+</div>
+</div>
+</section>
+<section id="travail-à-réaliser" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Travail à réaliser</h1>
+<p>Pour chaque bug ou fonctionnalité :</p>
+<ol type="1">
+<li>écrivez un test qui échoue, <strong>committez</strong></li>
+<li>écrivez le code de production qui fait passer le test, committez</li>
+<li>répondez aux questions dans le README.md</li>
+</ol>
+<section id="validation-règles-sur-les-tags" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="validation-règles-sur-les-tags"><span class="header-section-number">7.1</span> VALIDATION : règles sur les tags</h2>
+<p>Créez un article avec des tags. Aujourd’hui, seul un tag vide est refusé : on peut créer des tags comme <code>Hello World!!!</code> ou <code>scala</code> et <code>Scala</code>, qui sont deux tags différents.</p>
+<p>Ajoutez deux règles de validation :</p>
+<ul>
+<li>un tag ne contient que des lettres minuscules, des chiffres et des tirets (par exemple <code>cats-effect</code>, <code>scala3</code>)</li>
+<li>un article a au plus 5 tags</li>
+</ul>
+<p>Ces deux règles ne se placent pas au même endroit dans le code. Cherchez où est faite la vérification du tag vide, puis demandez-vous si la deuxième règle porte sur <strong>un</strong> tag ou sur <strong>un article</strong>.</p>
+<ul>
+<li>Toutes les erreurs doivent être renvoyées en une seule fois : un article avec 6 tags dont un invalide renvoie deux erreurs. Voir <a href="./zio_cheatsheet_2627.html#validation">Validation</a>.</li>
+<li>Testez vos règles avec des tests unitaires</li>
+<li>Vérifiez dans le navigateur que le frontend affiche bien les erreurs.</li>
+</ul>
+<p>BONUS : Testez les règles avec des <a href="./zio_cheatsheet_2627.html#générateurs">Générateurs</a> : générez des tags valides, vérifiez qu’ils sont acceptés. Générez des tags invalides, vérifiez qu’ils sont rejetés.</p>
+</section>
+<section id="bug-tagrepository" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="bug-tagrepository"><span class="header-section-number">7.2</span> BUG : TagRepository</h2>
+<p>Dans <code>TagRepositorySpec</code>, le test « Add tags and retrieve them » appelle <code>addTagsAndRetrieveThem</code> avec une liste fixe de deux tags. Modifiez-le avec <code>check</code> pour qu’il vérifie la même chose avec <strong>n’importe quelle</strong> liste de tags générée. Il vous faudra écrire un générateur de tags.</p>
+<ol type="1">
+<li>Lancez le test. ZIO Test trouve un contre-exemple qui fait échouer le test : lequel ?</li>
+<li>Corrigez le bug</li>
+<li>Répondez dans le README.md :
+<ul>
+<li>pourquoi les tests de <code>CommentEntrypointServiceSpec</code>, qui utilisent les repositories en mémoire, n’auraient pas trouvé ce bug ?</li>
+<li>est-ce qu’on peut reproduire ce bug avec l’interface ?</li>
+<li>qu’apporte <code>check</code> par rapport à un test écrit avec quelques exemples choisis à la main ?</li>
+</ul></li>
+</ol>
+</section>
+<section id="feature-modifier-un-commentaire" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="feature-modifier-un-commentaire"><span class="header-section-number">7.3</span> FEATURE : Modifier un commentaire</h2>
+<p>On peut créer ou supprimer ses commentaires, mais on ne peut pas les éditer. Modifiez le backend et le frontend pour le permettre. Si vous avez déjà réalisé cette fonctionnalité dans le projet ALTN72, vous pouvez réutiliser votre frontend.</p>
+<ul>
+<li>La route est <code>PUT /api/articles/:slug/comments/:id</code>, avec le même corps JSON que la création</li>
+<li>⚠️ Attention aux droits : seul l’auteur d’un commentaire peut le modifier</li>
+<li>Suivez le <a href="./zio_cheatsheet_2627.html#parcours-dune-requête">parcours d’une requête</a> : chaque couche a quelque chose à ajouter. N’oubliez pas l’implémentation en mémoire du repository.</li>
+<li>Ajoutez les tests correspondants</li>
+<li>Répondez dans le README.md : le <code>slug</code> de l’article présent dans l’URL est-il vérifié lors de la suppression d’un commentaire ? Que se passe-t-il si on appelle <code>DELETE /api/articles/un-autre-article/comments/:id</code> ? Faites en sorte que la modification ne présente pas ce problème.</li>
+</ul>
+<p><u>BONUS</u></p>
+<p>L’utilisateur essaie de modifier le même commentaire en ayant deux navigateurs ouverts.</p>
+<ul>
+<li>Décrivez dans le README.md le problème que cela peut poser</li>
+<li>Corrigez le problème</li>
+</ul>
+</section>
+<section id="feature-rôles" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="feature-rôles"><span class="header-section-number">7.4</span> FEATURE : Rôles</h2>
+<ol type="1">
+<li><p>Ajoutez un rôle aux utilisateurs. Ils peuvent avoir l’un de ces rôles :</p>
+<ul>
+<li><code>writer</code> : rôle par défaut, mêmes droits que maintenant.</li>
+<li><code>moderator</code> : writer + peut modifier/supprimer les articles et commentaires de tout le monde.</li>
+<li><code>admin</code> : moderator + peut changer les rôles des utilisateurs</li>
+</ul></li>
+<li><p>Modifiez le schéma de la base avec une <strong>nouvelle</strong> migration Flyway (<code>V2__...sql</code>), et mettez des rôles aux utilisateurs des données d’exemple (<code>R__seed_data.sql</code>)</p></li>
+<li><p>Affichez le rôle dans l’écran <em>Settings</em></p></li>
+<li><p>Ajoutez un écran de gestion des utilisateurs pour l’admin</p>
+<ul>
+<li>l’écran liste tous les utilisateurs</li>
+<li>on peut cliquer sur un utilisateur pour aller sur l’écran des settings</li>
+<li>dans <em>Settings</em>, l’admin peut modifier le rôle</li>
+</ul></li>
+<li><p>Le rôle est enregistré en base de données. Au moment de vérifier les droits d’un utilisateur, faut-il relire son rôle en base, ou le copier dans le token JWT au moment du login (voir <code>TokenAuthenticationService</code>) ?</p>
+<ul>
+<li>Écrivez vos réflexions dans le README.md.</li>
+<li>Que se passe-t-il dans chaque cas quand un admin retire le rôle <code>moderator</code> à un utilisateur connecté ?</li>
+</ul></li>
+<li><p>Modifiez l’UI et les services d’autorisation (<code>domain/service/authorisation</code>) pour autoriser/interdire les opérations correspondant à chaque rôle</p></li>
+</ol>
+</section>
+</section>
+<section id="conseils-et-bonnes-pratiques" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Conseils et bonnes pratiques</h1>
+<ul>
+<li>Pratiquez le TDD dans la mesure du possible : écrivez d’abord un test qui échoue, <strong>committez</strong>, puis écrivez le code de production.</li>
+<li>Inspirez-vous des tests existants (<code>src/test/scala</code>) : ils montrent comment construire les données de test avec des générateurs et comment tester un service ou une route.</li>
+<li>Avant de modifier une fonctionnalité, suivez le chemin d’une requête dans les trois couches.</li>
+<li>Lisez les types : la signature <code>ZIO[R, E, A]</code> d’une méthode indique ce dont elle a besoin (<code>R</code>), comment elle peut échouer (<code>E</code>) et ce qu’elle renvoie (<code>A</code>).</li>
+<li>Vous serez évalués sur la partie backend. Ne passez pas trop de temps à faire un joli frontend.</li>
+<li>Vous pouvez utiliser une IA, mais vous devez comprendre le code produit et pouvoir le justifier (voir <a href="./index-lsi.html#usage-des-ia">Usage des IA</a>).</li>
+</ul>
+<section id="ressources" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="ressources"><span class="header-section-number">8.1</span> Ressources</h2>
+<ul>
+<li><a href="./zio_cheatsheet_2627.html">ZIO Cheat Sheet</a> : les éléments clés pour comprendre le code du projet</li>
+<li><a href="https://zio.dev/reference/">Documentation ZIO</a> : en particulier <code>ZIO</code>, <code>ZLayer</code> et ZIO Test</li>
+<li><a href="https://typelevel.org/doobie/docs/01-Introduction.html">Book of Doobie</a></li>
+<li><a href="https://realworld-docs.netlify.app/specifications/backend/endpoints/">Spécification de l’API RealWorld</a></li>
+</ul>
+</section>
+<section id="faq" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="faq"><span class="header-section-number">8.2</span> FAQ</h2>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
